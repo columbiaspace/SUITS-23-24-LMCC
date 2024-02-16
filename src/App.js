@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css'; 
 import Navbar from "./components/Navbar";
+import BottomButtons from './components/BottomButtons';
 import {
   BrowserRouter as Router,
   Routes,
@@ -20,7 +21,7 @@ import Constant from './pages/constant';
 function App() {
   return (
     <div>
-      <h1>CU SUITS</h1>
+      <h1>CUITS 2024 LMCC</h1>
 
       <Router>
         <Navbar />
@@ -35,6 +36,7 @@ function App() {
           <Route path="/Equipment" element={<Equipment />} />
           <Route path="/Egress" element={<Egress />} />
         </Routes>
+        <BottomButtons />
       </Router>
     </div>
   );

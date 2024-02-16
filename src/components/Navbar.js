@@ -33,8 +33,8 @@ const Navbar = () => {
                     <NavLink to="/Equipment" activeStyle>
                         Equipment
                     </NavLink>
-                    <NavLink to="/Egross" activeStyle>
-                        Egross
+                    <NavLink to="/Egress" activeStyle>
+                        Egress
                     </NavLink>
                 </NavMenu>
             </Nav>
