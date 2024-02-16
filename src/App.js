@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css'; 
 import Navbar from "./components/Navbar";
+import BNavbar from "./components/BNavbar";
 import {
   BrowserRouter as Router,
   Routes,
@@ -20,21 +21,22 @@ import Constant from './pages/constant';
 function App() {
   return (
     <div>
-      <h1>CU SUITS</h1>
+      <h1>CUITS 2024 LMCC</h1>
 
       <Router>
         <Navbar />
         <Routes>
           <Route path="/Constant" element={<Constant />} />
-          <Route path="/TSS" element={<Tss />} />
-          <Route path="/Rover" element={<Rover />} />
-          <Route path="/Rocks" element={<Rocks />} />
-          <Route path="/Nav" element={<Nav />} />
-          <Route path="/Ingress" element={<Ingress />} />
           <Route path="/Focus" element={<Focus />} />
-          <Route path="/Equipment" element={<Equipment />} />
+          <Route path="/TSS" element={<Tss />} />
           <Route path="/Egress" element={<Egress />} />
+          <Route path="/Nav" element={<Nav />} />
+          <Route path="/Equipment" element={<Equipment />} />
+          <Route path="/Rocks" element={<Rocks />} />
+          <Route path="/Rover" element={<Rover />} />
+          <Route path="/Ingress" element={<Ingress />} />
         </Routes>
+        <BNavbar />
       </Router>
     </div>
   );
