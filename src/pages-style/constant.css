@@ -1,12 +1,31 @@
 .container {
     display: flex;
     height: 100vh;
-
-}
+  }
   
-.column {
+  .column {
     flex: 1;
     border-left: 1px solid;
-    padding: 10px;
-}
+    padding: 5px;
+    text-align: center; /* Center the content within each column */
+  }
+  
+  .column h3 {
+    margin: 5px 0;
+  }
+  
+  .column p {
+    text-align: left; /* Justify text to the left within paragraphs */
+    margin: 0; /* Remove default margin for paragraphs */
+    padding: 0; /* Remove default padding for paragraphs */
+  }
+  
+  .column ol {
+    text-align: left; /* Justify text to the left within ordered lists */
+    padding-left: 20px; /* Add some left padding for better visual separation */
+  }
+  
+  .column ol li {
+    margin-bottom: 8px; /* Adjust margin between list items */
+  }
   
