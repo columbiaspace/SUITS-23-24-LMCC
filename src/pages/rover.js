@@ -4,7 +4,7 @@ import './../pages-style/rover.css';
 function rover() {
   return (
     <div>
-      <h1>rover</h1>
+      <h1>Rover</h1>
 
     </div>
   );

@@ -13,7 +13,7 @@ import Nav from "./pages/nav";
 import Ingress from "./pages/ingress";
 import Focus from "./pages/focus";
 import Equipment from "./pages/equipment";
-import Egross from "./pages/egross";
+import Egress from "./pages/egress";
 import Constant from './pages/constant';
 
 
@@ -33,7 +33,7 @@ function App() {
           <Route path="/Ingress" element={<Ingress />} />
           <Route path="/Focus" element={<Focus />} />
           <Route path="/Equipment" element={<Equipment />} />
-          <Route path="/Egross" element={<Egross />} />
+          <Route path="/Egress" element={<Egress />} />
         </Routes>
       </Router>
     </div>
