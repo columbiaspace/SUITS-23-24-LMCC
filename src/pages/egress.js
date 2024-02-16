@@ -4,8 +4,8 @@ import './../pages-style/egress.css';
 function egress() {
   return (
     <div>
-      <h1>egress</h1>
-
+      <h1>Egress</h1>
+      <p>This page should display the current state of the UIA along with procedures to complete the egress task</p>
     </div>
   );
 }

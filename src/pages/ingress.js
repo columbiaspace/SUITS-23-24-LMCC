@@ -4,8 +4,8 @@ import './../pages-style/ingress.css';
 function ingress() {
   return (
     <div>
-      <h1>ingress</h1>
-
+      <h1>Ingress</h1>
+      <p>This page will display ingress procedures</p>
     </div>
   );
 }

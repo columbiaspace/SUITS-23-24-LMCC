@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css'; 
 import Navbar from "./components/Navbar";
-import BottomButtons from './components/BottomButtons';
+import BNavbar from "./components/BNavbar";
 import {
   BrowserRouter as Router,
   Routes,
@@ -27,16 +27,16 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/Constant" element={<Constant />} />
-          <Route path="/TSS" element={<Tss />} />
-          <Route path="/Rover" element={<Rover />} />
-          <Route path="/Rocks" element={<Rocks />} />
-          <Route path="/Nav" element={<Nav />} />
-          <Route path="/Ingress" element={<Ingress />} />
           <Route path="/Focus" element={<Focus />} />
-          <Route path="/Equipment" element={<Equipment />} />
+          <Route path="/TSS" element={<Tss />} />
           <Route path="/Egress" element={<Egress />} />
+          <Route path="/Nav" element={<Nav />} />
+          <Route path="/Equipment" element={<Equipment />} />
+          <Route path="/Rocks" element={<Rocks />} />
+          <Route path="/Rover" element={<Rover />} />
+          <Route path="/Ingress" element={<Ingress />} />
         </Routes>
-        <BottomButtons />
+        <BNavbar />
       </Router>
     </div>
   );
