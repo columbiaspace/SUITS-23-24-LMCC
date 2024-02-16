@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+    height: 100vh;
+
+}
+  
+.column {
+    flex: 1;
+    border-left: 1px solid;
+    padding: 10px;
+}
+  
