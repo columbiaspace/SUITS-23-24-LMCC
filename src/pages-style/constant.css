@@ -1,31 +1,85 @@
+* {
+  box-sizing: border-box;
+}
+
 .container {
-    display: flex;
-    height: 100vh;
-  }
-  
-  .column {
-    flex: 1;
-    border-left: 1px solid;
-    padding: 5px;
-    text-align: center; /* Center the content within each column */
-  }
-  
-  .column h3 {
-    margin: 5px 0;
-  }
-  
-  .column p {
-    text-align: left; /* Justify text to the left within paragraphs */
-    margin: 0; /* Remove default margin for paragraphs */
-    padding: 0; /* Remove default padding for paragraphs */
-  }
-  
-  .column ol {
-    text-align: left; /* Justify text to the left within ordered lists */
-    padding-left: 20px; /* Add some left padding for better visual separation */
-  }
-  
-  .column ol li {
-    margin-bottom: 8px; /* Adjust margin between list items */
-  }
-  
+  display: flex;
+  height: 100vh;
+}
+
+.subContainer{
+  display: flex;
+  height: 100%;
+}
+
+.column {
+  flex: 1;
+  border-left: 1px solid;
+  padding: 0px;
+  text-align: center;
+}
+
+.column h3 {
+  margin: 0;
+}
+
+.column p {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+.column ol {
+  text-align: left;
+  /* Justify text to the left within ordered lists */
+  padding-left: 20px;
+  /* Add some left padding for better visual separation */
+}
+
+.column ol li {
+  margin-bottom: 8px;
+  /* Adjust margin between list items */
+}
+
+.lmccImg {
+  max-width: 70%;
+  /* Adjust this value as needed */
+  height: auto;
+  /* Maintain aspect ratio */
+}
+
+.header-banner {
+  background: lightblue;
+  padding: 5px;
+  /* Adjust the padding to reduce vertical space */
+  height: 40px;
+  /* Adjust the height to reduce vertical space */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.smallHB{
+  background: lightblue;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  margin: 0;
+}
+
+.gif-container {
+  max-width: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.gif-container img {
+  display: block; /* Ensure the image behaves as a block element */
+  width: 100%; /* Make sure the image takes the full width of its container */
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
