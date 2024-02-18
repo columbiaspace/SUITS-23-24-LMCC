@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css'; 
 import Navbar from "./components/Navbar";
-import BNavbar from "./components/BNavbar";
+import BNavbar from "./components/BottomButtons";
 import {
   BrowserRouter as Router,
   Routes,

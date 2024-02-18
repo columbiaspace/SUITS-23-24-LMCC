@@ -1,10 +1,10 @@
 // BNavbar.js
 import React from "react";
-import { BNav, BNavMenu, BNavButton } from "./BNavbarElements"; // Add BNavButton import
+import { BottomButtonMenu, BButtonButton, BButton } from "./BottomButtonsElements"; // Add BNavButton import
 import { useNavigate, useLocation } from "react-router-dom";
-import './bnavbar.css';
+import './bottombuttons.css';
 
-const BNavbar = () => {
+const BottomButtons = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -25,17 +25,17 @@ const BNavbar = () => {
 
     return (
         <>
-            <BNav>
-                <BNavMenu>
+            <BButton>
+                <BottomButtonMenu>
                     {pageButtonMap[location.pathname] && pageButtonMap[location.pathname].map((buttonLink, index) => (
-                        <BNavButton key={index} onClick={() => handleButtonClick(buttonLink)} className="bnav-link">
+                        <BButtonButton key={index} onClick={() => handleButtonClick(buttonLink)} className="bnav-link">
                             {index % 2 === 0 ? '◄' : '►'} {buttonLink.split('/')[1]}
-                        </BNavButton>
+                        </BButtonButton>
                     ))}
-                </BNavMenu>
-            </BNav>
+                </BottomButtonMenu>
+            </BButton>
         </>
     );
 };
 
-export default BNavbar;
+export default BottomButtons;

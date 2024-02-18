@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import { NavLink as Link } from "react-router-dom";
 
-export const BNav = styled.nav`
+export const BButton = styled.nav`
     background: darkblue;
     height: 75px;
     display: flex;
@@ -15,7 +15,7 @@ export const BNav = styled.nav`
     width: 100%;
 `;
 
-export const BNavButton = styled.button`
+export const BButtonButton = styled.button`
     color: #808080;
     background: none;
     border: none;
@@ -37,7 +37,7 @@ export const BNavButton = styled.button`
     }
 `;
 
-export const BNavLink = styled(Link)`
+export const BottomLink = styled(Link)`
     color: #808080;
     text-decoration: none;
     width: 2rem; /* Fixed width for square buttons */
@@ -57,7 +57,7 @@ export const BNavLink = styled(Link)`
     }
 `;
 
-export const BNavMenu = styled.div`
+export const BottomButtonMenu = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
