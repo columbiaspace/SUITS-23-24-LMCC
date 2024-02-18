@@ -7,7 +7,7 @@ function Constant() {
     <div>
       <div className="container">
         <div className="column Astronaut">
-          <h3>Astronaut</h3>
+          <h3>Hi Matt</h3>
           <p>This section will display the following:</p>
           <ol>
             <li>Astronaut Biometrics</li>
