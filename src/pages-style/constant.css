@@ -4,17 +4,17 @@
 
 .container {
   display: flex;
-  height: 100vh;
+  height: 85vh;
 }
 
 .subContainer {
   display: flex;
-  height: 60%;
+  height: 50%;
 }
 
 .data {
   background: green;
-  height: 10%;
+  height: 12.5%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,18 +24,58 @@
 }
 
 .column.Mission {
-  position: relative; /* Set the position to relative for absolute positioning within */
+  position: relative;
 }
 
 .map-title {
   position: absolute;
-  top: 7%; /* Adjust the top position as needed */
-  left: 50%; /* Adjust the left position as needed */
-  transform: translate(-50%, -50%); /* Center the title */
-  background: rgba(255, 255, 255, 0.5); /* Translucent white background */
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
   padding: 10px;
   font-weight: bold;
 }
+
+.twoTasks {
+  height: 12%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px;
+  margin: 0;
+  border-bottom: 1px solid black;
+}
+
+.taskContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%; /* Set the height to 100% to cover the entire height of twoTasks */
+}
+
+.taskContainer + .taskContainer::before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  background-color: black;
+  left: 0;
+}
+
+.timer-container {
+  background-color: blue;
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+}
+
 .column {
   flex: 1;
   border-left: 1px solid;
@@ -55,35 +95,28 @@
 
 .column ol {
   text-align: left;
-  /* Justify text to the left within ordered lists */
   padding-left: 20px;
-  /* Add some left padding for better visual separation */
 }
 
 .column ol li {
   margin-bottom: 8px;
-  /* Adjust margin between list items */
 }
 
 .lmccImg {
   max-width: 70%;
-  /* Adjust this value as needed */
   height: auto;
-  /* Maintain aspect ratio */
 }
 
 .header-banner {
   background: lightblue;
   padding: 5px;
-  /* Adjust the padding to reduce vertical space */
   height: 40px;
-  /* Adjust the height to reduce vertical space */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.smallHB{
+.smallHB {
   background: lightblue;
   height: 30px;
   display: flex;
@@ -101,8 +134,8 @@
 }
 
 .gif-container img {
-  display: block; /* Ensure the image behaves as a block element */
-  width: 100%; /* Make sure the image takes the full width of its container */
+  display: block;
+  width: 100%;
   height: auto;
   margin: 0;
   padding: 0;
