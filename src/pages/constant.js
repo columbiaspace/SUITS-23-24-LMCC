@@ -1,38 +1,186 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './../pages-style/constant.css';
-import LMCCMockup from '../assets/LMCC Mockup.png';
-
+import AstronautGif from '../assets/astronautstream.gif';
+import RoverGif from '../assets/RoverGif.gif';
+import ThermalGif from '../assets/ThermalGif.gif';
+import MapGif from '../assets/MapGif.gif';
 function Constant() {
+  const [timer, setTimer] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    let interval;
+
+    if (isRunning) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer + 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [isRunning]);
+
+  const startTimer = () => {
+    setIsRunning(true);
+  };
+
+  const stopTimer = () => {
+    setIsRunning(false);
+  };
+
+  const resetTimer = () => {
+    setTimer(0);
+    setIsRunning(false);
+  };
+
+  const formatTime = (timeInSeconds) => {
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = timeInSeconds % 60;
+
+    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+
   return (
     <div>
       <div className="container">
+        {/* Column 1: Astronaut */}
         <div className="column Astronaut">
-          <h3>Astronaut</h3>
-          <p>This section will display the following:</p>
-          <ol>
-            <li>Astronaut Biometrics</li>
-            <li>State of Oxygen and Suit data</li>
-            <li>A video feed of the Astronauts POV</li>
-          </ol>
+          <div className="header-banner">
+            <h2>Astronaut Data</h2>
+          </div>
+          <div className="gif-container">
+            <img src={AstronautGif} alt="Astronaut POV GIF" />
+          </div>
+          <div className="subContainer">
+            <div className="column SuitData">
+              <div className="smallHB">
+                <h3>Suit Data</h3>
+              </div>
+              <div className="data" style={{ background: 'yellow' }}>
+                <span>Oxygen Tank Level:&nbsp;</span>
+                <span>45</span>
+                <span>%</span>
+              </div>
+              <div className="data" style={{ background: 'green' }}>
+                <span>Air Seal:&nbsp;</span>
+                <span>Good</span>
+              </div>
+              <div className="data" style={{ background: 'green' }}>
+                <span>Electronic Connections:&nbsp;</span>
+                <span>Good</span>
+              </div>
+              <div className="data" style={{ background: 'red' }}>
+                <span>Network Connection:&nbsp;</span>
+                <span>Poor</span>
+              </div>
+              <div className="data" style={{ background: 'green' }}>
+                <span>Fan Speed:&nbsp;</span>
+                <span>Good</span>
+              </div>
+              <div className="data" style={{ background: 'yellow' }}>
+                <span>Water Level:&nbsp;</span>
+                <span>Mid</span>
+              </div>
+            </div>
+            <div className="column Biometrics">
+              <div className="smallHB">
+                <h3>Biometrics</h3>
+              </div>
+              <div className="data" style={{ background: 'green' }}>
+                <span>Blood Oxygen:&nbsp;</span>
+                <span>98</span>
+                <span>%</span>
+              </div>
+              <div className="data" style={{ background: 'yellow' }}>
+                <span>Heartrate:&nbsp;</span>
+                <span>120</span>
+                <span>bpm</span>
+              </div>
+              <div className="data" style={{ background: 'green' }}>
+                <span>Respiratory Rate:&nbsp;</span>
+                <span>17</span>
+                <span>bpm</span>
+              </div>
+              <div className="data" style={{ background: 'green' }}>
+                <span>Body Temp:&nbsp;</span>
+                <span>98.9</span>
+                <span>*F</span>
+              </div>
+              <div className="data" style={{ background: 'red' }}>
+                <span>Blood Pressure:&nbsp;</span>
+                <span>140/90</span>
+                <span>mmHg</span>
+              </div>
+              <div className="data" style={{ background: 'red' }}>
+                <span>Stress Level:&nbsp;</span>
+                <span>HIGH!</span>
+              </div>
+            </div>
+          </div>
         </div>
+
+        {/* Column 2: Mission */}
         <div className="column Mission">
-          <h3>Mission</h3>
-          <p>This section will display the following:</p>
-          <ol>
-            <li>The Map with checkpoints</li>
-            <li>Elapsed Mission Time</li>
-            <li>Mission Objective Checklist</li>
-          </ol>
-          <img src={LMCCMockup} alt="LMCCMockup" />
+          <div className="header-banner">
+            <h2>Mission</h2>
+          </div>
+          <div className="gif-container">
+            <h2 className="map-title">Map</h2>
+            <img src={MapGif} alt="Map GIF" />
+          </div>
+          <div className="timer-container">
+            <p>Mission Timer: {formatTime(timer)}</p>
+            <button onClick={startTimer}>Start</button>
+            <button onClick={stopTimer}>Stop</button>
+            <button onClick={resetTimer}>Reset</button>
+          </div>
+          <div className="twoTasks">
+            <div className="taskContainer" style={{ background: 'green' }}>
+              <span>Egress:&nbsp;</span>
+              <span>Completed</span>
+            </div>
+            <div className="taskContainer" style={{ background: 'red' }}>
+              <span>Rock Scanning:&nbsp;</span>
+              <span>Not Started</span>
+            </div>
+          </div>
+          <div className="twoTasks">
+            <div className="taskContainer" style={{ background: 'green' }}>
+              <span>Navigation:&nbsp;</span>
+              <span>Completed</span>
+            </div>
+            <div className="taskContainer" style={{ background: 'red' }}>
+              <span>Rover:&nbsp;</span>
+              <span>Not Started</span>
+            </div>
+          </div>
+          <div className="twoTasks">
+            <div className="taskContainer" style={{ background: 'yellow' }}>
+              <span>Equipment:&nbsp;</span>
+              <span>In Progress</span>
+            </div>
+            <div className="taskContainer" style={{ background: 'red' }}>
+              <span>Ingress:&nbsp;</span>
+              <span>Not Started</span>
+            </div>
+          </div>
         </div>
+
+        {/* Column 3: Rover */}
         <div className="column Rover">
-          <h3>Rover</h3>
-          <p>This section will display the following:</p>
-          <ol>
-            <li>Rover Camera Feed</li>
-            <li>State of Rover battery, connection, tire pressure</li>
-            <li>Rover Thermal Camera Feed</li>
-          </ol>
+          <div className="header-banner">
+            <h2>Rover</h2>
+          </div>
+          <div className="gif-container">
+            <img src={RoverGif} alt="Rover POV GIF" />
+          </div>
+          <div className="gif-container">
+            <img src={ThermalGif} alt="Rover Thermal POV GIF" />
+          </div>
         </div>
       </div>
     </div>

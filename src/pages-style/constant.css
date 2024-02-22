@@ -1,31 +1,142 @@
+* {
+  box-sizing: border-box;
+}
+
 .container {
-    display: flex;
-    height: 100vh;
-  }
-  
-  .column {
-    flex: 1;
-    border-left: 1px solid;
-    padding: 5px;
-    text-align: center; /* Center the content within each column */
-  }
-  
-  .column h3 {
-    margin: 5px 0;
-  }
-  
-  .column p {
-    text-align: left; /* Justify text to the left within paragraphs */
-    margin: 0; /* Remove default margin for paragraphs */
-    padding: 0; /* Remove default padding for paragraphs */
-  }
-  
-  .column ol {
-    text-align: left; /* Justify text to the left within ordered lists */
-    padding-left: 20px; /* Add some left padding for better visual separation */
-  }
-  
-  .column ol li {
-    margin-bottom: 8px; /* Adjust margin between list items */
-  }
-  
+  display: flex;
+  height: 85vh;
+}
+
+.subContainer {
+  display: flex;
+  height: 50%;
+}
+
+.data {
+  background: green;
+  height: 12.5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  margin: 0;
+  border-bottom: 1px solid black;
+}
+
+.column.Mission {
+  position: relative;
+}
+
+.map-title {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.twoTasks {
+  height: 12%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px;
+  margin: 0;
+  border-bottom: 1px solid black;
+}
+
+.taskContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%; /* Set the height to 100% to cover the entire height of twoTasks */
+}
+
+.taskContainer + .taskContainer::before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  background-color: black;
+  left: 0;
+}
+
+.timer-container {
+  background-color: blue;
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+}
+
+.column {
+  flex: 1;
+  border-left: 1px solid;
+  padding: 0px;
+  text-align: center;
+}
+
+.column h3 {
+  margin: 0;
+}
+
+.column p {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+.column ol {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.column ol li {
+  margin-bottom: 8px;
+}
+
+.lmccImg {
+  max-width: 70%;
+  height: auto;
+}
+
+.header-banner {
+  background: lightblue;
+  padding: 5px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.smallHB {
+  background: lightblue;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  margin: 0;
+}
+
+.gif-container {
+  max-width: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.gif-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
