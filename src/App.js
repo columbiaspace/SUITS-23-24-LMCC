@@ -26,7 +26,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="" element={<Constant />} />
+          <Route path="/" element={<Constant />} />
           <Route path="/Constant" element={<Constant />} />
           <Route path="/Focus" element={<Focus />} />
           <Route path="/TSS" element={<Tss />} />
