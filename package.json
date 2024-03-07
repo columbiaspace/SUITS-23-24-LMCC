@@ -1,5 +1,6 @@
 {
   "name": "lmcc",
+  "homepage": "http://columbiaspace.github.io/SUITS-23-24-LMCC",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,6 +17,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -44,6 +47,7 @@
     "@babel/plugin-transform-optional-chaining": "^7.23.4",
     "@babel/plugin-transform-private-methods": "^7.23.3",
     "@rollup/plugin-terser": "^0.4.4",
+    "gh-pages": "^6.1.1",
     "raw-loader": "^4.0.2"
   }
 }
