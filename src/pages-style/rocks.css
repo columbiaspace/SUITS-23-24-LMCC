@@ -1,3 +1,55 @@
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex; /* allows flex items to be laid out according to flex-direction*/
+    flex-direction: row; /* arranges flex items from left to right */
+    height: 85vh; /* fills 85% of the page */
+    background-color: red;
+}
+
+.column {
+    display: flex;
+    flex: 1; /* flex item should grow to fill space within flex container*/
+    flex-direction: column; /* arranges flex items from top to bottom */
+    background-color: orange;
+}
+
+.maps-container {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0; /* space between content of container and its border */
+    margin: 0; /* space between container's border and neighbouring containers*/
+    background-color: yellow;
+}
+
+.subcontainer { /* applies to both subcontainers */
+    width: 50%;
+    height: 100%;
+    padding: 1;
+    margin: 0;
+    background-color: brown;
+}
+
+.astronaut-loc-container {
+    background-color: green;
+}
+
+.sampling-map-container {
+    background-color: blue;
+}
+
+.points-of-interest-container {
+    width: 100%;
+    height: 50%;
+    padding: 0;
+    margin: 0;
+    background-color: purple;
+}
+
 .warning-modal {
     position: fixed;
     top: 0;
@@ -27,5 +79,3 @@ button {
     right: 10px;
     cursor: pointer;
 }
-
-  
