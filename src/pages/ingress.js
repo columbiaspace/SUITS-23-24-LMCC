@@ -3,6 +3,7 @@ import './../pages-style/ingress.css';
 import { ProcedureList } from '../helpers/ProcedureList';
 import ProcedureItem from '../components/ProcedureItem';
 
+
 function Ingress() {
   const [currentProcedure, setCurrentProcedure] = useState(0);
 
