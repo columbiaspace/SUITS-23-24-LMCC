@@ -14,7 +14,7 @@ function Egress() {
 
   return (
     <div>
-      <h1>Rocks</h1>
+      <h1>Egress</h1>
       <p>This page will display samples that have been collected, and what samples should be kept</p>
       
       <button onClick={handleShowWarning}>Show Warning</button>
