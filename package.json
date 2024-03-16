@@ -49,5 +49,16 @@
     "@rollup/plugin-terser": "^0.4.4",
     "gh-pages": "^6.1.1",
     "raw-loader": "^4.0.2"
+  },
+  "description": "https://columbiaspace.github.io/SUITS-23-24-LMCC/",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/columbiaspace/SUITS-23-24-LMCC.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/columbiaspace/SUITS-23-24-LMCC/issues"
   }
 }

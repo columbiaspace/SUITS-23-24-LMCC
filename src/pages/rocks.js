@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './../pages-style/rocks.css';
-
-
+import { populateRockData } from './../helpers/RockData.js';
 
 function Rocks() {
+  useEffect(() => {
+    populateRockData(); // Pass the desired rock ID here
+}, []);
+
   return (
+
     <div>
       <h1>Geological Sampling</h1>
         <div className="container">
@@ -23,8 +27,11 @@ function Rocks() {
             </div>
           </div>
           { /* Rocks Column on the right half */ }
+          
           <div className="column">
             <h2>Table of Rocks</h2>
+            <div id="rockContainer"></div>
+          
           </div>
         </div>
     </div>
