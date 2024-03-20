@@ -2,14 +2,14 @@
     box-sizing: border-box;
 }
 
-.container {
+.rocks-container {
     display: flex; /* allows flex items to be laid out according to flex-direction*/
     flex-direction: row; /* arranges flex items from left to right */
     height: 85vh; /* fills 85% of the page */
     background-color: red;
 }
 
-.column {
+.rocks-column {
     display: flex;
     flex: 1; /* flex item should grow to fill space within flex container*/
     flex-direction: column; /* arranges flex items from top to bottom */
