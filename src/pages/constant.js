@@ -50,7 +50,7 @@ function Constant() {
         {/* Column 1: Astronaut */}
         <div className="column Astronaut">
           <div className="header-banner">
-            <h2>Astronaut Data</h2>
+            <h2>Astronaut DataTest</h2>
           </div>
           <div className="gif-container">
             <img src={AstronautGif} alt="Astronaut POV GIF" />

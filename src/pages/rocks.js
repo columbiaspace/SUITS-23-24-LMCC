@@ -1,20 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './../pages-style/rocks.css';
 
-import { ProcedureList } from '../helpers/ProcedureList';
-import ProcedureItem from '../components/ProcedureItem';
+
 
 function Rocks() {
-  const [showWarning, setShowWarning] = useState(false);
-
-  const handleShowWarning = () => {
-    setShowWarning(true);
-  };
-
-  const handleCloseWarning = () => {
-    setShowWarning(false);
-  };
-
   return (
     <div>
       <h1>Geological Sampling</h1>
