@@ -20,7 +20,7 @@
     width: 100%;
     height: 50%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* distribute items evenly with space between */
     padding: 0; /* space between content of container and its border */
     margin: 0; /* space between container's border and neighbouring containers*/
     background-color: yellow;
