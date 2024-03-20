@@ -1,21 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import './../pages-style/rocks.css';
-
-import { ProcedureList } from '../helpers/ProcedureList';
-import ProcedureItem from '../components/ProcedureItem';
+import { populateRockData } from './../helpers/RockData.js';
 
 function Rocks() {
-  const [showWarning, setShowWarning] = useState(false);
-
-  const handleShowWarning = () => {
-    setShowWarning(true);
-  };
-
-  const handleCloseWarning = () => {
-    setShowWarning(false);
-  };
+  useEffect(() => {
+    populateRockData(); // Pass the desired rock ID here
+}, []);
 
   return (
+
     <div>
       <h1>Geological Sampling</h1>
         <div className="rocks-container">
@@ -36,6 +29,8 @@ function Rocks() {
           { /* Rocks Column on the right half */ }
           <div className="rocks-column">
             <h2>Table of Rocks</h2>
+            <div id="rockContainer"></div>
+          
           </div>
         </div>
     </div>

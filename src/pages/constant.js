@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './../pages-style/constant.css';
-import AstronautGif from '../assets/astronautstream.gif';
 import RoverGif from '../assets/RoverGif.gif';
 import ThermalGif from '../assets/ThermalGif.gif';
 import MapGif from '../assets/MapGif.gif';
+import StreamComponent from '../components/StreamComponent.js';
+
+
 function Constant() {
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-
+  
   useEffect(() => {
     let interval;
 
@@ -53,7 +55,7 @@ function Constant() {
             <h2>Astronaut DataTest</h2>
           </div>
           <div className="gif-container">
-            <img src={AstronautGif} alt="Astronaut POV GIF" />
+            <StreamComponent />
           </div>
           <div className="subContainer">
             <div className="column SuitData">

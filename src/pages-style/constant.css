@@ -127,7 +127,7 @@
 }
 
 .gif-container {
-  max-width: 100%;
+  max-width: 100%; /* Adjusted to 100% */
   height: auto;
   padding: 0;
   margin: 0;
@@ -137,6 +137,14 @@
   display: block;
   width: 100%;
   height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+video {
+  max-width: 100%; /* Adjusted to 100% */
+  height: auto;
+  display: block;
   margin: 0;
   padding: 0;
 }

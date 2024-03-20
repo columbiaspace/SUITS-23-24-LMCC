@@ -1,0 +1,43 @@
+﻿wget -r -l 0 -np -A '*' http://localhost:14141/
+
+
+json_data/UIA.json
+
+
+json_data/COMM.json
+
+
+json_data/DCU.json
+
+
+(note team = 0)
+
+
+json_data/teams/" + team + "/EVA.json
+
+
+json_data/teams/" + team + "/TELEMETRY.json
+
+
+json_data/TEAMS.json
+
+
+json_data/SPEC.json
+
+
+json_data/IMU.json
+
+
+json_data/ERROR.json
+
+
+json_data/ROVER.json
+
+
+json_data/rocks/RockData.json
+
+
+json_data/teams/0/EVA.json
+
+
+json_data/teams/0/TELEMETRY.json
