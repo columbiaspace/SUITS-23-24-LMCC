@@ -9,7 +9,7 @@
 			"oxy_pri_pressure": 0.000000,
 			"oxy_sec_pressure": 463.576965,
 			"oxy_time_left": 4234,
-			"heart_rate": 90.000000,
+			"heart_rate": 90.0000,
 			"oxy_consumption": 0.103577,
 			"co2_production": 0.104614,
 			"suit_pressure_oxy": 3.072349,
