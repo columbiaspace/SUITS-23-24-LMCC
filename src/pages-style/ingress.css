@@ -1,32 +1,42 @@
 .ingress-container {
-    display: flex;
-  }
-  
-  .left-column {
-    flex: 3; /* Takes up 3/4 of the width */
-    padding: 20px; /* Optional: Add some padding for spacing */
-    background-color: #f0f0f0; /* Optional: Add a background color */
-  }
-  
-  .ProcedureList {
-    flex: 1; /* Takes up 1/4 of the width */
-    padding: 20px; /* Optional: Add some padding for spacing */
-    background-color: #e0e0e0; /* Optional: Add a background color */
-  }
-  .ProcedureItem {
-    display: none; /* Initially hide all ProcedureItems */
-  }
-  
-  .ProcedureItem.show {
-    display: block; /* Display the ProcedureItem with the "show" class */
-  }
-  
-  .navigation-buttons {
-    margin-top: 10px; /* Optional: Add margin for spacing */
-  }
-  
-  .navigation-buttons button {
-    margin-right: 10px; /* Optional: Add margin between buttons */
-    padding: 8px 12px; /* Optional: Add padding for button styling */
-    cursor: pointer;
-  }
+  display: flex;
+}
+
+.left-column {
+  flex: 1; /* Takes up 3/4 of the width */
+  padding: 20px; /* Optional: Add some padding for spacing */
+  background-color: #f0f0f0; /* Optional: Add a background color */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+}
+
+.left-column img {
+  width: 450px; /* Set a fixed width for the image */
+  height: auto; /* Allow the height to adjust proportionally */
+  margin-bottom: 20px; /* Optional: Add space below the image */
+}
+
+.ProcedureList {
+  flex: 1; /* Takes up 1/2 of the width */
+  padding: 20px; /* Optional: Add some padding for spacing */
+  background-color: #e0e0e0; /* Optional: Add a background color */
+}
+
+.ProcedureItem {
+  display: none; /* Initially hide all ProcedureItems */
+}
+
+.ProcedureItem.show {
+  display: block; /* Display the ProcedureItem with the "show" class */
+}
+
+.navigation-buttons {
+  margin-top: 10px; /* Optional: Add margin for spacing */
+}
+
+.navigation-buttons button {
+  margin-right: 10px; /* Optional: Add margin between buttons */
+  padding: 8px 12px; /* Optional: Add padding for button styling */
+  cursor: pointer;
+}

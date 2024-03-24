@@ -19,7 +19,9 @@ function Ingress() {
     <div className="ingress-container">
       <div className="left-column">
         <h1>Ingress</h1>
-        <p>This page will display ingress procedures</p>
+        {ProcedureList[currentProcedure].image && (
+          <img src={ProcedureList[currentProcedure].image} alt={ProcedureList[currentProcedure].name} />
+        )}
       </div>
       <div className="ProcedureList">
         {ProcedureList.map((Item, index) => (

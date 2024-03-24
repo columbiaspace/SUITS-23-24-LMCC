@@ -15,8 +15,8 @@ const Navbar = () => {
                     <NavLink to="/Focus" activeStyle>
                         Focus
                     </NavLink>
-                    <NavLink to="/TSS" activeStyle>
-                        TSS
+                    <NavLink to="/Setup" activeStyle>
+                        Setup
                     </NavLink>
                     <NavLink to="/Egress" activeStyle>
                         Egress
