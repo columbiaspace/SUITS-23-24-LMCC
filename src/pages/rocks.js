@@ -5,7 +5,7 @@ import { populateRockData } from './../helpers/RockData.js';
 function Rocks() {
   useEffect(() => {
     populateRockData(); // Pass the desired rock ID here
-}, []);
+  }, []);
 
   return (
 
@@ -33,6 +33,9 @@ function Rocks() {
           
           </div>
         </div>
+        <footer className="bottom-nav-container">
+          
+        </footer>
     </div>
   );
 }
