@@ -7,7 +7,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Tss from "./pages/tss";
+import Setup from "./pages/setup";
 import Rover from "./pages/rover";
 import Rocks from "./pages/rocks";
 import Nav from "./pages/nav";
@@ -29,7 +29,7 @@ function App() {
           <Route path="/" element={<Constant />} />
           <Route path="/Constant" element={<Constant />} />
           <Route path="/Focus" element={<Focus />} />
-          <Route path="/TSS" element={<Tss />} />
+          <Route path="/Setup" element={<Setup />} />
           <Route path="/Egress" element={<Egress />} />
           <Route path="/Nav" element={<Nav />} />
           <Route path="/Equipment" element={<Equipment />} />
