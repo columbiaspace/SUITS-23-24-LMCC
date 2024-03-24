@@ -11,9 +11,9 @@ function Rocks() {
 
     <div>
       <h1>Geological Sampling</h1>
-        <div className="container">
+        <div className="rocks-container">
           { /* Maps Column on the left half */ }
-          <div className="column">
+          <div className="rocks-column">
             <div className="maps-container">
               <div className="subcontainer astronaut-loc-container">
                 <h2>Astronaut Location</h2>
@@ -27,8 +27,7 @@ function Rocks() {
             </div>
           </div>
           { /* Rocks Column on the right half */ }
-          
-          <div className="column">
+          <div className="rocks-column">
             <h2>Table of Rocks</h2>
             <div id="rockContainer"></div>
           
