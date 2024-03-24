@@ -5,7 +5,7 @@ const StreamComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [ipAddress, setIpAddress] = useState('');
   const [streamed, setStreamed] = useState(false); // Track whether the video has streamed
-
+  
   useEffect(() => {
     const video = videoRef.current;
 

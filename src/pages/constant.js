@@ -8,7 +8,7 @@ import Map from '../components/Map.js';
 function Constant() {
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  
+
   useEffect(() => {
     let interval;
 
@@ -51,7 +51,7 @@ function Constant() {
         {/* Column 1: Astronaut */}
         <div className="column Astronaut">
           <div className="header-banner">
-            <h2>Astronaut DataTest</h2>
+            <h2>Astronaut:</h2>
           </div>
           <div className="gif-container">
             <StreamComponent />

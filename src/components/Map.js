@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { getMapBox_API } from './../helpers/ipAddress.js';
 
 const MapboxComponent = () => {
+    const MapBoxAPIKey = getMapBox_API(); 
+
     useEffect(() => {
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYWRlbmpvbmFoIiwiYSI6ImNsdTV4MTV1bjF2MWcybW55cDh2YW1jNTcifQ.zhS3zKlwQf1tJBW6oQNvQQ';
+        mapboxgl.accessToken = MapBoxAPIKey;
         const map = new mapboxgl.Map({
             container: 'map', // Replace with your container element ID
             style: 'mapbox://styles/mapbox/satellite-v9', 
@@ -22,7 +25,7 @@ const MapboxComponent = () => {
         map.on('click', addMarker);
     
         return () => map.remove(); // Clean up the map instance
-    }, []);
+    });
 
     
     return (
