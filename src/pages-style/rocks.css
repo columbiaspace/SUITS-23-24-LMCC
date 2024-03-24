@@ -7,6 +7,14 @@
     flex-direction: row; /* arranges flex items from left to right */
     height: 85vh; /* fills 85% of the page */
     background-color: red;
+    text-align: center;
+    padding-bottom: 75px; /* creates space for bottom nav bar */
+}
+
+.bottom-nav-container {
+    position: fixed; /* Fixed position at the bottom of the viewport */
+    bottom: 0;
+    width: 100%;
 }
 
 .rocks-column {
@@ -15,7 +23,6 @@
     flex: 1;
     background-color: orange;
     overflow-y: auto; /* Enable vertical scrolling */
-    max-height: 62.5vh; /* Limit the maximum height to 80% of the viewport height */
 }
 
 #rockContainer {
