@@ -130,7 +130,6 @@ function Constant() {
             <h2>Mission</h2>
           </div>
           <div className="gif-container">
-            <h2 className="map-title">Map</h2>
             <Map/>
           </div>
           <div className="timer-container">
