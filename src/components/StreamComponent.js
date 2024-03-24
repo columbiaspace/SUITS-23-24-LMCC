@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { getHOLO_IP } from './../helpers/ipAddress.js';
 
 const StreamComponent = () => {
   const videoRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [ipAddress, setIpAddress] = useState('');
-  const [streamed, setStreamed] = useState(false); // Track whether the video has streamed
-  
+  const [setStreamed] = useState(false); // Track whether the video has streamed
+  const HOLO_IP = getHOLO_IP(); 
+
   useEffect(() => {
     const video = videoRef.current;
 
@@ -19,11 +20,11 @@ const StreamComponent = () => {
       }
     };
 
-    if (video && ipAddress && isLoading) {
+    if (video && HOLO_IP && isLoading) {
       video.addEventListener('canplaythrough', handleCanPlayThrough);
       setIsLoading(true);
 
-      const streamUrl = `http://${ipAddress}/api/holographic/stream/live_high.mp4`;
+      const streamUrl = `http://${HOLO_IP}/api/holographic/stream/live_high.mp4`;
       video.src = streamUrl;
     }
 
@@ -32,7 +33,7 @@ const StreamComponent = () => {
         video.removeEventListener('canplaythrough', handleCanPlayThrough);
       }
     };
-  }, [ipAddress, isLoading]);
+  }, [HOLO_IP, isLoading, setStreamed]);
 
   const handleVideoClick = () => {
     const video = videoRef.current;
@@ -43,32 +44,8 @@ const StreamComponent = () => {
     }
   };
 
-  const handleInputChange = (event) => {
-    setIpAddress(event.target.value);
-    setStreamed(false); // Reset streamed state when the input changes
-  };
-
-  const handleOkButtonClick = () => {
-    setIsLoading(true);
-    setStreamed(false); // Reset streamed state when the OK button is pressed
-  };
-
   return (
     <>
-      {!streamed && (
-        <>
-          <input
-            type="text"
-            placeholder="Enter IP address"
-            value={ipAddress}
-            onChange={handleInputChange}
-          />
-          <button onClick={handleOkButtonClick}>OK</button>
-        </>
-      )}
-
-      {isLoading && !streamed && <div>Loading...</div>}
-
       <video ref={videoRef} alt={"Video Stream"} onClick={handleVideoClick} />
     </>
   );

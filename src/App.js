@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css'; 
 import Navbar from "./components/Navbar";
-import BNavbar from "./components/BottomButtons";
+import BottomButtons from "./components/BottomButtons.js";
 import {
   BrowserRouter as Router,
   Routes,
@@ -37,7 +37,7 @@ function App() {
           <Route path="/Rover" element={<Rover />} />
           <Route path="/Ingress" element={<Ingress />} />
         </Routes>
-        <BNavbar />
+        <BottomButtons />
       </Router>
     </div>
   );
