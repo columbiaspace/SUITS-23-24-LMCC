@@ -4,7 +4,7 @@ import RoverGif from '../assets/RoverGif.gif';
 import ThermalGif from '../assets/ThermalGif.gif';
 import MapGif from '../assets/MapGif.gif';
 import StreamComponent from '../components/StreamComponent.js';
-
+import Map from '../components/Map.js';
 
 function Constant() {
   const [timer, setTimer] = useState(0);
@@ -132,7 +132,7 @@ function Constant() {
           </div>
           <div className="gif-container">
             <h2 className="map-title">Map</h2>
-            <img src={MapGif} alt="Map GIF" />
+            <Map/>
           </div>
           <div className="timer-container">
             <p>Mission Timer: {formatTime(timer)}</p>
