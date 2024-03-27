@@ -1,7 +1,9 @@
 # CUITS 2024 LMCC
 
-CUITS 2024 LMCC is a React application designed to simulate a Mars mission control center, providing real-time data and control over various mission aspects.
+CUITS 2024 LMCC is a React application designed to simulate a Mars mission control center, providing real-time data and control over various mission aspects.  
 
+Check it out here!   
+https://columbiaspace.github.io/SUITS-23-24-LMCC/  
 ## Features
 
 - **Constant Monitoring:** Real-time display of astronaut biometrics, suit data, rover status, and mission progress.
