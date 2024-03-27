@@ -1,33 +1,42 @@
 import React, { useState } from 'react';
-import './../pages-style/egress.css';
+import './../pages-style/ingressegress.css';
+import { EgressProcedureList } from '../assets/ProcedureLists/EgressProcedureList';
+import ProcedureItem from '../components/ProcedureItem';
+
 
 function Egress() {
-  const [showWarning, setShowWarning] = useState(false);
+  const [currentProcedure, setCurrentProcedure] = useState(0);
 
-  const handleShowWarning = () => {
-    setShowWarning(true);
+  const handleNextProcedure = () => {
+    setCurrentProcedure((prevIndex) => (prevIndex + 1) % EgressProcedureList.length);
   };
 
-  const handleCloseWarning = () => {
-    setShowWarning(false);
+  const handlePrevProcedure = () => {
+    setCurrentProcedure((prevIndex) => (prevIndex - 1 + EgressProcedureList.length) % EgressProcedureList.length);
   };
 
   return (
-    <div>
-      <h1>Egress</h1>
-      <p>This page will display samples that have been collected, and what samples should be kept</p>
-      
-      <button onClick={handleShowWarning}>Show Warning</button>
-
-      {showWarning && (
-        <div className="warning-modal">
-          <div className="warning-modal-content">
-            <span className="close" onClick={handleCloseWarning}>&times;</span>
-            <p>Warning: Are you sure you want to proceed?</p>
-            <button onClick={handleCloseWarning}>Yes, Proceed</button>
-          </div>
+    <div className="ingressegress-container">
+      <div className="left-column">
+        <h1>Ingress</h1>
+        {EgressProcedureList[currentProcedure].image && (
+          <img src={EgressProcedureList[currentProcedure].image} alt={EgressProcedureList[currentProcedure].name} />
+        )}
+      </div>
+      <div className="ProcedureList">
+        {EgressProcedureList.map((Item, index) => (
+          <ProcedureItem
+            key={index}
+            name={Item.name}
+            description={Item.description}
+            className={index === currentProcedure ? 'show' : ''}
+          />
+        ))}
+        <div className="navigation-buttons">
+          <button onClick={handlePrevProcedure}>&lt; Previous</button>
+          <button onClick={handleNextProcedure}>Next &gt;</button>
         </div>
-      )}
+      </div>
     </div>
   );
 }

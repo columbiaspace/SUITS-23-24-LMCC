@@ -8,7 +8,7 @@ const Navbar = () => {
         <>
             <Nav>
                 <NavMenu>
-                    <img className="img" src={require("./../assets/logo.jpg")} alt="Logo"/>
+                    <img className="img" src={require("./../assets/Images/logo.jpg")} alt="Logo"/>
                     <NavLink to="/Constant" activeStyle>
                         Constant
                     </NavLink>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './../pages-style/ingress.css';
-import { ProcedureList } from '../helpers/ProcedureList';
+import './../pages-style/ingressegress.css';
+import { IngressProcedureList } from '../assets/ProcedureLists/IngressProcedureList';
 import ProcedureItem from '../components/ProcedureItem';
 
 
@@ -8,23 +8,23 @@ function Ingress() {
   const [currentProcedure, setCurrentProcedure] = useState(0);
 
   const handleNextProcedure = () => {
-    setCurrentProcedure((prevIndex) => (prevIndex + 1) % ProcedureList.length);
+    setCurrentProcedure((prevIndex) => (prevIndex + 1) % IngressProcedureList.length);
   };
 
   const handlePrevProcedure = () => {
-    setCurrentProcedure((prevIndex) => (prevIndex - 1 + ProcedureList.length) % ProcedureList.length);
+    setCurrentProcedure((prevIndex) => (prevIndex - 1 + IngressProcedureList.length) % IngressProcedureList.length);
   };
 
   return (
-    <div className="ingress-container">
+    <div className="ingressegress-container">
       <div className="left-column">
         <h1>Ingress</h1>
-        {ProcedureList[currentProcedure].image && (
-          <img src={ProcedureList[currentProcedure].image} alt={ProcedureList[currentProcedure].name} />
+        {IngressProcedureList[currentProcedure].image && (
+          <img src={IngressProcedureList[currentProcedure].image} alt={IngressProcedureList[currentProcedure].name} />
         )}
       </div>
       <div className="ProcedureList">
-        {ProcedureList.map((Item, index) => (
+        {IngressProcedureList.map((Item, index) => (
           <ProcedureItem
             key={index}
             name={Item.name}

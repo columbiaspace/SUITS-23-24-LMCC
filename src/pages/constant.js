@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './../pages-style/constant.css';
-import RoverGif from '../assets/RoverGif.gif';
-import ThermalGif from '../assets/ThermalGif.gif';
+import RoverGif from '../assets/Images/RoverGif.gif';
+import ThermalGif from '../assets/Images/ThermalGif.gif';
 import StreamComponent from '../components/StreamComponent.js';
 import Map from '../components/Map.js';
 
