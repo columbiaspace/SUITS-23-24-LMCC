@@ -7,8 +7,8 @@ Check it out [here!](https://columbiaspace.github.io/SUITS-23-24-LMCC/)
 
 - **Constant Monitoring:** Real-time display of astronaut biometrics, suit data, rover status, and mission progress.
 - **Navigation:** Complex map display with checkpoint management and pathfinding.
-- **Equipment Management:** Overview of available and in-use equipment.
-- **Sample Management (Egress/Ingress):** Handling of collected samples and procedural checklists.
+- **Equipment Repait and Diagnosis:** Procedures and checklists.
+- **Egress/Ingress:** Procedural checklists.
 - **Rover Control:** Real-time location and camera data display.
 - **Geological Sampling:** Interactive geological map and rock data management.
 
