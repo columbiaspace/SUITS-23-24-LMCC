@@ -1,6 +1,6 @@
 .ingressegress-container {
     display: flex;
-    height: 100vh;
+    height: 73vh;
 }
 
 .left-column {
@@ -13,8 +13,8 @@
 }
 
 .left-column img {
-    width: 450px;
-    height: auto;
+    width: auto;
+    height: 300px;
     margin-bottom: 20px;
 }
 
@@ -32,6 +32,7 @@
 
 .ProcedureItem {
     display: none;
+    height: 60vh;
 }
 
 .ProcedureItem.show {
@@ -39,11 +40,12 @@
 }
 
 .navigation-buttons {
+    display: flex;
+    justify-content: center; /* Align buttons in the center horizontally */
     margin-top: 10px;
 }
 
 .navigation-buttons button {
-    margin-right: 10px;
     padding: 8px 12px;
     cursor: pointer;
 }

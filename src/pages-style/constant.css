@@ -4,17 +4,22 @@
 
 .container {
   display: flex;
-  height: 85vh;
+  height: 73vh;
+}
+
+.taskBox {
+  flex-grow: 1;
 }
 
 .subContainer {
   display: flex;
   height: 50%;
+  flex-grow: 1;
 }
 
 .data {
   background: green;
-  height: 12.5%;
+  height: 15%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,6 +30,31 @@
 
 .column.Mission {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.column.Rover {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.roverGifs {
+  flex-grow: 1;
+}
+
+.column.Astronaut {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.columnSuitBiometrics {
+  flex-grow: 1;
 }
 
 .map-title {
@@ -38,7 +68,7 @@
 }
 
 .twoTasks {
-  height: 12%;
+  height: 33.3333%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -118,7 +148,7 @@
 
 .smallHB {
   background: lightblue;
-  height: 30px;
+  height: 10%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -128,7 +158,7 @@
 
 .gif-container {
   max-width: 100%; /* Adjusted to 100% */
-  height: auto;
+  height: 28vh;
   padding: 0;
   margin: 0;
 }

@@ -2,7 +2,7 @@ import image1 from '../Images/DCU_Front.jpg'; // Assuming you have images, chang
 
 export const IngressProcedureList = [
   {
-    name: '2 Connect UIA to DCU',
+    name: 'Connect UIA to DCU',
     description: 'a. PLUG: Connect UIA and DCU via the cable\nb. SWITCH: UIA EMU POWER-> ON (activates the Umbilical on the UIA side)\nc. SWITCH: DCU BATT -> Umbilical (activated the Umbilical on the DCU side)',
     image: image1,
   },

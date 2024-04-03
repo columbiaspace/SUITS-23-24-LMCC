@@ -57,7 +57,7 @@ function Constant() {
             <StreamComponent />
           </div>
           <div className="subContainer">
-            <div className="column SuitData">
+            <div className="columnSuitBiometrics">
               <div className="smallHB">
                 <h3>Suit Data</h3>
               </div>
@@ -87,7 +87,7 @@ function Constant() {
                 <span>Mid</span>
               </div>
             </div>
-            <div className="column Biometrics">
+            <div className="columnSuitBiometrics">
               <div className="smallHB">
                 <h3>Biometrics</h3>
               </div>
@@ -130,7 +130,7 @@ function Constant() {
             <h2>Mission</h2>
           </div>
           <div className="gif-container">
-            <Map/>
+            <Map />
           </div>
           <div className="timer-container">
             <p>Mission Timer: {formatTime(timer)}</p>
@@ -138,34 +138,36 @@ function Constant() {
             <button onClick={stopTimer}>Stop</button>
             <button onClick={resetTimer}>Reset</button>
           </div>
-          <div className="twoTasks">
-            <div className="taskContainer" style={{ background: 'green' }}>
-              <span>Egress:&nbsp;</span>
-              <span>Completed</span>
+          <div className="taskBox">
+            <div className="twoTasks">
+              <div className="taskContainer" style={{ background: 'green' }}>
+                <span>Egress:&nbsp;</span>
+                <span>Completed</span>
+              </div>
+              <div className="taskContainer" style={{ background: 'red' }}>
+                <span>Rock Scanning:&nbsp;</span>
+                <span>Not Started</span>
+              </div>
             </div>
-            <div className="taskContainer" style={{ background: 'red' }}>
-              <span>Rock Scanning:&nbsp;</span>
-              <span>Not Started</span>
+            <div className="twoTasks">
+              <div className="taskContainer" style={{ background: 'green' }}>
+                <span>Navigation:&nbsp;</span>
+                <span>Completed</span>
+              </div>
+              <div className="taskContainer" style={{ background: 'red' }}>
+                <span>Rover:&nbsp;</span>
+                <span>Not Started</span>
+              </div>
             </div>
-          </div>
-          <div className="twoTasks">
-            <div className="taskContainer" style={{ background: 'green' }}>
-              <span>Navigation:&nbsp;</span>
-              <span>Completed</span>
-            </div>
-            <div className="taskContainer" style={{ background: 'red' }}>
-              <span>Rover:&nbsp;</span>
-              <span>Not Started</span>
-            </div>
-          </div>
-          <div className="twoTasks">
-            <div className="taskContainer" style={{ background: 'yellow' }}>
-              <span>Equipment:&nbsp;</span>
-              <span>In Progress</span>
-            </div>
-            <div className="taskContainer" style={{ background: 'red' }}>
-              <span>Ingress:&nbsp;</span>
-              <span>Not Started</span>
+            <div className="twoTasks">
+              <div className="taskContainer" style={{ background: 'yellow' }}>
+                <span>Equipment:&nbsp;</span>
+                <span>In Progress</span>
+              </div>
+              <div className="taskContainer" style={{ background: 'red' }}>
+                <span>Ingress:&nbsp;</span>
+                <span>Not Started</span>
+              </div>
             </div>
           </div>
         </div>
@@ -175,11 +177,11 @@ function Constant() {
           <div className="header-banner">
             <h2>Rover</h2>
           </div>
-          <div className="gif-container">
-            <img src={RoverGif} alt="Rover POV GIF" />
+          <div className="gif-container" style={{ height: '50%', display: 'flex', alignItems: 'stretch' }}>
+            <img src={RoverGif} alt="Rover POV GIF" style={{ height: '100%', objectFit: 'cover', width: '100%' }} />
           </div>
-          <div className="gif-container">
-            <img src={ThermalGif} alt="Rover Thermal POV GIF" />
+          <div className="gif-container" style={{ height: '50%', display: 'flex', alignItems: 'stretch' }}>
+            <img src={ThermalGif} alt="Rover Thermal POV GIF" style={{ height: '100%', objectFit: 'cover', width: '100%' }} />
           </div>
         </div>
       </div>

@@ -1,11 +1,15 @@
 import React from 'react';
 import './../pages-style/nav.css';
+import Map from '../components/Map';
 
 function nav() {
   return (
-    <div>
+    <div className='navPage'>
       <h1>Navigation</h1>
-      <p>This page will display a complex map, allow checkpoints to be made and edited, and use pathfinding algorithms to show point to point navigation directions</p>
+
+      <div className="map-container">
+          <Map />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import './../pages-style/rocks.css';
 import { populateRockData } from './../helpers/RockData.js';
+import Map from '../components/Map.js';
 
 function Rocks() {
   useEffect(() => {
@@ -19,7 +20,10 @@ function Rocks() {
                 <h2>Astronaut Location</h2>
               </div>
               <div className="subcontainer sampling-map-container">
-                <h2>Sample Map</h2>
+                <h2>Map</h2>
+                <div className="gif-container">
+                  <Map />
+                </div>
               </div>
             </div>
             <div className="points-of-interest-container">

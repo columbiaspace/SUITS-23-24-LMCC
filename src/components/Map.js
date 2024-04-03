@@ -12,7 +12,7 @@ const MapboxComponent = () => {
             container: 'map', // Replace with your container element ID
             style: 'mapbox://styles/mapbox/satellite-v9', 
             center: [-95.08148549138448, 29.564911887991144], // Longitude, Latitude
-            zoom: 17 // Adjust zoom level as needed
+            zoom: 17.5 // Adjust zoom level as needed
         });
 
         const addMarker = (e) => {
@@ -29,7 +29,7 @@ const MapboxComponent = () => {
 
     
     return (
-        <div id="map" style={{ width: '100%', height: '400px' }}></div>
+        <div id="map" style={{ width: '100%', height: '100%' }}></div>
     );
 };
 

@@ -1,4 +1,4 @@
-// BNavbar.js
+
 import React from "react";
 import { BottomButtonMenu, BButtonButton, BButton } from "./BottomButtonsElements"; // Add BNavButton import
 import { useNavigate, useLocation } from "react-router-dom";
@@ -25,7 +25,7 @@ const BottomButtons = () => {
 
     return (
         <>
-            <BButton>
+            <BButton style={{ height: '7vh' }}>
                 <BottomButtonMenu>
                     {pageButtonMap[location.pathname] && pageButtonMap[location.pathname].map((buttonLink, index) => (
                         <BButtonButton key={index} onClick={() => handleButtonClick(buttonLink)} className="bnav-link">

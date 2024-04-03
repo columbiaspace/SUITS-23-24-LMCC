@@ -1,0 +1,29 @@
+.rover-page {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header-rover {
+    text-align: center;
+  }
+  
+  .content-rover {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .column-rover {
+    flex: 1;
+    display: flex;
+    flex-direction: column; /* Ensure column layout for contents */
+    align-items: center; /* Center contents horizontally */
+  }
+  
+  .gif-container-rover {
+    width: 100%; /* Take full width of the column */
+    min-height: 300px; /* Set a minimum height to ensure visibility */
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+  }
+  

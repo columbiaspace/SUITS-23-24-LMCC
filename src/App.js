@@ -12,7 +12,6 @@ import Rover from "./pages/rover";
 import Rocks from "./pages/rocks";
 import Nav from "./pages/nav";
 import Ingress from "./pages/ingress";
-import Focus from "./pages/focus";
 import Equipment from "./pages/equipment";
 import Egress from "./pages/egress";
 import Constant from './pages/constant';
@@ -26,9 +25,8 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Constant />} />
+          <Route path="" element={<Setup />} />
           <Route path="/Constant" element={<Constant />} />
-          <Route path="/Focus" element={<Focus />} />
           <Route path="/Setup" element={<Setup />} />
           <Route path="/Egress" element={<Egress />} />
           <Route path="/Nav" element={<Nav />} />

@@ -1,4 +1,3 @@
-// Navbar.js
 import React from "react";
 import { Nav, NavLink, NavMenu } from "./NavbarElements";
 import './navbar.css';
@@ -6,14 +5,11 @@ import './navbar.css';
 const Navbar = () => {
     return (
         <>
-            <Nav>
+            <Nav style={{ height: '10vh' }}>
                 <NavMenu>
                     <img className="img" src={require("./../assets/Images/logo.jpg")} alt="Logo"/>
                     <NavLink to="/Constant" activeStyle>
                         Constant
-                    </NavLink>
-                    <NavLink to="/Focus" activeStyle>
-                        Focus
                     </NavLink>
                     <NavLink to="/Setup" activeStyle>
                         Setup
