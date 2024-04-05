@@ -9,6 +9,7 @@ const StreamComponent = () => {
     if (videoRef.current && HOLO_IP) {
       const streamUrl = `http://${HOLO_IP}/api/holographic/stream/live_high.mp4`;
       videoRef.current.src = streamUrl;
+      videoRef.current.load();
       videoRef.current.play().catch(error => {
         console.error('Error playing the video:', error);
       });
@@ -16,7 +17,7 @@ const StreamComponent = () => {
   }, [HOLO_IP]);
 
   return (
-    <video ref={videoRef} controls autoPlay muted />
+    <video ref={videoRef} controls autoPlay muted playsInline />
   );
 };
 
