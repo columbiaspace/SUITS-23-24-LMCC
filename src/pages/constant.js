@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import './../pages-style/constant.css';
 import StreamComponent from '../components/StreamComponent.js';
 import Map from '../components/Map.js';
 import { getTSS_IP } from './../helpers/ipAddress.js'; // Import getTSS_IP function
 import { downloadAndReplaceFile, } from './../helpers/wgetHelper.js';
-import React, { useState, useEffect } from "react";
 import "./../pages-style/constant.css";
 import RoverCam from "../components/RoverCamera.js";
-import StreamComponent from "../components/StreamComponent.js";
-import Map from "../components/Map.js";
 
 function Constant() {
   const [timer, setTimer] = useState(0);
