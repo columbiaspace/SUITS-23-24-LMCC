@@ -18,7 +18,7 @@ function Egress() {
   return (
     <div className="ingressegress-container">
       <div className="left-column">
-        <h1>Ingress</h1>
+        <h1>Egress</h1>
         {EgressProcedureList[currentProcedure].image && (
           <img src={EgressProcedureList[currentProcedure].image} alt={EgressProcedureList[currentProcedure].name} />
         )}

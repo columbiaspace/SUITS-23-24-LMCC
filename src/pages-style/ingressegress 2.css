@@ -1,0 +1,51 @@
+.ingressegress-container {
+    display: flex;
+    height: 73vh;
+}
+
+.left-column {
+    flex: 1;
+    padding: 20px;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.left-column img {
+    width: auto;
+    height: 300px;
+    margin-bottom: 20px;
+}
+
+.ProcedureList {
+    flex: 1;
+    padding: 20px;
+    background-color: #e0e0e0;
+}
+
+.ProcedureList {
+    text-wrap: true;
+    width: 50%;
+    height: 100%;
+}
+
+.ProcedureItem {
+    display: none;
+    height: 60vh;
+}
+
+.ProcedureItem.show {
+    display: block;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: center; /* Align buttons in the center horizontally */
+    margin-top: 10px;
+}
+
+.navigation-buttons button {
+    padding: 8px 12px;
+    cursor: pointer;
+}
