@@ -1,0 +1,83 @@
+/* General body styling */
+body {
+  font-family: Arial, sans-serif; /* Ensures a clean, modern typeface */
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4; /* Light grey background */
+}
+
+/* Container style */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* This line ensures that all children are centered horizontally */
+  padding: 20px;
+  margin: 0 auto; /* Centering the container horizontally on the page */
+  max-width: 1200px; /* Maximum width of the container, centers content within */
+}
+
+
+.page-title {
+  text-align: center; /* Centering the text horizontally */
+  margin-top: 20px; /* Adds space above the title */
+  margin-bottom: 20px; /* Adds space below the title */
+  font-size: 28px; /* Sets a larger font size for visibility */
+  color: #007bff; /* Applies a blue color for style */
+}
+
+
+/* Card styles */
+.card {
+  background-color: #ffffff;
+  border: 1px solid #ccc; /* Light grey border */
+  width: 300px; /* Fixed width */
+  height: auto; /* Height adjusts to content */
+  margin: 10px; /* Space between cards */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  cursor: pointer;
+  transition: transform 0.3s ease; /* Smooth transform effect */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Slightly enlarge card on hover */
+}
+
+.card-title {
+  background-color: #007bff; /* A bold, modern blue */
+  color: #ffffff;
+  font-size: 20px;
+  padding: 15px 20px;
+  margin: 0; /* Remove default margin */
+}
+
+/* Card content visibility */
+.card-content {
+  display: none; /* Hide content initially */
+  padding: 20px;
+}
+
+.card-content.show {
+  display: block; /* Display content when expanded */
+}
+
+.step {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eaeaea; /* Light line to separate steps */
+  padding-bottom: 20px;
+}
+
+.step:last-child {
+  border-bottom: none; /* No border for the last step */
+}
+
+/* Add responsive design features */
+@media (max-width: 768px) {
+  .container {
+    justify-content: center; /* Center cards on smaller screens */
+  }
+
+  .card {
+    width: 90%; /* Full width on smaller screens */
+    margin: 10px auto; /* Auto margin for horizontal centering */
+  }
+}

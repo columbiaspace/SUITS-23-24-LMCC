@@ -1,0 +1,40 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.card {
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.card-title {
+    color: #007bff;
+}
+
+.card-content {
+    display: none;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.card-content.show {
+    display: block;
+}
+
+input[type="text"] {
+    margin: 10px;
+    padding: 8px;
+    width: 200px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
