@@ -10,7 +10,6 @@ const ExpandableCard = ({ title, steps }) => {
 
   return (
     <div className="card" onClick={toggleExpansion}>
-    
       <h3 className="card-title">{title}</h3>
       {isExpanded && (
         <div className={isExpanded ? "card-content show" : "card-content"}>
