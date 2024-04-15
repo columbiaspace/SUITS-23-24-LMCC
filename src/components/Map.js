@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { getMapBox_API } from './../helpers/ipAddress.js';
-import geoJson from '../assets/json_data/GeoJson/mapData.json';
+import geoJson from '../assets/json_data/GeoJson/stagnentData.json';
 
 const MapboxComponent = () => {
     const MapBoxAPIKey = getMapBox_API();
@@ -16,72 +16,69 @@ const MapboxComponent = () => {
             zoom: 17.5
         });
 
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        });
+
         map.on('load', function () {
             map.addSource('geojson-source', {
                 type: 'geojson',
                 data: geoJson
             });
 
-            // Add layers based on feature type
             geoJson.features.forEach((feature, index) => {
-                if (feature.geometry.type === 'Point') {
-                    // Add a layer for point features
-                    map.addLayer({
-                        id: `point-layer-${index}`,
-                        type: 'circle',
-                        source: 'geojson-source',
-                        filter: ['==', ['id'], feature.id],
-                        paint: {
-                            'circle-radius': 6,
-                            'circle-color': feature.properties['marker-color'] || '#FF0000'
-                        }
-                    });
+                if (feature.properties.mapbounds) return; // Skip map bounds or similar features
 
-                    // Event listener for showing popup on hover
-                    map.on('mouseenter', `point-layer-${index}`, (e) => {
-                        // Change the cursor style as a UI indicator.
-                        map.getCanvas().style.cursor = 'pointer';
+                const layerId = `${feature.geometry.type.toLowerCase()}-layer-${index}`;
+                const layerType = feature.geometry.type === 'Point' ? 'circle' : feature.geometry.type === 'LineString' ? 'line' : 'fill';
 
-                        const coordinates = e.features[0].geometry.coordinates.slice();
-                        const description = e.features[0].properties.Name; // Customize this based on what you want to show
+                map.addLayer({
+                    id: layerId,
+                    type: layerType,
+                    source: 'geojson-source',
+                    filter: ['==', ['id'], feature.id],
+                    paint: {
+                        'circle-radius': 6,
+                        'circle-color': feature.properties['marker-color'] || '#FF0000',
+                        'fill-color': feature.properties.fill || '#888888',
+                        'fill-opacity': feature.properties['fill-opacity'] || 0.5,
+                        'line-color': feature.properties.stroke || '#888888',
+                        'line-width': feature.properties['stroke-width'] || 2
+                    }
+                });
 
-                        // Populate the popup and set its coordinates
-                        new mapboxgl.Popup()
-                            .setLngLat(coordinates)
-                            .setHTML(description)
-                            .addTo(map);
-                    });
+                map.on('mouseenter', layerId, (e) => {
+                    if (!e.features[0]) return;
+                    map.getCanvas().style.cursor = 'pointer';
+                    
+                    let coordinates;
+                    if (feature.geometry.type === 'Point') {
+                        coordinates = e.features[0].geometry.coordinates.slice();
+                    } else if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+                        coordinates = e.features[0].geometry.coordinates[0][0];
+                    } else if (feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString') {
+                        coordinates = e.features[0].geometry.coordinates[0];
+                    }
+                    
+                    const description = e.features[0].properties.Name || 'No description available';
 
-                    map.on('mouseleave', `point-layer-${index}`, () => {
-                        map.getCanvas().style.cursor = '';
-                         // Nothing Here, Remove the popup when the mouse leaves the feature
-                    });
-                } else {
-                    // Handle non-point features
-                    const layerType = feature.geometry.type === 'LineString' ? 'line' : 'fill';
-                    map.addLayer({
-                        id: `geojson-layer-${index}`,
-                        type: layerType,
-                        source: 'geojson-source',
-                        filter: ['==', ['id'], feature.id],
-                        paint: {
-                            // Set paint properties based on feature's geometry type
-                            'fill-color': feature.properties.fill || '#888888',
-                            'fill-opacity': feature.properties['fill-opacity'] || 0.5,
-                            'line-color': feature.properties.stroke || '#888888',
-                            'line-width': feature.properties['stroke-width'] || 2
-                        }
-                    });
-                }
+                    popup.setLngLat(coordinates)
+                         .setHTML(description)
+                         .addTo(map);
+                });
+
+                map.on('mouseleave', layerId, () => {
+                    map.getCanvas().style.cursor = '';
+                    popup.remove();
+                });
             });
         });
 
         return () => map.remove(); // Clean up the map instance
     });
 
-    return (
-        <div id="map" style={{ width: '100%', height: '100%' }}></div>
-    );
+    return <div id="map" style={{ width: '100%', height: '100%' }}></div>;
 };
 
 export default MapboxComponent;
