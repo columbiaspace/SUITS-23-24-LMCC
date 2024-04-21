@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getTSS_IP, setTSS_IP, getHOLO_IP, setHOLO_IP, getMapBox_API, setMapBox_API } from '../helpers/ipAddress';
+import { getTSS_IP, setTSS_IP, getHOLO_IP, setHOLO_IP, getMapBox_API, setMapBox_API } from '../../helpers/ipAddress';
+import '../../pages-style/page.css'
 
 function Setup() {
   const [tssIP, setTssIP] = useState(getTSS_IP());
@@ -49,7 +50,7 @@ function Setup() {
   };
 
   return (
-    <div>
+    <div pagecontainer>
       <h1>Setup</h1>
       <p>This page will be the landing page for the Setup display, and should explain the point of the Setup display</p>
       <label htmlFor="tss_ip">TSS IP Address: </label>

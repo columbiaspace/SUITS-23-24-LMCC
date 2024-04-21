@@ -1,10 +1,11 @@
 import React from 'react';
-import './../pages-style/rover.css';
-import Map from '../components/Map.js'
+import '../../pages-style/rover.css';
+import '../../pages-style/page.css'
+import Map from '../../components/Map.js'
 
 function Rover() {
   return (
-    <div className="rover-page">
+    <div className="pagecontainer">
       <div className="header-rover">
         <h1>Rover</h1>
         <p>This page will display the rover's collected samples, location, and camera data</p>

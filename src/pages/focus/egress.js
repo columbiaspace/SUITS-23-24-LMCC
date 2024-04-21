@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import './../pages-style/ingressegress.css';
-import { EgressProcedureList } from '../assets/ProcedureLists/EgressProcedureList';
-import ProcedureItem from '../components/ProcedureItem';
+import '../../pages-style/ingressegress.css';
+import '../../pages-style/page.css'
+import { EgressProcedureList } from '../../assets/ProcedureLists/EgressProcedureList';
+import ProcedureItem from '../../components/ProcedureItem';
 
 
 function Egress() {
@@ -16,7 +17,7 @@ function Egress() {
   };
 
   return (
-    <div className="ingressegress-container">
+    <div className="pagecontainer">
       <div className="left-column">
         <h1>Ingress</h1>
         {EgressProcedureList[currentProcedure].image && (

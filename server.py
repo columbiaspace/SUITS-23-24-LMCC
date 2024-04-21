@@ -1,24 +1,28 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import httpx
 from fastapi.middleware.cors import CORSMiddleware
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-app = FastAPI()
-
-# Define a helper function to fetch JSON from the server
 async def fetch_json(url: str):
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
+        if response.status_code != 200:
+            logger.error(f"Failed to fetch data from {url}, status code: {response.status_code}")
+            return {"error": f"Failed to fetch data, status code: {response.status_code}"}
         return response.json()
 
 # Endpoint to handle general JSON files like COMM.json, DCU.json, etc.
