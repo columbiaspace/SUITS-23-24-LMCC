@@ -16,7 +16,6 @@ body {
   max-width: 1200px; /* Maximum width of the container, centers content within */
 }
 
-
 .page-title {
   text-align: center; /* Centering the text horizontally */
   margin-top: 20px; /* Adds space above the title */
@@ -24,7 +23,6 @@ body {
   font-size: 28px; /* Sets a larger font size for visibility */
   color: #007bff; /* Applies a blue color for style */
 }
-
 
 /* Card styles */
 .card {
@@ -70,14 +68,57 @@ body {
   border-bottom: none; /* No border for the last step */
 }
 
-/* Add responsive design features */
+/* Header area with title and add new button */
+.header-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px; /* Adjust spacing as needed */
+}
+
+.add-procedure-btn {
+  background-color: #d3d3d3; /* Light gray background */
+  color: #000000; /* White text */
+  font-weight: bold; /* Bold font */
+  border: 1px solid #ccc; /* Light grey border */
+  width: 300px; /* Match other cards */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.add-procedure-btn:hover {
+  transform: scale(1.05);
+}
+
 @media (max-width: 768px) {
   .container {
     justify-content: center; /* Center cards on smaller screens */
   }
 
-  .card {
+  .card, .add-procedure-btn {
     width: 90%; /* Full width on smaller screens */
     margin: 10px auto; /* Auto margin for horizontal centering */
+  }
+
+  .header-area {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .add-procedure-btn {
+    margin-top: 10px; /* Spacing after the title on smaller screens */
+  }
+
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
   }
 }
