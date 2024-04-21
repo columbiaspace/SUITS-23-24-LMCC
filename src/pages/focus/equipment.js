@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ExpandableCard from "../../helpers/ExpandableCard.jsx";
 import "../../pages-style/page.css";
+import "../../pages-style/equipment.css";
 import equipmentData from "../../assets/ProcedureLists/EquipmentRepair.json";
 
 const EquipmentPage = () => {

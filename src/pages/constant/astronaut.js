@@ -5,7 +5,7 @@ function astronaut() {
   return (
     <div className="column Astronaut">
       <div className="header-banner">
-        <h2>Astronaut:</h2>
+        <h2>Astronaut</h2>
       </div>
       <div className="gif-container">
         <StreamComponent />

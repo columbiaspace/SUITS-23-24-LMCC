@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getHOLO_IP } from './../helpers/ipAddress.js';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import NoVid from "./../assets/Images/NoVid.jpg"
+import NoVid from "./../assets/Images/NoVid.png"
 
 const StreamComponent = () => {
   const videoRef = useRef(null);
@@ -27,7 +27,7 @@ const StreamComponent = () => {
       <div>
         <h1>HoloLens Not Connected</h1>
         <p style={{ textAlign: 'center' }}>To see stream, input the HoloLens IP in the Setup page <Link to="/Setup">here</Link>.</p>
-        <img src={NoVid} alt="No Stream Icon" style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '200px', height: '200px' }}/>
+        <img src={NoVid} alt="No Stream Icon" style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', marginTop: '10px', width: '200px', height: '200px' }}/>
       </div>
     );
   }
