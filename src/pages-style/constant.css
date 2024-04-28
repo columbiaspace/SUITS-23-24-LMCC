@@ -2,6 +2,27 @@
   box-sizing: border-box;
 }
 
+/* Style each column to take up exactly one-third of the container width and full height */
+#lcol, #mcol, #rcol {
+  flex: 1; /* Each column flexes to fill one-third of the space */
+  height: 100%; /* Full height of the parent */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+}
+
+#mcol {
+  border-left: 1px solid #ccc; /* Adds a divider to the left of the middle column */
+  border-right: 1px solid #ccc; /* Adds a divider to the right of the middle column */
+}
+
+/* Ensure the content does not overflow from each column */
+#lcol > *, #mcol > *, #rcol > * {
+  overflow: auto;
+  height: 100%;
+}
+
+/*OLD*/
+
+
 .container {
   display: flex;
   height: 73vh;

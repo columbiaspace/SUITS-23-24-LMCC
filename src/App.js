@@ -1,27 +1,24 @@
 import React from 'react';
 import './App.css'; 
 import Navbar from "./components/Navbar";
-import BottomButtons from "./components/BottomButtons.js";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
 } from "react-router-dom";
-import Setup from "./pages/setup";
-import Rover from "./pages/rover";
-import Rocks from "./pages/rocks";
-import Nav from "./pages/nav";
-import Ingress from "./pages/ingress";
-import Equipment from "./pages/equipment";
-import Egress from "./pages/egress";
-import Constant from './pages/constant';
+import Setup from "./pages/focus/setup";
+import Rover from "./pages/focus/rover";
+import Rocks from "./pages/focus/rocks";
+import Nav from "./pages/focus/nav";
+import Ingress from "./pages/focus/ingress";
+import Equipment from "./pages/focus/equipment";
+import Egress from "./pages/focus/egress";
+import Constant from './pages/constant/constant.js';
 
 
 function App() {
   return (
     <div>
-      <h1>CUITS 2024 LMCC</h1>
-
       <Router>
         <Navbar />
         <Routes>
@@ -35,7 +32,6 @@ function App() {
           <Route path="/Rover" element={<Rover />} />
           <Route path="/Ingress" element={<Ingress />} />
         </Routes>
-        <BottomButtons />
       </Router>
     </div>
   );

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import './../pages-style/rocks.css';
-import { populateRockData } from './../helpers/RockData.js';
-import Map from '../components/Map.js';
+import '../../pages-style/rocks.css';
+import '../../pages-style/page.css';
+import { populateRockData } from '../../helpers/RockData.js';
+import Map from '../../components/Map.js';
 
 function Rocks() {
   useEffect(() => {
@@ -10,7 +11,7 @@ function Rocks() {
 
   return (
 
-    <div>
+    <div className='pagecontainter'>
       <h1>Geological Sampling</h1>
         <div className="rocks-container">
           { /* Maps Column on the left half */ }

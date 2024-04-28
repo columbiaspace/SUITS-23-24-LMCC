@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { getMapBox_API } from './../helpers/ipAddress.js';
+import React, { useEffect, useState } from "react";
+import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { getMapBox_API } from "./../helpers/ipAddress.js";
+import geoJson from "../assets/json_data/GeoJson/stagnentData.json";
 
 const MapboxComponent = () => {
     const MapBoxAPIKey = getMapBox_API();
     const [map, setMap] = useState(null);
-    const [userMarkers, setUserMarkers] = useState([]);
+    const [markers, setMarkers] = useState([]);
     const [landmarks, setLandmarks] = useState([]);
     const [selectedPoints, setSelectedPoints] = useState([]);
-    const [showUserMarkers, setShowUserMarkers] = useState(true);
-    const [showLandmarks, setShowLandmarks] = useState(true);
+    const [showMarkers, setShowMarkers] = useState(true);
     const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
 
     useEffect(() => {
@@ -19,10 +19,11 @@ const MapboxComponent = () => {
             container: 'map',
             style: 'mapbox://styles/mapbox/satellite-v9',
             center: [-95.08148549138448, 29.564911887991144],
-            zoom: 15
+            zoom: 15,
         });
 
         newMap.on('load', () => {
+            // Load landmarks
             setLandmarks([
                 { id: 'landmark1', title: 'Eiffel Tower', lat: 48.8584, lng: 2.2945, description: 'A wrought-iron lattice tower on the Champ de Mars in Paris, France.' },
                 { id: 'landmark2', title: 'Statue of Liberty', lat: 40.6892, lng: -74.0445, description: 'A colossal statue on Liberty Island in New York Harbor.' }
@@ -33,6 +34,33 @@ const MapboxComponent = () => {
                     .addTo(newMap);
                 return { ...landmark, marker };
             }));
+
+            // Load geoJSON data
+            newMap.addSource("geojson-source", {
+                type: "geojson",
+                data: geoJson,
+            });
+
+            geoJson.features.forEach((feature, index) => {
+                if (feature.properties.mapbounds) return;
+                const layerId = `${feature.geometry.type.toLowerCase()}-layer-${index}`;
+                const layerType = feature.geometry.type === "Point" ? "circle" : feature.geometry.type === "LineString" ? "line" : "fill";
+
+                newMap.addLayer({
+                    id: layerId,
+                    type: layerType,
+                    source: "geojson-source",
+                    filter: ["==", ["id"], feature.id],
+                    paint: {
+                        "circle-radius": 6,
+                        "circle-color": feature.properties["marker-color"] || "#FF0000",
+                        "fill-color": feature.properties.fill || "#888888",
+                        "fill-opacity": feature.properties["fill-opacity"] || 0.5,
+                        "line-color": feature.properties.stroke || "#888888",
+                        "line-width": feature.properties["stroke-width"] || 2,
+                    },
+                });
+            });
         });
 
         newMap.on('mousemove', (e) => {
@@ -42,7 +70,8 @@ const MapboxComponent = () => {
         setMap(newMap);
 
         return () => {
-            userMarkers.forEach(marker => marker.remove());
+            markers.forEach(marker => marker.marker.remove());
+            landmarks.forEach(landmark => landmark.marker.remove());
             newMap.remove();
         };
     }, []);
@@ -59,26 +88,29 @@ const MapboxComponent = () => {
                 .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(`<h3>${title}</h3><p>${description}</p>`))
                 .addTo(map);
 
-            setUserMarkers(currentMarkers => [...currentMarkers, { marker, title, description, id: currentMarkers.length }]);
+            setMarkers(currentMarkers => [...currentMarkers, { marker, title, description, id: currentMarkers.length }]);
         });
     }, [map]);
 
-    const toggleVisibility = (type) => {
-        if (type === 'userMarkers') {
-            setShowUserMarkers(!showUserMarkers);
-            userMarkers.forEach(m => m.marker.getElement().style.display = showUserMarkers ? 'none' : 'block');
-        } else {
-            setShowLandmarks(!showLandmarks);
-            landmarks.forEach(l => l.marker.getElement().style.display = showLandmarks ? 'none' : 'block');
-        }
+    const toggleVisibility = () => {
+        setShowMarkers(!showMarkers);
+        markers.concat(landmarks).forEach(m => m.marker.getElement().style.display = showMarkers ? 'none' : 'block');
     };
 
-    const drawRoute = () => {
+    const handleSelectPoint = marker => {
+        const updatedSelection = selectedPoints.includes(marker) ? selectedPoints.filter(p => p !== marker) : [...selectedPoints, marker];
+        setSelectedPoints(updatedSelection.length > 2 ? updatedSelection.slice(1) : updatedSelection);
+    };
+
+    const displayMarkerInfo = (marker) => {
+        alert(`Title: ${marker.title}\nDescription: ${marker.description}`);
+    };
+
+    const calculateRoute = () => {
         if (selectedPoints.length === 2) {
             const [start, end] = selectedPoints.map(m => m.marker.getLngLat());
             const route = {
                 type: 'Feature',
-                properties: {},
                 geometry: {
                     type: 'LineString',
                     coordinates: [[start.lng, start.lat], [end.lng, end.lat]]
@@ -88,11 +120,13 @@ const MapboxComponent = () => {
             if (map.getSource('route')) {
                 map.getSource('route').setData(route);
             } else {
-                map.addSource('route', { type: 'geojson', data: route });
                 map.addLayer({
                     id: 'route',
                     type: 'line',
-                    source: 'route',
+                    source: {
+                        type: 'geojson',
+                        data: route
+                    },
                     layout: {
                         'line-join': 'round',
                         'line-cap': 'round'
@@ -109,8 +143,12 @@ const MapboxComponent = () => {
         }
     };
 
-    const displayMarkerInfo = (marker) => {
-        alert(`Title: ${marker.title}\nDescription: ${marker.description}`);
+    const cancelRoute = () => {
+        if (map.getLayer('route')) {
+            map.removeLayer('route');
+            map.removeSource('route');
+        }
+        setSelectedPoints([]);
     };
 
     return (
@@ -130,13 +168,13 @@ const MapboxComponent = () => {
                 </div>
             </div>
             <div style={{ width: '250px', overflowY: 'auto' }}>
-                <button onClick={() => toggleVisibility('userMarkers')}>{showUserMarkers ? 'Hide' : 'Show'} User Markers</button>
-                <button onClick={() => toggleVisibility('landmarks')}>{showLandmarks ? 'Hide' : 'Show'} Landmarks</button>
-                <button onClick={drawRoute}>Draw Route</button>
-                {userMarkers.concat(landmarks).map((marker, index) => (
+                <button onClick={toggleVisibility}>{showMarkers ? 'Hide' : 'Show'} Markers</button>
+                <button onClick={calculateRoute}>Calculate Route</button>
+                <button onClick={cancelRoute}>Cancel Route</button>
+                {markers.concat(landmarks).map((marker, index) => (
                     <div key={index}
                         style={{ padding: '10px', backgroundColor: selectedPoints.includes(marker) ? 'lightblue' : 'white', cursor: 'pointer' }}
-                        onClick={() => setSelectedPoints(prev => prev.includes(marker) ? prev.filter(p => p !== marker) : [...prev, marker])}
+                        onClick={() => handleSelectPoint(marker)}
                         onDoubleClick={() => displayMarkerInfo(marker)}>
                         {marker.title}
                     </div>
