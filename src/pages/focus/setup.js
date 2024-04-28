@@ -9,11 +9,13 @@ function Setup() {
   const [timer, setTimer] = useState(0);
 
   useEffect(() => {
+    let time = 0;
     const fetchTime = async () => {
       try {
         const response = await fetch('http://localhost:8000/json_data/teams/0/EVA.json');
         const data = await response.json();
-        setTimer(data.eva.total_time);
+        time = data.eva.total_time;
+        setTimer(time);
       } catch (error) {
         console.error("Failed to fetch time data:", error);
       }
