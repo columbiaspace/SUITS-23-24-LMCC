@@ -2,6 +2,29 @@ import React from "react";
 import StreamComponent from "../../components/StreamComponent.js";
 
 function astronaut() {
+
+
+  // useEffect(() => {
+  //   let time = 0;
+
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch('http://localhost:8000/json_data/teams/0/EVA.json');
+  //       const data = await response.json();
+  //       time = data.eva.total_time;
+  //       setTimer(time);
+  //     } catch (error) {
+  //       console.error("Failed to fetch time data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  //   const interval = setInterval(fetchTime, 1000); // Update every 1 second
+  //   return () => clearInterval(interval);
+  // }, []);
+
+  let oxygen_level = 45
+
   return (
     <div className="column Astronaut">
       <div className="header-banner">
@@ -17,7 +40,7 @@ function astronaut() {
           </div>
           <div className="data" style={{ background: "yellow" }}>
             <span>Oxygen Tank Level:&nbsp;</span>
-            <span>45</span>
+            <span>{oxygen_level}</span>
             <span>%</span>
           </div>
           <div className="data" style={{ background: "green" }}>

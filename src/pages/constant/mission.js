@@ -1,7 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Map from '../../components/Map.js';
 
-function mission() {
+function Mission() {
+  const [timer, setTimer] = useState(0);
+
+  useEffect(() => {
+    let time = 0;
+    const fetchTime = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/json_data/teams/0/EVA.json');
+        const data = await response.json();
+        time = data.eva.total_time;
+        setTimer(time);
+      } catch (error) {
+        console.error("Failed to fetch time data:", error);
+      }
+    };
+
+    fetchTime();
+    const interval = setInterval(fetchTime, 500);
+    return () => clearInterval(interval);
+  }, []);
+
+  const formatTime = (timeInSeconds) => {
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = timeInSeconds % 60;
+    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+
   return (
     <div className="column Mission">
       <div className="header-banner">
@@ -11,7 +39,7 @@ function mission() {
             <Map />
           </div>
           <div className="timer-container">
-            <p>Mission Timer: 0:00:00</p>
+          <p>Mission Timer: {formatTime(timer)}</p>
           </div>
           <div className="taskBox">
             <div className="twoTasks">
@@ -49,4 +77,4 @@ function mission() {
   );
 }
 
-export default mission;
+export default Mission;

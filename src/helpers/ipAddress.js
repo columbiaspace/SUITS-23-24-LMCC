@@ -1,6 +1,7 @@
-let TSS_IP = "None"; 
-let HOLO_IP = "None";
-let MapBox_API = "None";
+let TSS_IP = "127.0.0.1:14141"; 
+let HOLO_IP = "126.10.204.3";
+let MapBox_API = "pk.something";
+let SERVER_IP = "127.0.0.1:8000"
 
 export const setTSS_IP = (newTSS_IP) => {
   TSS_IP = newTSS_IP;
@@ -8,6 +9,14 @@ export const setTSS_IP = (newTSS_IP) => {
 
 export const getTSS_IP = () => {
   return TSS_IP;
+};
+
+export const setSERVER_IP = (newSERVER_IP) => {
+  SERVER_IP = newSERVER_IP;
+};
+
+export const getSERVER_IP = () => {
+  return SERVER_IP;
 };
 
 export const setHOLO_IP = (newHOLO_IP) => {
