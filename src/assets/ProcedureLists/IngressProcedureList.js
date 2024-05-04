@@ -1,35 +1,29 @@
-import image1 from '../Images/DCU_Front.jpg'; // Assuming you have images, change accordingly
+import image1 from '../Images/DCU_Front.jpg';
+import image2 from '../Images/Ingress2.jpg';
+import image3 from '../Images/Ingress3.jpg';
+import image4 from '../Images/Ingress4.jpg';
+// Assuming you have images, change accordingly
 
 export const IngressProcedureList = [
   {
-    name: 'Connect UIA to DCU',
-    description: 'a. PLUG: Connect UIA and DCU via the cable\nb. SWITCH: UIA EMU POWER-> ON (activates the Umbilical on the UIA side)\nc. SWITCH: DCU BATT -> Umbilical (activated the Umbilical on the DCU side)',
+    name: 'Connect UIA to DCU and start Depress',
+    description: 'UIA and DCU \t1. EV1 and EV2 connect UIA and DCU umbilical \nUIA \t2. EV-1, EV-2 EMU PWR - ON\nBOTH DCU \t3. BATT - UMB',
     image: image1,
   },
   {
     name: 'Vent O2 Tanks',
-    description: 'SWITCH: UIA OXY VENT -> ON (vents the content of the primary tank)',
-    image: null,
+    description: 'UIA 1. OXYGEN O2 VENT - OPEN\nHMD 2. Wait until both Primary and Secondary OXY tanks are < 10psi\nUIA 3. OXYGEN O2 VENT - CLOSE',
+    image: image2,
   },
   {
-    name: 'Wait until Primary and secondary OXY Tanks are empty',
-    description: 'SWITCH: UIA OXY VENT -> OFF (conclude venting the primary tank)',
-    image: null,
+    name: 'Empty Water Tanks',
+    description: 'BOTH DCU 1. PUMP - OPEN\nUIA 2. EV-1, EV-2 WASTE WATER - OPEN\nHMD 3. Wait until water EV1 and EV2 Coolant tank is < 5%\nUIA 4. EV-1, EV-2 WASTE WATER - CLOSE',
+    image: image3,
   },
   {
-    name: 'Flush Water Coolant',
-    description: 'a. SWITCH: DCU PUMP -> OPEN (Allows coolant to flow between suits and UIA)\nb. SWITCH: UIA WATER WASTE -> ON/OPEN (flushes the water coolant out of suit)',
-    image: null,
+    name: 'Disconnect UIA from DCU',
+    description: 'UIA 1. EV-1, EV-2 EMU PWR - OFF\nDCU 2. EV1 and EV2 disconnect umbilical',
+    image: image4,
   },
-  {
-    name: 'Wait until Water Coolant Tank is empty',
-    description: 'SWITCH: UIA WATER WASTE -> OFF (conclude flushing the water coolant)',
-    image: null,
-  },
-  {
-    name: 'Disconnect IMU to DCU',
-    description: 'a. SWITCH: UIA EMU POWER-> OFF (deactivated the Umbilical on the UIA side)\nb. UNPLUG: Connect UIA and DCU via the cable',
-    image: null,
-  },
-  // Add more procedures as needed
+
 ];
