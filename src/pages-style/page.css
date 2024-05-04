@@ -1,0 +1,8 @@
+.pagecontainer {
+  display: flex;
+  height: 90vh; /* 100% of the viewport height */
+  width: 100vw; /* 100% of the viewport width */
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevents any content from overflowing */
+}

@@ -3,3 +3,9 @@
     width: auto;
     margin-right: 10px;
 }
+
+#title {
+    color: white;
+    font-size: x-large;
+    margin-right: 50px;
+}

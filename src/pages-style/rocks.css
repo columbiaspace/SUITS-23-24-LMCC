@@ -8,7 +8,6 @@
     height: 85vh; /* fills 85% of the page */
     background-color: red;
     text-align: center;
-    padding-bottom: 75px; /* creates space for bottom nav bar */
 }
 
 .bottom-nav-container {

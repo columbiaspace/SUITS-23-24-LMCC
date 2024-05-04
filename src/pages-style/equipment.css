@@ -1,0 +1,43 @@
+.header-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.add-procedure-btn {
+  margin-top: 20px;
+  /* Adjust spacing as needed */
+}
+
+.modal {
+  position: fixed;
+  /* Position relative to the viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  /* Ensures it sits on top of other content */
+}
+
+.modal input[type="text"] {
+  width: 20%;
+  /* Adjust width as needed */
+  padding: 10px;
+  margin: 10px 0;
+  /* Space between input fields */
+}
+
+.modal button {
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  /* Pointer cursor on hover */
+}

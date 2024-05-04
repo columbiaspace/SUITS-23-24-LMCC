@@ -8,6 +8,7 @@ const Navbar = () => {
             <Nav style={{ height: '10vh' }}>
                 <NavMenu>
                     <img className="img" src={require("./../assets/Images/logo.jpg")} alt="Logo"/>
+                    <h1 id="title">CUITS 2024 LMCC</h1>
                     <NavLink to="/Constant" activeStyle>
                         Constant
                     </NavLink>

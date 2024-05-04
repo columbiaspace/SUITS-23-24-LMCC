@@ -1,0 +1,174 @@
+localhost:14141/json_data/
+│
+├── rocks/
+│   └── RockData.json
+│       └── {
+│           "ROCKS": [
+│               {"name": "default_rock", "id": 0, "data": {...}},
+│               {"name": "mare_basalt", "id": 1, "data": {...}},
+│               {"name": "vesicular_basalt", "id": 2, "data": {...}},
+│               {"name": "olivine_basalt_1", "id": 3, "data": {...}},
+│               {"name": "feldspathic_basalt", "id": 4, "data": {...}},
+│               {"name": "pigeonite_basalt", "id": 5, "data": {...}},
+│               {"name": "olivine_basalt_2", "id": 6, "data": {...}},
+│               {"name": "ilmenite_basalt", "id": 7, "data": {...}},
+│               ... (additional rock types)
+│           ]
+│       }
+│
+├── teams/
+│   ├── 0/
+│   │   ├── Completed_EVA.json
+│   │   │   └── {"eva": {...}}
+│   │   ├── Completed_TELEMETRY.json
+│   │   ├── EVA.json
+│   │   │   └── {"eva": {...}}
+│   │   ├── TELEMETRY.json
+│   │       └── {"telemetry": {...}}
+│   ├── 1/
+│   │   ├── Completed_EVA.json
+│   │   │   └── {"eva": {...}}
+│   │   ├── Completed_TELEMETRY.json
+│   │   ├── EVA.json
+│   │   │   └── {"eva": {...}}
+│   │   ├── TELEMETRY.json
+│   │       └── {"telemetry": {...}}
+│   ├── 2/
+│   │   ├── ...
+│   ├── ... (folders 3 through 9 with similar structure)
+│   └── 10/
+│       ├── Completed_EVA.json
+│       │   └── {"eva": {...}}
+│       ├── Completed_TELEMETRY.json
+│       ├── EVA.json
+│       │   └── {"eva": {...}}
+│       ├── TELEMETRY.json
+│           └── {"telemetry": {...}}
+│
+├── COMM.json
+│   └── {
+│       "comm": {
+│           "comm_tower": false
+│       }
+│   }
+├── DCU.json
+│   └── {
+│       "dcu": {
+│           "eva1": {
+│               "batt": true,
+│               "oxy": true,
+│               "comm": true,
+│               "fan": true,
+│               "pump": true,
+│               "co2": true
+│           },
+│           "eva2": {
+│               "batt": true,
+│               "oxy": true,
+│               "comm": true,
+│               "fan": true,
+│               "pump": true,
+│               "co2": true
+│           }
+│       }
+│   }
+├── ERROR.json
+│   └── {
+│       "error": {
+│           "fan_error": false,
+│           "oxy_error": false,
+│           "pump_error": false
+│       }
+│   }
+├── IMU.json
+│   └── {
+│       "imu": {
+│           "eva1": {
+│               "posx": 0.000000,
+│               "posy": 0.000000,
+│               "heading": 0.000000
+│           },
+│           "eva2": {
+│               "posx": 0.000000,
+│               "posy": 0.000000,
+│               "heading": 0.000000
+│           }
+│       }
+│   }
+├── ROVER.json
+│   └── {
+│       "rover": {
+│           "posx": 0.000000,
+│           "posy": 0.000000,
+│           "qr_id": 0
+│       }
+│   }
+├── SPEC.json
+│   └── {
+│       "spec": {
+│           "eva1": {
+│               "name": "default_rock",
+│               "id": 0,
+│               "data": {
+│                   "SiO2": 1,
+│                   "TiO2": 1,
+│                   "Al2O3": 1,
+│                   "FeO": 1,
+│                   "MnO": 1,
+│                   "MgO": 1,
+│                   "CaO": 1,
+│                   "K2O": 1,
+│                   "P2O3": 1,
+│                   "other": 91
+│               }
+│           },
+│           "eva2": {
+│               "name": "default_rock",
+│               "id": 0,
+│               "data": {
+│                   "SiO2": 1,
+│                   "TiO2": 1,
+│                   "Al2O3": 1,
+│                   "FeO": 1,
+│                   "MnO": 1,
+│                   "MgO": 1,
+│                   "CaO": 1,
+│                   "K2O": 1,
+│                   "P2O3": 1,
+│                   "other": 91
+│               }
+│           }
+│       }
+│   }
+├── TEAMS.json
+│   └── {
+│       "teams": {
+│           "team_1": "ARSIS",
+│           "team_2": "Cartographer",
+│           "team_3": "CLAWS",
+│           "team_4": "COSMIC",
+│           "team_5": "CosmoShox",
+│           "team_6": "C.U.I.T.S.",
+│           "team_7": "Daedalus",
+│           "team_8": "JARIVS",
+│           "team_9": "M.I.K.E.",
+│           "team_10": "RISD SUITS",
+│           "team_11": "Space Bears",
+│           "team_num": 11
+│       }
+│   }
+└── UIA.json
+    └── {
+        "uia": {
+            "eva1_power": true,
+            "eva1_oxy": true,
+            "eva1_water_supply": false,
+            "eva1_water_waste": false,
+            "eva2_power": false,
+            "eva2_oxy": false,
+            "eva2_water_supply": true,
+            "eva2_water_waste": false,
+            "oxy_vent": false,
+            "depress": false
+        }
+    }
