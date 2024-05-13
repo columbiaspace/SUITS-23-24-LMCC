@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 import asyncio
 import json
+import os
 from datetime import datetime
 
 logging.basicConfig(level=logging.DEBUG)
@@ -34,14 +35,31 @@ async def fetch_json(url: str):
 @app.on_event("startup")
 async def startup_event():
     """Create config_keys.json and start the periodic fetch task."""
-    # Create config_keys.json
-    config_data = {
+    # Default config values
+    default_config_data = {
         "TSS_IP": "localhost:14141",
         "MAPBOX_KEY": "your_mapbox_key_here",
         "HOLO_IP": "your_holo_ip_here"
     }
-    with open(CONFIG_FILE, 'w') as f:
-        json.dump(config_data, f)
+
+    # Load existing config if it exists, otherwise use the default
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, 'r') as f:
+            config_data = json.load(f)
+    else:
+        config_data = {}
+
+    # Update config with default values if keys are missing
+    updated = False
+    for key, value in default_config_data.items():
+        if key not in config_data:
+            config_data[key] = value
+            updated = True
+
+    # Save the updated config if there were any changes
+    if updated:
+        with open(CONFIG_FILE, 'w') as f:
+            json.dump(config_data, f)
 
     # Start the periodic fetch task
     task = asyncio.create_task(periodic_fetch_and_store())
@@ -51,8 +69,14 @@ async def startup_event():
 async def update_config(request: Request):
     """Endpoint to update the config_keys.json file."""
     new_config = await request.json()
+    with open(CONFIG_FILE, 'r') as f:
+        config_data = json.load(f)
+    
+    config_data.update(new_config)
+    
     with open(CONFIG_FILE, 'w') as f:
-        json.dump(new_config, f)
+        json.dump(config_data, f)
+    
     return {"message": "Config updated successfully"}
 
 async def periodic_fetch_and_store():
