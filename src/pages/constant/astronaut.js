@@ -4,7 +4,7 @@ import { useGlobal } from '../../components/GlobalContext';
 
 function Astronaut() {
   const { allData } = useGlobal();
-  const heartRate = allData.telemetry.telemetry.eva1.heart_rate;
+  const heartRate = allData?.telemetry?.telemetry?.eva1?.heart_rate;
 
   return (
     <div className="column Astronaut">

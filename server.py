@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 import httpx
 from fastapi.middleware.cors import CORSMiddleware
 import logging
@@ -12,6 +12,7 @@ app = FastAPI()
 
 tss_ip = 'localhost:14141'
 DATA_FILE = 'tss_data.json'
+CONFIG_FILE = 'config_keys.json'
 
 # Configure CORS
 app.add_middleware(
@@ -31,10 +32,28 @@ async def fetch_json(url: str):
         return response.json()
 
 @app.on_event("startup")
-async def start_periodic_fetch():
-    """Starts the periodic fetch task."""
+async def startup_event():
+    """Create config_keys.json and start the periodic fetch task."""
+    # Create config_keys.json
+    config_data = {
+        "TSS_IP": "localhost:14141",
+        "MAPBOX_KEY": "your_mapbox_key_here",
+        "HOLO_IP": "your_holo_ip_here"
+    }
+    with open(CONFIG_FILE, 'w') as f:
+        json.dump(config_data, f)
+
+    # Start the periodic fetch task
     task = asyncio.create_task(periodic_fetch_and_store())
     await asyncio.sleep(1)  # Prevents the startup event from blocking indefinitely
+
+@app.put("/update_config")
+async def update_config(request: Request):
+    """Endpoint to update the config_keys.json file."""
+    new_config = await request.json()
+    with open(CONFIG_FILE, 'w') as f:
+        json.dump(new_config, f)
+    return {"message": "Config updated successfully"}
 
 async def periodic_fetch_and_store():
     """Fetch specific JSON data every second and store it."""
@@ -62,6 +81,12 @@ async def read_data():
         return stored_data
     except FileNotFoundError:
         return {"error": "Data file not found. Please check back later."}
+
+@app.get("/get_mapbox_key")
+async def get_mapbox_key():
+    with open(CONFIG_FILE, 'r') as f:
+        config = json.load(f)
+    return {"MAPBOX_KEY": config["MAPBOX_KEY"]}
 
 # Existing endpoints
 @app.get("/json_data/{filename}")

@@ -1,17 +1,32 @@
 import React, { useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { getMapBox_API } from "./../helpers/ipAddress.js";
 import geoJson from "../assets/json_data/GeoJson/stagnentData.json";
 
 const MapboxComponent = () => {
-  const MapBoxAPIKey = getMapBox_API();
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [selectedPoints, setSelectedPoints] = useState([]);
+  const [mapBoxAPIKey, setMapBoxAPIKey] = useState(null);
 
   useEffect(() => {
-    mapboxgl.accessToken = MapBoxAPIKey;
+    const fetchMapBoxAPIKey = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/get_mapbox_key");
+        const data = await response.json();
+        setMapBoxAPIKey(data.MAPBOX_KEY);
+      } catch (error) {
+        console.error("Error fetching MapBox API key:", error);
+      }
+    };
+
+    fetchMapBoxAPIKey();
+  }, []);
+
+  useEffect(() => {
+    if (!mapBoxAPIKey) return;
+
+    mapboxgl.accessToken = mapBoxAPIKey;
     const newMap = new mapboxgl.Map({
       container: "map",
       style: "mapbox://styles/mapbox/satellite-v9",
@@ -33,7 +48,7 @@ const MapboxComponent = () => {
         const layerType =
           feature.geometry.type === "Point"
             ? "circle"
-            : "LineString"
+            : feature.geometry.type === "LineString"
             ? "line"
             : "fill";
 
@@ -60,7 +75,7 @@ const MapboxComponent = () => {
       }
       newMap.remove();
     };
-  }, [MapBoxAPIKey, markers]); // Now includes 'markers'
+  }, [mapBoxAPIKey, markers]);
 
   useEffect(() => {
     if (!map) return;
