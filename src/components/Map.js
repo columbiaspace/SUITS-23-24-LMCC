@@ -25,8 +25,8 @@ const MapboxComponent = () => {
         newMap.on('load', () => {
             // Load landmarks
             setLandmarks([
-                { id: 'landmark1', title: 'Eiffel Tower', lat: 48.8584, lng: 2.2945, description: 'A wrought-iron lattice tower on the Champ de Mars in Paris, France.' },
-                { id: 'landmark2', title: 'Statue of Liberty', lat: 40.6892, lng: -74.0445, description: 'A colossal statue on Liberty Island in New York Harbor.' }
+                //{ id: 'landmark1', title: 'Eiffel Tower', lat: 48.8584, lng: 2.2945, description: 'A wrought-iron lattice tower on the Champ de Mars in Paris, France.' },
+             //   { id: 'landmark2', title: 'Statue of Liberty', lat: 40.6892, lng: -74.0445, description: 'A colossal statue on Liberty Island in New York Harbor.' }
             ].map(landmark => {
                 const marker = new mapboxgl.Marker()
                     .setLngLat([landmark.lng, landmark.lat])
@@ -168,9 +168,18 @@ const MapboxComponent = () => {
                 </div>
             </div>
             <div style={{ width: '250px', overflowY: 'auto' }}>
-                <button onClick={toggleVisibility}>{showMarkers ? 'Hide' : 'Show'} Markers</button>
-                <button onClick={calculateRoute}>Calculate Route</button>
-                <button onClick={cancelRoute}>Cancel Route</button>
+                <label>
+                    <input type="checkbox" checked={!showMarkers} onChange={toggleVisibility} />
+                    {showMarkers ? 'Hide Markers' : 'Show Markers'}
+                </label>
+                <label>
+                    <input type="checkbox" onChange={calculateRoute} />
+                    Calculate Route
+                </label>
+                <label>
+                    <input type="checkbox" onChange={cancelRoute} />
+                    Cancel Route
+                </label>
                 {markers.concat(landmarks).map((marker, index) => (
                     <div key={index}
                         style={{ padding: '10px', backgroundColor: selectedPoints.includes(marker) ? 'lightblue' : 'white', cursor: 'pointer' }}
