@@ -7,10 +7,7 @@ function Setup() {
   const [, setTssIP] = useState(getTSS_IP());
   const [, setHoloIP] = useState(getHOLO_IP());
   const [, setMapBoxAPI] = useState(getMapBox_API());
-  const [, setServerIP] = useState(getSERVER_IP());
-  
-
-  
+  const [, setServerIP] = useState(getSERVER_IP());  
 
   const handleSetTSS_IP = () => {
     const inputTSS_IP = document.getElementById("tss_ip").value;

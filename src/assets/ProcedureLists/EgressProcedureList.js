@@ -1,7 +1,7 @@
 import image1 from '../Images/DCU_Front.jpg';
 import image2 from '../Images/dog2.png';
 import image3 from '../Images/dog3.png';
-import supplywaste from '../Images/supplywaste.jpg'
+// import supplywaste from '../Images/supplywaste.jpg'
 export const EgressProcedureList = [
   {
     name: 'Connect UIA to DCU and start Depress',

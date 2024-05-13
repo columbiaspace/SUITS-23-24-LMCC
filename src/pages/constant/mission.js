@@ -1,26 +1,10 @@
-import React, { useState, useEffect } from 'react';
+
 import Map from '../../components/Map.js';
+import { useGlobal } from '../../components/GlobalContext';
 
 function Mission() {
-  const [timer, setTimer] = useState(0);
-
-  useEffect(() => {
-    let time = 0;
-    const fetchTime = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/json_data/teams/0/EVA.json');
-        const data = await response.json();
-        time = data.eva.total_time;
-        setTimer(time);
-      } catch (error) {
-        console.error("Failed to fetch time data:", error);
-      }
-    };
-
-    fetchTime();
-    const interval = setInterval(fetchTime, 500);
-    return () => clearInterval(interval);
-  }, []);
+  const { evaData } = useGlobal();
+  const timer = evaData.total_time || 0; // Default to 0 if total_time is undefined
 
   const formatTime = (timeInSeconds) => {
     const hours = Math.floor(timeInSeconds / 3600);
@@ -33,46 +17,44 @@ function Mission() {
   return (
     <div className="column Mission">
       <div className="header-banner">
-            <h2>Mission</h2>
+        <h2>Mission</h2>
+      </div>
+      <div className="gif-container">
+        <Map />
+      </div>
+      <div className="timer-container">
+        <p>Mission Timer: {formatTime(timer)}</p>
+      </div>
+      <div className="taskBox">
+        <div className="twoTasks">
+          <div className="taskContainer" style={{
+            background: evaData.uia.completed ? "green" : (evaData.uia.started ? "yellow" : "red")
+          }}>
+            <span>UIA:&nbsp;</span>
+            <span>{evaData.uia.completed ? "Completed" : (evaData.uia.started ? "In Progress" : "Not Started")}</span>
           </div>
-          <div className="gif-container">
-            <Map />
+          <div className="taskContainer" style={{
+            background: evaData.spec.completed ? "green" : (evaData.spec.started ? "yellow" : "red")
+          }}>
+            <span>Spectroscopy:&nbsp;</span>
+            <span>{evaData.spec.completed ? "Completed" : (evaData.spec.started ? "In Progress" : "Not Started")}</span>
           </div>
-          <div className="timer-container">
-          <p>Mission Timer: {formatTime(timer)}</p>
+        </div>
+        <div className="twoTasks">
+          <div className="taskContainer" style={{
+            background: evaData.dcu.completed ? "green" : (evaData.dcu.started ? "yellow" : "red")
+          }}>
+            <span>DCU:&nbsp;</span>
+            <span>{evaData.dcu.completed ? "Completed" : (evaData.dcu.started ? "In Progress" : "Not Started")}</span>
           </div>
-          <div className="taskBox">
-            <div className="twoTasks">
-              <div className="taskContainer" style={{ background: "green" }}>
-                <span>Egress:&nbsp;</span>
-                <span>Completed</span>
-              </div>
-              <div className="taskContainer" style={{ background: "red" }}>
-                <span>Rock Scanning:&nbsp;</span>
-                <span>Not Started</span>
-              </div>
-            </div>
-            <div className="twoTasks">
-              <div className="taskContainer" style={{ background: "green" }}>
-                <span>Navigation:&nbsp;</span>
-                <span>Completed</span>
-              </div>
-              <div className="taskContainer" style={{ background: "red" }}>
-                <span>Rover:&nbsp;</span>
-                <span>Not Started</span>
-              </div>
-            </div>
-            <div className="twoTasks">
-              <div className="taskContainer" style={{ background: "yellow" }}>
-                <span>Equipment:&nbsp;</span>
-                <span>In Progress</span>
-              </div>
-              <div className="taskContainer" style={{ background: "red" }}>
-                <span>Ingress:&nbsp;</span>
-                <span>Not Started</span>
-              </div>
-            </div>
+          <div className="taskContainer" style={{
+            background: evaData.rover.completed ? "green" : (evaData.rover.started ? "yellow" : "red")
+          }}>
+            <span>Rover:&nbsp;</span>
+            <span>{evaData.rover.completed ? "Completed" : (evaData.rover.started ? "In Progress" : "Not Started")}</span>
           </div>
+        </div>
+      </ div>
     </div>
   );
 }
