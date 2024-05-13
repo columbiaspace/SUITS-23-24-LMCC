@@ -3,7 +3,9 @@ import StreamComponent from "../../components/StreamComponent.js";
 import { useGlobal } from '../../components/GlobalContext';
 
 function Astronaut() {
-  const { evaData } = useGlobal();
+  const { allData } = useGlobal();
+  const heartRate = allData.telemetry.telemetry.eva1.heart_rate;
+
   return (
     <div className="column Astronaut">
       <div className="header-banner">
@@ -54,8 +56,7 @@ function Astronaut() {
           </div>
           <div className="data" style={{ background: "yellow" }}>
             <span>Heartrate:&nbsp;</span>
-            <span>{ evaData.telemetry.telemetry.eva1.heart_rate }</span>
-            <span>bpm</span>
+            <span>{heartRate} bpm</span>
           </div>
           <div className="data" style={{ background: "green" }}>
             <span>Respiratory Rate:&nbsp;</span>
