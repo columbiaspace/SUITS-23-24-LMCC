@@ -4,6 +4,7 @@ import axios from 'axios';
 const GlobalContext = createContext({});  // Initialize with an empty object instead of null
 
 export const useGlobal = () => useContext(GlobalContext);
+
 export const GlobalProvider = ({ children }) => {
   const [allData, setAllData] = useState({});
   const [error, setError] = useState(null);

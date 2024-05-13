@@ -7,7 +7,18 @@ function Mission() {
 
   // Ensure allData is properly loaded
   if (!allData || !allData.eva || !allData.eva.eva) {
-    return <div>Loading...</div>;
+    return (
+      <div className="column Mission">
+      <div className="header-banner">
+        <h2>Mission</h2>
+      </div>
+      <div className="gif-container">
+        <Map />
+      </div>
+      <div className="timer-container">
+        <p>Server is not running</p>
+      </div>
+    </div>)
   }
 
   const { eva } = allData.eva; // Destructure for easier access

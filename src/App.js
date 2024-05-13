@@ -19,6 +19,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Setup />} />
+          <Route path="/SUITS-23-24-LMCC" element={<Setup />} />
           <Route path="/constant" element={<Constant />} />
           <Route path="/setup" element={<Setup />} />
           <Route path="/egress" element={<Egress />} />
