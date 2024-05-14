@@ -1,0 +1,110 @@
+.pagecontainer {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    width: 100vw;
+    overflow: hidden;
+  }
+  
+  #topbar {
+    height: 10vh;
+    width: 100%;
+    background-color: lightblue; /* Change to desired color */
+    position: relative;
+  }
+  
+  #centerbar {
+    width: 40vw;
+    height: 10vh;
+    background-color: lightgreen; /* Change to desired color */
+    position: absolute;
+    top: calc(50vh); /* Center vertically */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+  
+  #HMDStream, #RoverStream {
+    width: 50%;
+    height: 45vh;
+    background-color: lightcoral; /* Change to desired color */
+  }
+  
+  #RoverStream {
+    background-color: lightyellow; /* Change to desired color */
+  }
+  
+  #EV1, #Map, #EV2 {
+    width: 33.33%;
+    height: 45vh;
+  }
+  
+  #EV1 {
+    background-color: lightgray; /* Change to desired color */
+  }
+  
+  #Map {
+    margin-top: 5vh;
+    background-color: lightpink; /* Change to desired color */
+  }
+  
+  #EV2 {
+    background-color: lightgoldenrodyellow; /* Change to desired color */
+  }
+  
+  .top-half, .bottom-half {
+    display: flex;
+    width: 100%;
+  }
+  
+  .bottom-half {
+    display: flex;
+    width: 100%;
+    height: 55vh;
+  }
+  .ev-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+  }
+  
+  .ev-table-container {
+    width: 100%;
+    height: 100%;
+    overflow: auto;  /* Allow scrolling if content overflows */
+  }
+  
+  .ev-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .ev-table th,
+  .ev-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    box-sizing: border-box;
+  }
+  
+  .ev-table th {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .ev-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .ev-table tr:hover {
+    background-color: #ddd;
+  }
+  

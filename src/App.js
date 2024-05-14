@@ -9,7 +9,7 @@ import Nav from "./pages/focus/nav";
 import Ingress from "./pages/focus/ingress";
 import Equipment from "./pages/focus/equipment";
 import Egress from "./pages/focus/egress";
-import Constant from './pages/constant/constant';
+import Constant from './pages/constant/constant2';
 import { GlobalProvider } from './components/GlobalContext'; // Ensure this is the correct path to your GlobalContext
 
 function App() {
