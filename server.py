@@ -11,9 +11,16 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 app = FastAPI()
 
-tss_ip = 'localhost:14141'
 DATA_FILE = 'tss_data.json'
 CONFIG_FILE = 'config_keys.json'
+
+# Load config to get TSS_IP
+if os.path.exists(CONFIG_FILE):
+    with open(CONFIG_FILE, 'r') as f:
+        config_data = json.load(f)
+        tss_ip = config_data.get("TSS_IP", 'localhost:14141')
+else:
+    tss_ip = 'localhost:14141'
 
 # Configure CORS
 app.add_middleware(
@@ -84,16 +91,22 @@ async def periodic_fetch_and_store():
     eva_url = f"http://{tss_ip}/json_data/teams/0/EVA.json"
     telemetry_url = f"http://{tss_ip}/json_data/teams/0/TELEMETRY.json"
     while True:
-        eva_data = await fetch_json(eva_url)
-        telemetry_data = await fetch_json(telemetry_url)
-        if eva_data and telemetry_data:  # Ensure both data sets are fetched successfully
-            combined_data = {
-                "timestamp": datetime.now().isoformat(),
-                "eva": eva_data,
-                "telemetry": telemetry_data
-            }
-            with open(DATA_FILE, 'w') as f:
-                json.dump(combined_data, f)
+        try:
+            eva_data = await fetch_json(eva_url)
+            telemetry_data = await fetch_json(telemetry_url)
+            if eva_data and telemetry_data:  # Ensure both data sets are fetched successfully
+                combined_data = {
+                    "timestamp": datetime.now().isoformat(),
+                    "eva": eva_data,
+                    "telemetry": telemetry_data
+                }
+                with open(DATA_FILE, 'w') as f:
+                    json.dump(combined_data, f)
+                logger.info("Data fetched and stored successfully.")
+            else:
+                logger.warning("One or both data sets were not fetched successfully.")
+        except Exception as e:
+            logger.error(f"An error occurred during periodic fetch: {e}")
         await asyncio.sleep(1)  # Sleep for a second before the next fetch
 
 @app.get("/data")

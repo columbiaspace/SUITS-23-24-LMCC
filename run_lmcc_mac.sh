@@ -1,28 +1,24 @@
 #!/bin/bash
 
+# Get the directory of the current script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Function to check and install Python
 install_python() {
-  if ! command -v python3 &> /dev/null
-  then
+  if ! command -v python3 &> /dev/null; then
     echo "Python3 could not be found. Installing Python3..."
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
       sudo apt update
       sudo apt install -y python3 python3-pip
     elif [[ "$OSTYPE" == "darwin"* ]]; then
       # Check if Homebrew is installed, install if not
-      if ! command -v brew &> /dev/null
-      then
+      if ! command -v brew &> /dev/null; then
         echo "Homebrew could not be found. Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       fi
       brew install python3
-    elif [[ "$OSTYPE" == "cygwin" ]]; then
-      # POSIX compatibility layer and Linux environment emulation for Windows
-      echo "Cygwin environment detected. Please install Python3 manually."
-      exit 1
-    elif [[ "$OSTYPE" == "msys" ]]; then
-      # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
-      echo "MSYS environment detected. Please install Python3 manually."
+    elif [[ "$OSTYPE" == "cygwin" ]] || [[ "$OSTYPE" == "msys" ]]; then
+      echo "Please install Python3 manually on this OS."
       exit 1
     else
       echo "Unknown OS type. Please install Python3 manually."
@@ -45,14 +41,17 @@ install_python
 # Install Python dependencies
 install_python_dependencies
 
-# Installing npm dependencies
+# Clone Repo
+clone_tss
+
+# Install npm dependencies
 echo "Installing npm dependencies..."
 npm install
 
-# Starting the server
+# Start the server
 echo "Starting the server with npm start..."
 npm start &
 
-# Starting the FastAPI server
+# Start the FastAPI server
 echo "Starting the FastAPI server with uvicorn..."
 uvicorn server:app --host 0.0.0.0 --port 8000 --reload

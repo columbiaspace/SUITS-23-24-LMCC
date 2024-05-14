@@ -1,117 +1,178 @@
 .pagecontainer {
-    display: flex;
-    flex-direction: column;
-    height: 90vh;
-    width: 100vw;
-    overflow: hidden;
-  }
-  
-  #topbar {
-    height: 5%;
-    width: 100%;
-    background-color: lightblue; /* Change to desired color */
-    position: absolute;
-  }
-  
-  #centerbar {
-    width: 40vw;
-    height: 10vh;
-    background-color: lightgreen; /* Change to desired color */
-    position: absolute;
-    top: calc(45.5vh); /* Center vertically */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-  }
-  
-  #HMDStream, #RoverStream {
-    width: 50%;
-    height: 100%;
-    background-color: lightcoral; /* Change to desired color */
-  }
-  
-  #RoverStream {
-    background-color: lightyellow; /* Change to desired color */
-  }
-  
-  #EV1, #Map, #EV2 {
-    width: 33.33%;
-    height: 100%;
-  }
-  
-  #EV1 {
-    background-color: lightgray; /* Change to desired color */
-  }
-  
-  #Map {
-    margin-top: 5vh;
-    background-color: lightpink; /* Change to desired color */
-  }
-  
-  #EV2 {
-    background-color: lightgoldenrodyellow; /* Change to desired color */
-  }
-  
-  .top-half, .bottom-half {
-    display: flex;
-    width: 100%;
-  }
-  
-  .top-half {
-    display: flex;
-    width: 100%;
-    height: 45%;
-  }
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  width: 100vw;
+  overflow: hidden;
+}
 
-  .bottom-half {
-    display: flex;
-    width: 100%;
-    height: 55%;
-  }
+#topbar {
+  height: 5%;
+  width: 100%;
+  background-color: lightblue;
+  position: absolute;
+}
 
-  .ev-container {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-  }
-  
-  .ev-table-container {
-    width: 100%;
-    height: 100%;
-    overflow: auto;  /* Allow scrolling if content overflows */
-  }
-  
-  .ev-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .ev-table th,
-  .ev-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-    box-sizing: border-box;
-  }
-  
-  .ev-table th {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .ev-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  .ev-table tr:hover {
-    background-color: #ddd;
-  }
-  
+#centerbar {
+  width: 40vw;
+  height: 10vh;
+  background-color: rgb(72, 72, 244);
+  position: absolute;
+  top: calc(45.5vh);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.centerButton {
+  width: 100px;
+  height: 50px;
+  background-color: lightblue;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+.centerButton:hover {
+  background-color: darkblue;
+}
+
+#HMDStream, #RoverStream {
+  width: 50%;
+  height: 100%;
+  background-color: lightblue;
+}
+
+#RoverStream {
+  background-color: darkblue;
+}
+
+#EV1, #Map, #EV2 {
+  width: 33.33%;
+  height: 100%;
+}
+
+#EV1 {
+  background-color: lightblue;
+}
+
+#Map {
+  margin-top: 5vh;
+  background-color: darkblue;
+}
+
+#EV2 {
+  background-color: lightblue;
+}
+
+.top-half, .bottom-half {
+  display: flex;
+  width: 100%;
+}
+
+.top-half {
+  display: flex;
+  width: 100%;
+  height: 45%;
+}
+
+.bottom-half {
+  display: flex;
+  width: 100%;
+  height: 55%;
+}
+
+.ev-container {
+  padding: 20px;
+  background-color: #f0f8ff; /* Light blue-ish background */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.ev-table-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.ev-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ev-table th,
+.ev-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.ev-table th {
+  background-color: darkblue;
+  color: white;
+}
+
+.ev-table tr:nth-child(even) {
+  background-color: #e6f2ff; /* Light blue background for even rows */
+}
+
+.ev-table tr:hover {
+  background-color: #cce6ff; /* Slightly darker light blue for hover */
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  min-height: 40%;
+  width: 30%;
+  max-width: 80%;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
