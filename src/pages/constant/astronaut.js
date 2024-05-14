@@ -1,7 +1,11 @@
 import React from "react";
 import StreamComponent from "../../components/StreamComponent.js";
+import { useGlobal } from '../../components/GlobalContext';
 
-function astronaut() {
+function Astronaut() {
+  const { allData } = useGlobal();
+  const heartRate = allData?.telemetry?.telemetry?.eva1?.heart_rate;
+
   return (
     <div className="column Astronaut">
       <div className="header-banner">
@@ -17,7 +21,7 @@ function astronaut() {
           </div>
           <div className="data" style={{ background: "yellow" }}>
             <span>Oxygen Tank Level:&nbsp;</span>
-            <span>45</span>
+            <span>20</span>
             <span>%</span>
           </div>
           <div className="data" style={{ background: "green" }}>
@@ -52,8 +56,7 @@ function astronaut() {
           </div>
           <div className="data" style={{ background: "yellow" }}>
             <span>Heartrate:&nbsp;</span>
-            <span>120</span>
-            <span>bpm</span>
+            <span>{heartRate} bpm</span>
           </div>
           <div className="data" style={{ background: "green" }}>
             <span>Respiratory Rate:&nbsp;</span>
@@ -80,4 +83,4 @@ function astronaut() {
   );
 }
 
-export default astronaut;
+export default Astronaut;

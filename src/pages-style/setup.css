@@ -1,0 +1,35 @@
+
+#setup {
+    display: block;
+}
+
+
+.entryBoxes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.dataEntry {
+    height: 100px;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dataEntry button{
+    margin: 0;
+}
+
+.dataDisplay {
+    background-color: green;
+}
+
+.header {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
