@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGlobal } from '../../components/GlobalContext';
-import './constant2.css'; // Import CSS file for styling
+import './constant.css'; // Import CSS file for styling
 
 const EVData = ({ evNumber }) => {
   const { allData, error } = useGlobal();

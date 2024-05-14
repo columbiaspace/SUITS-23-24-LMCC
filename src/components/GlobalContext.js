@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-const GlobalContext = createContext({});  // Initialize with an empty object instead of null
+const GlobalContext = createContext({});
 
 export const useGlobal = () => useContext(GlobalContext);
 
@@ -11,7 +11,7 @@ export const GlobalProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setError(null);  // Reset error before fetching
+      setError(null);
       try {
         const response = await axios.get('http://localhost:8000/data');
         if (response.status === 200) {
@@ -22,7 +22,7 @@ export const GlobalProvider = ({ children }) => {
       } catch (error) {
         console.error("Error fetching data:", error);
         setError(error.message);
-        setAllData({});  // Optional: Clear data on error
+        setAllData({});
       }
     };
   

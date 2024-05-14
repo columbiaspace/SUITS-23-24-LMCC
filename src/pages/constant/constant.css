@@ -7,10 +7,10 @@
   }
   
   #topbar {
-    height: 10vh;
+    height: 5%;
     width: 100%;
     background-color: lightblue; /* Change to desired color */
-    position: relative;
+    position: absolute;
   }
   
   #centerbar {
@@ -18,7 +18,7 @@
     height: 10vh;
     background-color: lightgreen; /* Change to desired color */
     position: absolute;
-    top: calc(50vh); /* Center vertically */
+    top: calc(45.5vh); /* Center vertically */
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
@@ -26,7 +26,7 @@
   
   #HMDStream, #RoverStream {
     width: 50%;
-    height: 45vh;
+    height: 100%;
     background-color: lightcoral; /* Change to desired color */
   }
   
@@ -36,7 +36,7 @@
   
   #EV1, #Map, #EV2 {
     width: 33.33%;
-    height: 45vh;
+    height: 100%;
   }
   
   #EV1 {
@@ -57,11 +57,18 @@
     width: 100%;
   }
   
+  .top-half {
+    display: flex;
+    width: 100%;
+    height: 45%;
+  }
+
   .bottom-half {
     display: flex;
     width: 100%;
-    height: 55vh;
+    height: 55%;
   }
+
   .ev-container {
     padding: 20px;
     background-color: #f9f9f9;
