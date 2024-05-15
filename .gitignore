@@ -24,3 +24,4 @@ yarn-error.log*
 __pycache__/server.cpython-312.pyc
 __pycache__/server.cpython-312.pyc
 config_keys.json
+tss_data.json
