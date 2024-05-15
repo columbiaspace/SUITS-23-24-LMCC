@@ -7,6 +7,7 @@ import asyncio
 import json
 import os
 from datetime import datetime
+from server.initdb import *
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -41,34 +42,10 @@ async def fetch_json(url: str):
             logger.error(f"Failed to fetch data from {url}, status code: {response.status_code}")
             return None
         return response.json()
+
 @app.on_event("startup")
 async def startup_event():
-    default_config_data = {
-        "TSS_IP": "localhost:14141",
-        "MAPBOX_KEY": "your_mapbox_key_here",
-        "HOLO_IP": "your_holo_ip_here",
-        "SERVER_IP": "localhost:8000"
-    }
-
-    if os.path.exists(CONFIG_FILE):
-        with open(CONFIG_FILE, 'r') as f:
-            config_data = json.load(f)
-    else:
-        config_data = {}
-
-    updated = False
-    for key, value in default_config_data.items():
-        if key not in config_data:
-            config_data[key] = value
-            updated = True
-
-    if updated:
-        with open(CONFIG_FILE, 'w') as f:
-            json.dump(config_data, f)
-
-    # Clear the GeoJSON file on startup
-    with open(GEOJSON_FILE, 'w') as f:
-        json.dump({"type": "FeatureCollection", "features": []}, f)
+    initialize_database_files()
 
     task = asyncio.create_task(periodic_fetch_and_store())
     await asyncio.sleep(1)
