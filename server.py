@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Query
 import httpx
 from fastapi.middleware.cors import CORSMiddleware
 import logging
@@ -46,7 +46,8 @@ async def startup_event():
     default_config_data = {
         "TSS_IP": "localhost:14141",
         "MAPBOX_KEY": "your_mapbox_key_here",
-        "HOLO_IP": "your_holo_ip_here"
+        "HOLO_IP": "your_holo_ip_here",
+        "SERVER_IP": "localhost:8000"  # Assuming a default server IP
     }
 
     # Load existing config if it exists, otherwise use the default
@@ -86,6 +87,13 @@ async def update_config(request: Request):
     
     return {"message": "Config updated successfully"}
 
+@app.get("/config")
+async def get_config():
+    """Endpoint to get the current configuration."""
+    with open(CONFIG_FILE, 'r') as f:
+        config_data = json.load(f)
+    return config_data
+
 async def periodic_fetch_and_store():
     """Fetch specific JSON data every second and store it."""
     eva_url = f"http://{tss_ip}/json_data/teams/0/EVA.json"
@@ -124,6 +132,40 @@ async def get_mapbox_key():
     with open(CONFIG_FILE, 'r') as f:
         config = json.load(f)
     return {"MAPBOX_KEY": config["MAPBOX_KEY"]}
+
+# New endpoint to check connection
+@app.get("/check_connection")
+async def check_connection(tss_ip: str = None, holo_ip: str = None, server_ip: str = None):
+    async with httpx.AsyncClient() as client:
+        if tss_ip:
+            try:
+                response = await client.get(f"http://{tss_ip}/")
+                if response.status_code == 200:
+                    return {"status": "connected", "type": "TSS_IP"}
+                else:
+                    return {"status": "no connection", "type": "TSS_IP"}
+            except Exception:
+                return {"status": "no connection", "type": "TSS_IP"}
+        elif holo_ip:
+            try:
+                response = await client.get(f"https://{holo_ip}/")
+                if response.status_code == 200:
+                    return {"status": "connected", "type": "HOLO_IP"}
+                else:
+                    return {"status": "no connection", "type": "HOLO_IP"}
+            except Exception:
+                return {"status": "no connection", "type": "HOLO_IP"}
+        elif server_ip:
+            try:
+                response = await client.get(f"http://{server_ip}/docs")
+                if response.status_code == 200:
+                    return {"status": "connected", "type": "SERVER_IP"}
+                else:
+                    return {"status": "no connection", "type": "SERVER_IP"}
+            except Exception:
+                return {"status": "no connection", "type": "SERVER_IP"}
+        else:
+            raise HTTPException(status_code=400, detail="Invalid request, provide either tss_ip, holo_ip, or server_ip")
 
 # Existing endpoints
 @app.get("/json_data/{filename}")

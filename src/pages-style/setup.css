@@ -33,3 +33,24 @@
     align-items: center;
     justify-content: center;
 }
+
+.status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 10px;
+  }
+  
+  .status.green {
+    background-color: green;
+  }
+  
+  .status.yellow {
+    background-color: yellow;
+  }
+  
+  .status.red {
+    background-color: red;
+  }
+  
