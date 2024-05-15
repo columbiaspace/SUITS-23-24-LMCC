@@ -27,3 +27,4 @@ config_keys.json
 tss_data.json
 tss_data.json
 *.pyc
+tss_data.json
