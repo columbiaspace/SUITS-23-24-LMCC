@@ -1,29 +1,69 @@
-.rover-page {
-    display: flex;
-    flex-direction: column;
+.pagecontainer {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  width: 100vw;
 }
-  
-  .header-rover {
-    text-align: center;
-  }
-  
-  .content-rover {
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .column-rover {
-    flex: 1;
-    display: flex;
-    flex-direction: column; /* Ensure column layout for contents */
-    align-items: center; /* Center contents horizontally */
-  }
-  
-  .gif-container-rover {
-    width: 100%; /* Take full width of the column */
-    min-height: 300px; /* Set a minimum height to ensure visibility */
-    display: flex;
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-  }
-  
+
+.header-rover {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f9fa; /* Light gray */
+}
+
+.content-rover {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  height: 100%;
+}
+
+.left-column-rover {
+  display: grid;
+  grid-template-rows: 50% 50%;
+  border-right: 1px solid #ddd;
+  height: 100%;
+}
+
+.rover-cam {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #eef; /* Light blue */
+  overflow: hidden;
+  position: relative;
+}
+
+.rover-camera-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.video-container {
+  width: 100%;
+  height: calc(100% - 50px); /* Adjust height to leave space for the button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-container video,
+.video-container img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+}
+
+.map {
+  background-color: #dde; /* Light green */
+}
+
+.right-column-rover {
+  background-color: #f8f9fa; /* Light gray */
+}
