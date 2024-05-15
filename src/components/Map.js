@@ -80,7 +80,6 @@ const MapboxComponent = () => {
       });
     });
 
-    
     return () => {
       markers.forEach((marker) => marker.marker.remove());
       landmarks.forEach((landmark) => landmark.marker.remove());
