@@ -17,7 +17,7 @@ function Egress() {
   };
 
   return (
-    <div className="pagecontainer">
+    <div className="ingressegress-container">
       <div className="left-column">
         <h1>Egress</h1>
         {EgressProcedureList[currentProcedure].image && (

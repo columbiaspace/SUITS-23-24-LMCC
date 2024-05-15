@@ -8,7 +8,7 @@ function ProcedureItem({ name, description, className }) {
 
     return (
         <div className={`ProcedureItem ${className}`}>
-            <h1>{name}</h1>
+            <h1 className="procedureTitle">{name}</h1>
             <ul className='procedureDescription'>{descriptionItems}</ul>
         </div>
     );
