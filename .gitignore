@@ -34,3 +34,4 @@ __pycache__/server.cpython-312.pyc
 config_keys.json
 __pycache__/server.cpython-312.pyc
 tss_data.json
+/myenv
