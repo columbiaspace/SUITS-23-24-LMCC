@@ -1,6 +1,8 @@
-import image1 from '../Images/DCU_Front.jpg';
-import image2 from '../Images/dog2.png';
-import image3 from '../Images/dog3.png';
+import image1 from '../Images/Egress1.jpg';
+import image2 from '../Images/Egress2.jpg';
+import image3 from '../Images/Egress3.jpg';
+import image4 from '../Images/Egress4.jpg';
+
 // import supplywaste from '../Images/supplywaste.jpg'
 export const EgressProcedureList = [
   {
@@ -21,7 +23,7 @@ export const EgressProcedureList = [
   {
     name: 'END Depress, Check Switches and Disconnect',
     description: 'HMD 1. Wait until SUIT P, O2 P = 4\nUIA 2. DEPRESS PUMP PWR - OFF\nBOTH DCU 3. BATT - LOCAL\nUIA 9. EV-1, EV-2 PWR - OFF\nBOTH DCU 4. Verify OXY - PRI\nBOTH DCU 5. Verify COMMS - A\nBOTH DCU 6. Verify FAN - PRI\nBOTH DCU 7. Verify PUMP - CLOSE\nBOTH DCU 8. Verify CO2 - A\nUIA and DCU 9. EV1 and EV2 disconnect UIA and DCU umbilical',
-    image: null,
+    image: image4,
   },
 
   // Add more procedures as needed

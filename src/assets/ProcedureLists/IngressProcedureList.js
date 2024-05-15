@@ -1,4 +1,4 @@
-import image1 from '../Images/DCU_Front.jpg';
+import image1 from '../Images/Ingress1.jpg';
 import image2 from '../Images/Ingress2.jpg';
 import image3 from '../Images/Ingress3.jpg';
 import image4 from '../Images/Ingress4.jpg';
