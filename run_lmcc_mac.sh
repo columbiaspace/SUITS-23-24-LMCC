@@ -46,8 +46,8 @@ echo "Installing npm dependencies..."
 npm install
 
 # Start the server
-# echo "Starting the server with npm start..."
-# npm start &
+echo "Starting the server with npm start..."
+npm start &
 
 # Start the FastAPI server
 echo "Starting the FastAPI server with uvicorn..."
