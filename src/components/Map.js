@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
 import "mapbox-gl/dist/mapbox-gl.css";
-import geoJson from "../assets/json_data/GeoJson/stagnentData.json";
 
 const MapboxComponent = () => {
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
-  const [landmarks, setLandmarks] = useState([]);
   const [selectedPoints, setSelectedPoints] = useState([]);
   const [showMarkers, setShowMarkers] = useState(true);
   const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
@@ -38,38 +36,6 @@ const MapboxComponent = () => {
     });
 
     newMap.on("load", () => {
-      // Load geoJSON data
-      newMap.addSource("geojson-source", {
-        type: "geojson",
-        data: geoJson,
-      });
-
-      geoJson.features.forEach((feature, index) => {
-        if (feature.properties.mapbounds) return;
-        const layerId = `${feature.geometry.type.toLowerCase()}-layer-${index}`;
-        const layerType =
-          feature.geometry.type === "Point"
-            ? "circle"
-            : feature.geometry.type === "LineString"
-            ? "line"
-            : "fill";
-
-        newMap.addLayer({
-          id: layerId,
-          type: layerType,
-          source: "geojson-source",
-          filter: ["==", ["id"], feature.id],
-          paint: {
-            "circle-radius": 6,
-            "circle-color": feature.properties["marker-color"] || "#FF0000",
-            "fill-color": feature.properties.fill || "#888888",
-            "fill-opacity": feature.properties["fill-opacity"] || 0.5,
-            "line-color": feature.properties.stroke || "#888888",
-            "line-width": feature.properties["stroke-width"] || 2,
-          },
-        });
-      });
-
       setMap(newMap);
     });
 
@@ -82,32 +48,75 @@ const MapboxComponent = () => {
 
     return () => {
       markers.forEach((marker) => marker.marker.remove());
-      landmarks.forEach((landmark) => landmark.marker.remove());
       newMap.remove();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapBoxAPIKey]); // Only run this effect when mapBoxAPIKey changes
+  }, [mapBoxAPIKey, markers]);
 
   useEffect(() => {
-    if (!map) return;
-    const newLandmarks = [
-      // Example landmarks (uncomment and adjust as needed)
-      // { id: 'landmark1', title: 'Eiffel Tower', lat: 48.8584, lng: 2.2945, description: 'A wrought-iron lattice tower on the Champ de Mars in Paris, France.' },
-      // { id: 'landmark2', title: 'Statue of Liberty', lat: 40.6892, lng: -74.0445, description: 'A colossal statue on Liberty Island in New York Harbor.' }
-    ].map((landmark) => {
-      const marker = new mapboxgl.Marker()
-        .setLngLat([landmark.lng, landmark.lat])
-        .setPopup(
-          new mapboxgl.Popup().setHTML(
-            `<h3>${landmark.title}</h3><p>${landmark.description}</p>`
-          )
-        )
-        .addTo(map);
-      return { ...landmark, marker };
-    });
+    const fetchGeoJson = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/geojson");
+        const geoJson = await response.json();
 
-    setLandmarks(newLandmarks);
-  }, [map]); // Only run this effect when map changes
+        if (map) {
+          if (map.getSource("geojson-source")) {
+            map.getSource("geojson-source").setData(geoJson);
+          } else {
+            map.addSource("geojson-source", {
+              type: "geojson",
+              data: geoJson,
+            });
+
+            geoJson.features.forEach((feature, index) => {
+              if (feature.properties.mapbounds) return;
+              const layerId = `${feature.geometry.type.toLowerCase()}-layer-${index}`;
+              const layerType =
+                feature.geometry.type === "Point"
+                  ? "circle"
+                  : feature.geometry.type === "LineString"
+                  ? "line"
+                  : "fill";
+
+              map.addLayer({
+                id: layerId,
+                type: layerType,
+                source: "geojson-source",
+                filter: ["==", ["id"], feature.id],
+                paint: {
+                  "circle-radius": 6,
+                  "circle-color": feature.properties["marker-color"] || "#FF0000",
+                  "fill-color": feature.properties.fill || "#888888",
+                  "fill-opacity": feature.properties["fill-opacity"] || 0.5,
+                  "line-color": feature.properties.stroke || "#888888",
+                  "line-width": feature.properties["stroke-width"] || 2,
+                },
+              });
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching GeoJSON data:", error);
+      }
+    };
+
+    const intervalId = setInterval(fetchGeoJson, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [map]);
+
+  const addMarker = async (title, description, lat, lng) => {
+    try {
+      await fetch("http://localhost:8000/add_marker", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, description, lat, lng }),
+      });
+    } catch (error) {
+      console.error("Error posting new marker:", error);
+    }
+  };
 
   useEffect(() => {
     if (!map) return;
@@ -117,8 +126,11 @@ const MapboxComponent = () => {
       const description = prompt("Enter description for the marker:");
       if (!title || !description) return;
 
+      const lat = e.lngLat.lat;
+      const lng = e.lngLat.lng;
+
       const marker = new mapboxgl.Marker()
-        .setLngLat([e.lngLat.lng, e.lngLat.lat])
+        .setLngLat([lng, lat])
         .setPopup(
           new mapboxgl.Popup({ offset: 25 }).setHTML(
             `<h3>${title}</h3><p>${description}</p>`
@@ -130,12 +142,14 @@ const MapboxComponent = () => {
         ...currentMarkers,
         { marker, title, description, id: currentMarkers.length },
       ]);
+
+      addMarker(title, description, lat, lng);
     });
-  }, [map]); // Only run this effect when map changes
+  }, [map]);
 
   const toggleVisibility = () => {
     setShowMarkers(!showMarkers);
-    markers.concat(landmarks).forEach(
+    markers.forEach(
       (m) =>
         (m.marker.getElement().style.display = showMarkers ? "none" : "block")
     );
@@ -237,7 +251,7 @@ const MapboxComponent = () => {
           <input type="checkbox" onChange={cancelRoute} />
           Cancel Route
         </label>
-        {markers.concat(landmarks).map((marker, index) => (
+        {markers.map((marker, index) => (
           <div
             key={index}
             style={{

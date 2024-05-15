@@ -41,17 +41,14 @@ install_python
 # Install Python dependencies
 install_python_dependencies
 
-# Clone Repo
-clone_tss
-
 # Install npm dependencies
 echo "Installing npm dependencies..."
 npm install
 
 # Start the server
-echo "Starting the server with npm start..."
-npm start &
+# echo "Starting the server with npm start..."
+# npm start &
 
 # Start the FastAPI server
 echo "Starting the FastAPI server with uvicorn..."
-uvicorn server:app --host 0.0.0.0 --port 8000 --reload
+uvicorn server.server:app --host 0.0.0.0 --port 8000 --reload
