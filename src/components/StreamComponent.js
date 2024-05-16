@@ -1,12 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { getHOLO_IP } from './../helpers/ipAddress.js';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import NoVid from "./../assets/Images/NoVid.png"
+import NoVid from "./../assets/Images/NoVid.png";
 
 const StreamComponent = () => {
   const videoRef = useRef(null);
   const [isConnected, setIsConnected] = useState(true);
-  const HOLO_IP = getHOLO_IP(); // Assume this function returns the IP address correctly
+  const [HOLO_IP, setHOLO_IP] = useState(null); // Initialize HOLO_IP as null
+
+  useEffect(() => {
+    // Fetch configuration data from localhost:8000/config
+    fetch('http://localhost:8000/config')
+      .then(response => response.json())
+      .then(data => {
+        setHOLO_IP(data.HOLO_IP); // Set HOLO_IP from fetched data
+      })
+      .catch(error => {
+        console.error('Error fetching configuration:', error);
+        setIsConnected(false); // Set isConnected to false on error
+      });
+  }, []);
 
   useEffect(() => {
     if (videoRef.current && HOLO_IP) {
