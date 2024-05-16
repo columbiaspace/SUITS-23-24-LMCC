@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
+// import React, { useEffect } from 'react';
 import '../../pages-style/rocks.css';
 import '../../pages-style/page.css';
-import { populateRockData } from '../../helpers/RockData.js';
 import Map from '../../components/Map.js';
 
 function Rocks() {
-  useEffect(() => {
-    populateRockData(); // Pass the desired rock ID here
-  }, []);
+  // useEffect(() => {
+  // //   populateRockData(); // Pass the desired rock ID here
+  // // }, []);
 
   return (
 

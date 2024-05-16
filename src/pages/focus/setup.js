@@ -18,7 +18,7 @@ function Setup() {
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const response = await fetch('http://localhost:8000/config');
+        const response = await fetch('http://localhost:8000/get_config');
         const config = await response.json();
         setTssIP(config.TSS_IP);
         setHoloIP(config.HOLO_IP);

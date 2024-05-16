@@ -6,8 +6,8 @@
   }
   
   .procedureTitle {
-    margin-bottom: 10px; /* Add margin between title and description */
-    flex-grow: 1; /* Allow title to grow to fill available space */
+    margin: 10px; /* Add margin between title and description */
+    font-size: large;
   }
   
   .procedureDescription {
@@ -25,7 +25,6 @@
     flex: 1;
     padding: 20px;
     background-color: #e0e0e0;
-    max-height: 400px; /* Set a maximum height for the right column */
     overflow-y: auto; /* Enable vertical scrolling if content exceeds the maximum height */
   }
   

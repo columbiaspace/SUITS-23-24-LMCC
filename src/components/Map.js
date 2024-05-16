@@ -13,7 +13,7 @@ const MapboxComponent = () => {
   useEffect(() => {
     const fetchMapBoxAPIKey = async () => {
       try {
-        const response = await fetch("http://localhost:8000/get_mapbox_key");
+        const response = await fetch("http://localhost:8000/get_config");
         const data = await response.json();
         setMapBoxAPIKey(data.MAPBOX_KEY);
       } catch (error) {
@@ -55,7 +55,7 @@ const MapboxComponent = () => {
   useEffect(() => {
     const fetchGeoJson = async () => {
       try {
-        const response = await fetch("http://localhost:8000/geojson");
+        const response = await fetch("http://localhost:8000/get_geojson");
         const geoJson = await response.json();
 
         if (map) {
