@@ -27,7 +27,6 @@ function Constant() {
       <div className="pagecontainer" id="constantpage">
         <div id="topbar"></div>
         <div id="centerbar">
-          <div className='centerButton' id='Message' onClick={showMessageModal}>Message</div>
           <div className='centerButton' id='Alert' onClick={showAlertModal}>Alert</div>
           <div className='centerButton' id='MapButton' onClick={showMapModal}>Map</div>
         </div>

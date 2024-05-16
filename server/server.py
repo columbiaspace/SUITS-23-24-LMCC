@@ -14,9 +14,14 @@ logger = logging.getLogger(__name__)
 app = FastAPI()
 
 DATA_FILE = './server/json_databases/tss_data.json'
-GEOJSON_FILE = './server/json_databases/created_pins.json'
+PINS_FILE = './server/json_databases/created_pins.json'
 BOUNDARY_LINES_FILE = './server/json_databases/boundary_lines.json'
 CONFIG_FILE = './server/json_databases/config_keys.json'
+INGRESS_FILE = './server/json_databases/ingress_procedures.json'
+EGRESS_FILE = './server/json_databases/egress_procedures.json'
+EQUIPMENT_REPAIR_FILE = './server/json_databases/equipment_repair.json'
+ALERTS_FILE = './server/json_databases/alerts.json'
+MESSAGES_FILE = './server/json_databases/messages.json'
 
 # Load config to get TSS_IP
 if os.path.exists(CONFIG_FILE):
@@ -157,8 +162,8 @@ async def get_geojson():
                 geojson_data["features"].extend(boundary_lines_data["features"])
 
     # Read existing geojson data
-    if os.path.exists(GEOJSON_FILE):
-        with open(GEOJSON_FILE, "r") as file:
+    if os.path.exists(BOUNDARY_LINES_FILE):
+        with open(BOUNDARY_LINES_FILE, "r") as file:
             existing_geojson_data = json.load(file)
             if "features" in existing_geojson_data:
                 geojson_data["features"].extend(existing_geojson_data["features"])
@@ -167,10 +172,10 @@ async def get_geojson():
 
 @app.post("/add_marker")
 async def add_marker(marker: Marker):
-    if not os.path.exists(GEOJSON_FILE):
+    if not os.path.exists(BOUNDARY_LINES_FILE):
         data = {"type": "FeatureCollection", "features": []}
     else:
-        with open(GEOJSON_FILE, "r") as file:
+        with open(BOUNDARY_LINES_FILE, "r") as file:
             data = json.load(file)
     
     new_feature = {
@@ -189,7 +194,7 @@ async def add_marker(marker: Marker):
     
     data["features"].append(new_feature)
     
-    with open(GEOJSON_FILE, "w") as file:
+    with open(BOUNDARY_LINES_FILE, "w") as file:
         json.dump(data, file)
     
     return {"message": "Marker added successfully"}
@@ -210,3 +215,24 @@ async def get_team_data(team_number: int, filename: str):
         raise HTTPException(status_code=400, detail="Team number must be between 0 and 10")
     url = f"http://{tss_ip}/json_data/teams/{team_number}/{filename}"
     return await fetch_json(url)
+
+def load_procedures():
+    if os.path.exists(EQUIPMENT_REPAIR_FILE):
+        with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+            return json.load(file)
+    else:
+        raise FileNotFoundError(f"{EQUIPMENT_REPAIR_FILE} not found")
+
+@app.get("/procedure")
+async def get_procedure(id: int):
+    try:
+        data = load_procedures()
+        procedures = data.get("procedures", [])
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+    procedure = next((proc for proc in procedures if proc["id"] == id), None)
+    if procedure:
+        return procedure
+    else:
+        raise HTTPException(status_code=404, detail="Procedure not found")
