@@ -70,7 +70,7 @@ const Equipment = () => {
     };
 
     const handleStepChange = (index, field, value) => {
-        const updatedSteps = newProcedure.steps.map((step, i) => 
+        const updatedSteps = newProcedure.steps.map((step, i) =>
             i === index ? { ...step, [field]: value } : step
         );
         setNewProcedure({ ...newProcedure, steps: updatedSteps });
@@ -140,7 +140,6 @@ const Equipment = () => {
 
     return (
         <div id="container">
-            <button onClick={() => { setShowModal(true); setIsEditing(false); setNewProcedure({ id: '', title: '', steps: [] }); }}>Add New Procedure</button>
             {procedures.length > 0 ? (
                 procedures.map(procedure => {
                     const isHighlighted = procedure.id === sentProcedureId;
@@ -171,7 +170,7 @@ const Equipment = () => {
             ) : (
                 <div>No procedures found.</div>
             )}
-
+            <button onClick={() => { setShowModal(true); setIsEditing(false); setNewProcedure({ id: '', title: '', steps: [] }); }}>Add New Procedure</button>
             {showModal && (
                 <div id="modal">
                     <div id="modal-content">
