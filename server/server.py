@@ -222,3 +222,24 @@ with open(INGRESS_EGRESS_FILE, 'r') as f:
 @app.get("/procedures")
 def get_procedures():
     return procedures
+
+# Get Equipment Procedures
+@app.get("/get_equipment_procedures")
+async def get_equipment_procedures():
+    try:
+        if os.path.exists(EQUIPMENT_REPAIR_FILE):
+            with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+                data = json.load(file)
+        else:
+            raise FileNotFoundError(f"{EQUIPMENT_REPAIR_FILE} not found")
+        procedures = data.get("procedures", [])
+        return procedures
+    except FileNotFoundError as e:
+        logger.error(str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except json.JSONDecodeError as e:
+        logger.error(f"JSON decode error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error decoding JSON data")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred: {str(e)}")
+        raise HTTPException(status_code=500, detail="An unexpected error occurred")

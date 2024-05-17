@@ -1,88 +1,55 @@
-import React, { useState } from 'react';
-import ExpandableCard from "../../helpers/ExpandableCard.jsx";
-import "../../pages-style/page.css";
-import "../../pages-style/equipment.css";
-import equipmentData from "../../assets/ProcedureLists/EquipmentRepair.json";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import '../../pages-style/equipment.css';
 
-const EquipmentPage = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [procedureData, setProcedureData] = useState({ title: '', steps: [] });
-  const [currentStep, setCurrentStep] = useState(0);
-  const [inputValue, setInputValue] = useState('');
-  const [procedures, setProcedures] = useState([]);
+const Equipment = () => {
+    const [procedures, setProcedures] = useState([]);
+    const [error, setError] = useState(null);
 
-  const handleAddNewProcedure = () => {
-    setShowModal(true);
-  };
+    const fetchData = () => {
+        axios.get('http://localhost:8000/get_equipment_procedures')
+            .then(response => {
+                console.log(response.data); // Debugging: Log the fetched data
+                setProcedures(response.data || []);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                setError('Error fetching data');
+            });
+    };
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+    useEffect(() => {
+        fetchData();  // Fetch initially
 
-  const handleNext = () => {
-    if (currentStep === 0) { // Set title
-      setProcedureData(prevData => ({ ...prevData, title: inputValue }));
-    } else if (currentStep % 2 === 1) { // Set subtitle
-      setProcedureData(prevData => ({
-        ...prevData,
-        steps: [...prevData.steps, { step: `Subtitle ${Math.ceil(currentStep / 2)}: ${inputValue}`, description: '' }]
-      }));
-    } else { // Set main text
-      const newSteps = [...procedureData.steps];
-      newSteps[newSteps.length - 1].description = inputValue;
-      setProcedureData(prevData => ({ ...prevData, steps: newSteps }));
-    }
-    setCurrentStep(prevStep => prevStep + 1);
-    setInputValue('');
-  };
+        const interval = setInterval(() => {
+            fetchData();
+        }, 3000);  // Fetch every 3 seconds
 
-  const handleContinue = (shouldContinue) => {
-    if (!shouldContinue) {
-      if (currentStep % 2 === 0) { // Ensure the last main text is included
-        const newSteps = [...procedureData.steps];
-        if (newSteps.length > 0) {
-          newSteps[newSteps.length - 1].description = inputValue;
-          setProcedureData(prevData => ({ ...prevData, steps: newSteps }));
-        }
-      }
-      setProcedures(prevProcedures => [...prevProcedures, procedureData]);
-      setShowModal(false);
-      setProcedureData({ title: '', steps: [] });
-      setCurrentStep(0);
-      setInputValue('');
-    }
-  };
+        return () => clearInterval(interval);  // Cleanup on unmount
+    }, []);
 
-  return (
-    <div className="pagecontainer">
-      <div className="container">
-        <div className="header-area">
-          <h2>Equipment Repair</h2>
-          <button onClick={handleAddNewProcedure} className="add-procedure-btn">Add New Procedure</button>
-        </div>
-        {Object.entries(equipmentData).map(([title, steps]) => (
-          <ExpandableCard key={title} title={title} steps={steps} />
-        ))}
-        {procedures.map((procedure, index) => (
-          <ExpandableCard key={index} title={procedure.title} steps={procedure.steps} />
-        ))}
-        {showModal && (
-          <div className="modal">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              placeholder={currentStep === 0 ? 'Title:' : currentStep % 2 === 1 ? 'Subtitle:' : 'Main text:'}
-            />
-            <button onClick={handleNext}>Next</button>
-            {(currentStep > 1 || (currentStep === 1 && procedureData.steps.length > 0)) && (
-              <button onClick={() => handleContinue(false)}>Finish</button>
+    if (error) return <div className="error">Error: {error}</div>;
+
+    return (
+        <div className="container">
+            {procedures.length > 0 ? (
+                procedures.map(procedure => (
+                    <div key={procedure.id}>
+                        <h2>{procedure.title}</h2>
+                        <ul>
+                            {procedure.steps.map((step, index) => (
+                                <li key={index}>
+                                    <strong>{step.step} ({step.role})</strong>: {step.description}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            ) : (
+                <div>No procedures found.</div>
             )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
-export default EquipmentPage;
+export default Equipment;
