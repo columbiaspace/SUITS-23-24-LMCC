@@ -19,6 +19,7 @@ h2, h3 {
 ul {
   list-style-type: none;
   padding: 0;
+  margin-bottom: 50px;
 }
 
 li {
@@ -153,4 +154,38 @@ button:hover {
 
 .procedure-header.expanded h2 {
   border-bottom: 2px solid #ddd;
+}
+
+.delete-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}
+
+.delete-button:hover {
+  background-color: #cc0000;
+}
+
+.edit-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  bottom: 15px;
+  right: 90px;
+}
+
+.edit-button:hover {
+  background-color: #45a049;
 }
