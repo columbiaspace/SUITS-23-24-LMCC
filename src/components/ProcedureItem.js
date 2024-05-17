@@ -1,5 +1,4 @@
 import React from 'react';
-import './procedureitem.css';
 
 function ProcedureItem({ name, description, className }) {
     const descriptionItems = description.split('\n').map((item, index) => (

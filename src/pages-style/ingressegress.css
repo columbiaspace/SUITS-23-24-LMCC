@@ -1,105 +1,147 @@
 /* ingressegress.css */
 
+/* Define CSS variables for colors */
+:root {
+  --background-color: #f8f9fa;
+  --column-background-color: #ffffff;
+  --left-column-background-color: #007bff;
+  --right-column-background-color: #80bdff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --primary-color: #007bff;
+  --primary-hover-color: #0056b3;
+  --text-color-main: #343a40;
+  --text-color-secondary: #495057;
+  --border-color: #ced4da;
+  --select-border-color: #ccc;
+  --select-focus-border-color: #007bff;
+}
+
 .ingressegress-container {
   height: 90vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 20px;
-  background-color: #f4f4f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--background-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px var(--shadow-color);
 }
 
-.header {
-  font-size: 2.5rem;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.content {
+.left-column, .right-column {
+  margin: 10px;
+  padding: 20px;
+  background-color: var(--column-background-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px var(--shadow-color);
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 1200px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  flex-grow: 1;
+  flex-direction: column;
 }
 
 .left-column {
-  flex: 1;
-  padding: 20px;
-  display: flex;
-  align-items: center;
+  flex-basis: 60%; /* Take up 60% of the container's width */
   justify-content: center;
-  border-right: 1px solid #ddd;
-}
-
-.left-column img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
+  align-items: center;
+  background-color: var(--left-column-background-color);
 }
 
 .right-column {
-  flex: 3;
-  padding: 20px;
-  max-height: 100%;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  flex-basis: 40%; /* Take up 40% of the container's width */
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--right-column-background-color);
+  overflow-y: auto; /* Enable vertical scrolling if content exceeds the maximum height */
+}
+
+.left-column h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: var(--text-color-main);
+}
+
+.left-column img {
+  width: auto;
+  max-width: 100%;
+  max-height: 70vh;
+  border-radius: 10px;
 }
 
 .right-column h2 {
-  font-size: 1.5rem;
-  color: #333;
+  font-size: 20px;
   margin-bottom: 10px;
+  color: var(--text-color-secondary);
 }
 
 .select-container {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .select-container select {
   width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid var(--select-border-color);
   border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.select-container select:focus {
+  outline: none;
+  border-color: var(--select-focus-border-color);
 }
 
 .ProcedureList {
-  flex: 1;
-  margin: 20px;
-  overflow-y: auto;
+  margin-bottom: 20px;
+  flex: 1; /* Allow the ProcedureList to take up available space */
+  display: flex;
+  flex-direction: column;
 }
 
-.ProcedureList .show {
-  word-wrap: break-word;
-  white-space: pre-wrap;
+.ProcedureItem {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Ensure ProcedureItem spans the entire width */
+  margin-bottom: 20px; /* Add margin to separate ProcedureItems */
+}
+
+.procedureTitle {
+  margin: 10px; /* Add margin between title and description */
+  font-size: large;
+}
+
+.procedureDescription {
+  padding-left: 20px; /* Add padding to the description for better readability */
+  flex-grow: 1; /* Allow description to grow to fill available space */
 }
 
 .navigation-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: auto;
+  align-items: flex-end;
+  margin-top: auto; /* Push buttons to the bottom */
 }
 
 .navigation-buttons button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  color: #fff;
-  background-color: #007bff;
+  padding: 8px 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-right: 10px; /* Add margin between buttons */
 }
 
 .navigation-buttons button:hover {
-  background-color: #0056b3;
+  background-color: var(--primary-hover-color);
+}
+
+@media (max-width: 768px) {
+  .ingressegress-container {
+    flex-direction: column;
+  }
+
+  .left-column, .right-column {
+    margin: 10px 0;
+    flex-basis: auto;
+  }
 }

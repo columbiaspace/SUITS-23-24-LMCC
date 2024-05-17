@@ -155,25 +155,33 @@ function Setup() {
           <label htmlFor='tss_ip'>TSS IP Address: </label>
           <input type='text' id='tss_ip' name='tss_ip' defaultValue={tssIP} />
           <button onClick={handleSetTSS_IP}>Set TSS IP</button>
-          <span className={`status ${tssIPStatus}`}></span>
+          <div className={`status ${tssIPStatus}`}>
+            <span className="status-text"></span>
+          </div>
         </div>
         <div className='dataEntry'>
           <label htmlFor='server_ip'>Server IP Address:</label>
           <input type='text' id='server_ip' name='server_ip' defaultValue={serverIP} />
           <button onClick={handleSetSERVER_IP}>Set Server IP</button>
-          <span className={`status ${serverIPStatus}`}></span>
+          <div className={`status ${serverIPStatus}`}>
+            <span className="status-text"></span>
+          </div>
         </div>
         <div className='dataEntry'>
           <label htmlFor='holo_ip'>HOLO Lens IP Address: </label>
           <input type='text' id='holo_ip' name='holo_ip' defaultValue={holoIP} />
           <button onClick={handleSetHOLO_IP}>Set HOLO IP</button>
-          <span className={`status ${holoIPStatus}`}></span>
+          <div className={`status ${holoIPStatus}`}>
+            <span className="status-text"></span>
+          </div>
         </div>
         <div className='dataEntry'>
           <label htmlFor='mapbox_api'>Map Box API Key: </label>
           <input type='text' id='mapbox_api' name='mapbox_api' defaultValue={mapBoxAPI} />
           <button onClick={handleSetMapBoxAPI}>Set MapBox API Key</button>
-          <span className={`status ${mapBoxAPIStatus}`}></span>
+          <div className={`status ${mapBoxAPIStatus}`}>
+            <span className="status-text"></span>
+          </div>
         </div>
       </div>
       <div style={{ display: 'none' }}>
