@@ -30,9 +30,9 @@ const MapboxComponent = () => {
     mapboxgl.accessToken = mapBoxAPIKey;
     const newMap = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/mapbox/satellite-v9",
+      style: "mapbox://styles/mapbox/satellite-v8",
       center: [-95.08148549138448, 29.564911887991144],
-      zoom: 15,
+      zoom: 17,
     });
 
     newMap.on("load", () => {
@@ -106,7 +106,7 @@ const MapboxComponent = () => {
 
   const addMarker = async (title, description, lat, lng) => {
     try {
-      await fetch("http://localhost:8000/add_marker", {
+      await fetch("mapbox://styles/mapbox/satellite-streets-v12", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

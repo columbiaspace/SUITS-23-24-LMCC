@@ -48,7 +48,7 @@
   align-items: center;
   justify-content: space-between;
   background-color: var(--right-column-background-color);
-  overflow-y: auto; /* Enable vertical scrolling if content exceeds the maximum height */
+  overflow: hidden; /* Prevent the right column from scrolling */
 }
 
 .left-column h1 {
@@ -70,6 +70,15 @@
   color: var(--text-color-secondary);
 }
 
+.ProcedureList {
+  flex: 1;
+  overflow-y: auto; /* Enable vertical scrolling for the ProcedureList */
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px; /* Set an initial font size */
+}
+
 .select-container {
   margin-bottom: 10px;
 }
@@ -88,13 +97,6 @@
   border-color: var(--select-focus-border-color);
 }
 
-.ProcedureList {
-  margin-bottom: 20px;
-  flex: 1; /* Allow the ProcedureList to take up available space */
-  display: flex;
-  flex-direction: column;
-}
-
 .ProcedureItem {
   display: flex;
   flex-direction: column;
@@ -102,14 +104,10 @@
   margin-bottom: 20px; /* Add margin to separate ProcedureItems */
 }
 
-.procedureTitle {
-  margin: 10px; /* Add margin between title and description */
-  font-size: large;
-}
-
 .procedureDescription {
-  padding-left: 20px; /* Add padding to the description for better readability */
+  padding: 20px; /* Add padding to the description for better readability */
   flex-grow: 1; /* Allow description to grow to fill available space */
+  margin: 0;
 }
 
 .navigation-buttons {

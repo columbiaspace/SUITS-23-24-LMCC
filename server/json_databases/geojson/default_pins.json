@@ -1,0 +1,39 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "Name": "Comm Tower",
+          "marker-color": "#f4aeae",
+          "marker-size": "medium",
+          "marker-symbol": "circle"
+        },
+        "geometry": {
+          "coordinates": [
+            -95.0812619802509,
+            29.56490763560322
+          ],
+          "type": "Point"
+        },
+        "id": 1
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Name": "UIA",
+          "marker-color": "#f4aeae",
+          "marker-size": "medium",
+          "marker-symbol": "circle"
+        },
+        "geometry": {
+          "coordinates": [
+            -95.08141454127517,
+            29.56460538049521
+          ],
+          "type": "Point"
+        },
+        "id": 2
+      }
+    ]
+  }

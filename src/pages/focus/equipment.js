@@ -80,7 +80,7 @@ const Equipment = () => {
         const apiCall = isEditing
             ? axios.put(`http://localhost:8000/update_procedure/${currentProcedureId}`, newProcedure)
             : axios.post('http://localhost:8000/add_procedure', newProcedure);
-
+    
         apiCall
             .then(response => {
                 console.log('Procedure saved:', response.data);
@@ -92,12 +92,17 @@ const Equipment = () => {
                     steps: []
                 });
                 fetchData();
+                // If editing and the procedure is the currently sent one, resend it
+                if (isEditing && currentProcedureId === sentProcedureId) {
+                    sendProcedure(currentProcedureId);
+                }
             })
             .catch(error => {
                 console.error('Error saving procedure:', error);
                 setError('Error saving procedure');
             });
     };
+    
 
     const toggleExpand = (id) => {
         setExpandedProcedure(expandedProcedure === id ? null : id);

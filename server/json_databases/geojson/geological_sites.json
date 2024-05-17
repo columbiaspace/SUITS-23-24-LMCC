@@ -1,0 +1,90 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "Name": "C",
+          "stroke": "#000000"
+        },
+        "geometry": {
+          "coordinates": [
+            -95.08171325163919,
+            29.564815614505832
+          ],
+          "type": "Point"
+        },
+        "id": 2
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Name": "A"
+        },
+        "geometry": {
+          "coordinates": [
+            -95.08179186649113,
+            29.56462838562973
+          ],
+          "type": "Point"
+        },
+        "id": 5
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Name": "B"
+        },
+        "geometry": {
+          "coordinates": [
+            -95.0816345852645,
+            29.564746533746927
+          ],
+          "type": "Point"
+        },
+        "id": 5
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Name": "D"
+        },
+        "geometry": {
+          "coordinates": [
+            -95.08162028697159,
+            29.56485224510341
+          ],
+          "type": "Point"
+        },
+        "id": 5
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Name": "E"
+        },
+        "geometry": {
+          "coordinates": [
+            -95.08145764388514,
+            29.564823485407146
+          ],
+          "type": "Point"
+        },
+        "id": 5
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Name": "F"
+        },
+        "geometry": {
+          "coordinates": [
+            -95.08126998010785,
+            29.564989047701275
+          ],
+          "type": "Point"
+        },
+        "id": 5
+      }
+    ]
+  }

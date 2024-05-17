@@ -11,13 +11,14 @@ from server.initdb import *
 app = FastAPI()
 
 DATA_FILE = './server/json_databases/tss_data.json'
-PINS_FILE = './server/json_databases/map_pins.json'
+PINS_FILE = './server/json_databases/geojson/user_pins.json'
 BOUNDARY_LINES_FILE = './server/json_databases/boundary_lines.json'
 CONFIG_FILE = './server/json_databases/config_keys.json'
 INGRESS_EGRESS_FILE = './server/json_databases/ingress_egress_procedures.json'
 EQUIPMENT_REPAIR_FILE = './server/json_databases/equipment_repair.json'
 ALERTS_FILE = './server/json_databases/alerts.json'
 MESSAGES_FILE = './server/json_databases/messages.json'
+GOLDEN_ER_FILE = './server/json_databases/golden_er_procedure.json'
 
 # TSS Connection
 if os.path.exists(CONFIG_FILE):
