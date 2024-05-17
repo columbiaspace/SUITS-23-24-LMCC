@@ -2,15 +2,12 @@ from fastapi import FastAPI, HTTPException, Request
 import httpx
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import logging
 import asyncio
 import json
 import os
 from datetime import datetime
 from server.initdb import *
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 app = FastAPI()
 
 DATA_FILE = './server/json_databases/tss_data.json'
@@ -70,11 +67,12 @@ async def periodic_fetch_and_store():
                 }
                 with open(DATA_FILE, 'w') as f:
                     json.dump(combined_data, f)
-                logger.info("Data fetched and stored successfully.")
             else:
-                logger.warning("One or both data sets were not fetched successfully.")
+                pass
+                # logger.warning("One or both data sets were not fetched successfully.")
         except Exception as e:
-            logger.error(f"An error occurred during periodic fetch: {e}")
+            pass
+            # logger.error(f"An error occurred during periodic fetch: {e}")
         await asyncio.sleep(1)
 
 # Save new IP or Key
@@ -235,13 +233,14 @@ async def get_equipment_procedures():
         procedures = data.get("procedures", [])
         return procedures
     except FileNotFoundError as e:
-        logger.error(str(e))
+        
+        # logger.error(str(e))
         raise HTTPException(status_code=404, detail=str(e))
     except json.JSONDecodeError as e:
-        logger.error(f"JSON decode error: {str(e)}")
+        # logger.error(f"JSON decode error: {str(e)}")
         raise HTTPException(status_code=500, detail="Error decoding JSON data")
     except Exception as e:
-        logger.error(f"An unexpected error occurred: {str(e)}")
+        # logger.error(f"An unexpected error occurred: {str(e)}")
         raise HTTPException(status_code=500, detail="An unexpected error occurred")
 
 class Step(BaseModel):
