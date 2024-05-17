@@ -243,3 +243,31 @@ async def get_equipment_procedures():
     except Exception as e:
         logger.error(f"An unexpected error occurred: {str(e)}")
         raise HTTPException(status_code=500, detail="An unexpected error occurred")
+
+class Step(BaseModel):
+    step: str
+    role: str
+    description: str
+
+class Procedure(BaseModel):
+    id: int
+    title: str
+    steps: list[Step]
+
+@app.post("/add_procedure", response_model=Procedure)
+async def add_procedure(procedure: Procedure):
+    if os.path.exists(EQUIPMENT_REPAIR_FILE):
+        with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+            data = json.load(file)
+    else:
+        data = {"procedures": []}
+
+    if any(existing_procedure["id"] == procedure.id for existing_procedure in data["procedures"]):
+        raise HTTPException(status_code=400, detail="Procedure with this ID already exists")
+
+    data["procedures"].append(procedure.dict())
+
+    with open(EQUIPMENT_REPAIR_FILE, 'w') as file:
+        json.dump(data, file, indent=4)
+
+    return procedure
