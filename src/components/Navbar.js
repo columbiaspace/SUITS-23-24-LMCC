@@ -7,7 +7,7 @@ const Navbar = () => {
         <nav className="Navbar">
             <div className="NavMenu">
                 <img className="img" src={require("./../assets/Images/logo.jpg")} alt="Logo"/>
-                <h1 id="title">CUITS 2024 LMCC</h1>
+                <h1 id="title">CUITS LMCC 2024</h1>
                 <Link className="NavLink" to="/Constant" activeStyle={{ color: '#69b3e7' }}>
                     Constant
                 </Link>

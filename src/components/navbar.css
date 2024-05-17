@@ -1,15 +1,18 @@
 /* navbar.css */
 
 .img {
-    height: 3rem;
-    width: auto;
-    margin-right: 10px;
+    height: 4rem;
+    width: 4rem;
+    margin: 10px;
+    border-radius: 50%; /* Circle border */
+    border: 2px solid #007bff; /* Border color and width */
+    object-fit: fill; /* Ensure the image fits within the circle */
 }
 
 #title {
     color: white;
     font-size: x-large;
-    margin-right: 50px;
+    margin: 30px;
     font-family: 'Arial', sans-serif; /* Use a clean font */
     letter-spacing: 1px; /* Slight spacing for better readability */
 }
