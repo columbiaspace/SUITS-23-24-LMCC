@@ -16,6 +16,7 @@ const Equipment = () => {
         role: '',
         description: ''
     });
+    const [expandedProcedure, setExpandedProcedure] = useState(null);
 
     const fetchData = () => {
         axios.get('http://localhost:8000/get_equipment_procedures')
@@ -69,6 +70,10 @@ const Equipment = () => {
             });
     };
 
+    const toggleExpand = (id) => {
+        setExpandedProcedure(expandedProcedure === id ? null : id);
+    };
+
     if (error) return <div id="error">Error: {error}</div>;
 
     return (
@@ -76,18 +81,20 @@ const Equipment = () => {
             <button onClick={() => setShowModal(true)}>Add New Procedure</button>
             {procedures.length > 0 ? (
                 procedures.map(procedure => (
-                    <div key={procedure.id} className="procedure-card">
-                        <div className="procedure-header">
+                    <div key={procedure.id} className="procedure-card" onClick={() => toggleExpand(procedure.id)}>
+                        <div className={`procedure-header ${expandedProcedure === procedure.id ? 'expanded' : ''}`}>
                             <h2>{procedure.title}</h2>
-                            <h4>#{procedure.id}</h4>
+                            <h4>ID: {procedure.id}</h4>
                         </div>
-                        <ul>
-                            {procedure.steps.map((step, index) => (
-                                <li key={index}>
-                                    <strong>{step.step} ({step.role})</strong>: {step.description}
-                                </li>
-                            ))}
-                        </ul>
+                        {expandedProcedure === procedure.id && (
+                            <ul>
+                                {procedure.steps.map((step, index) => (
+                                    <li key={index}>
+                                        <strong>{step.step} ({step.role})</strong>: {step.description}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
                 ))
             ) : (
