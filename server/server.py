@@ -271,3 +271,47 @@ async def add_procedure(procedure: Procedure):
         json.dump(data, file, indent=4)
 
     return procedure
+
+@app.delete("/delete_procedure/{id}", response_model=dict)
+async def delete_procedure(id: int):
+    if os.path.exists(EQUIPMENT_REPAIR_FILE):
+        with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+            data = json.load(file)
+    else:
+        raise HTTPException(status_code=404, detail=f"{EQUIPMENT_REPAIR_FILE} not found")
+
+    procedures = data.get("procedures", [])
+    updated_procedures = [procedure for procedure in procedures if procedure["id"] != id]
+
+    if len(procedures) == len(updated_procedures):
+        raise HTTPException(status_code=404, detail="Procedure not found")
+
+    data["procedures"] = updated_procedures
+
+    with open(EQUIPMENT_REPAIR_FILE, 'w') as file:
+        json.dump(data, file, indent=4)
+
+    return {"message": "Procedure deleted successfully"}
+
+@app.put("/update_procedure/{id}", response_model=Procedure)
+async def update_procedure(id: int, updated_procedure: Procedure):
+    if os.path.exists(EQUIPMENT_REPAIR_FILE):
+        with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+            data = json.load(file)
+    else:
+        raise HTTPException(status_code=404, detail=f"{EQUIPMENT_REPAIR_FILE} not found")
+
+    procedures = data.get("procedures", [])
+    for index, procedure in enumerate(procedures):
+        if procedure["id"] == id:
+            procedures[index] = updated_procedure.dict()
+            break
+    else:
+        raise HTTPException(status_code=404, detail="Procedure not found")
+
+    data["procedures"] = procedures
+
+    with open(EQUIPMENT_REPAIR_FILE, 'w') as file:
+        json.dump(data, file, indent=4)
+
+    return updated_procedure

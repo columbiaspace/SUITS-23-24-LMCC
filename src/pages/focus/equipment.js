@@ -6,6 +6,8 @@ const Equipment = () => {
     const [procedures, setProcedures] = useState([]);
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [currentProcedureId, setCurrentProcedureId] = useState(null);
     const [newProcedure, setNewProcedure] = useState({
         id: '',
         title: '',
@@ -16,6 +18,7 @@ const Equipment = () => {
         role: '',
         description: ''
     });
+    const [expandedProcedure, setExpandedProcedure] = useState(null);
 
     const fetchData = () => {
         axios.get('http://localhost:8000/get_equipment_procedures')
@@ -51,11 +54,23 @@ const Equipment = () => {
         });
     };
 
+    const handleStepChange = (index, field, value) => {
+        const updatedSteps = newProcedure.steps.map((step, i) => 
+            i === index ? { ...step, [field]: value } : step
+        );
+        setNewProcedure({ ...newProcedure, steps: updatedSteps });
+    };
+
     const handleSubmit = () => {
-        axios.post('http://localhost:8000/add_procedure', newProcedure)
+        const apiCall = isEditing
+            ? axios.put(`http://localhost:8000/update_procedure/${currentProcedureId}`, newProcedure)
+            : axios.post('http://localhost:8000/add_procedure', newProcedure);
+
+        apiCall
             .then(response => {
-                console.log('Procedure added:', response.data);
+                console.log('Procedure saved:', response.data);
                 setShowModal(false);
+                setIsEditing(false);
                 setNewProcedure({
                     id: '',
                     title: '',
@@ -64,30 +79,61 @@ const Equipment = () => {
                 fetchData();
             })
             .catch(error => {
-                console.error('Error adding procedure:', error);
-                setError('Error adding procedure');
+                console.error('Error saving procedure:', error);
+                setError('Error saving procedure');
             });
+    };
+
+    const toggleExpand = (id) => {
+        setExpandedProcedure(expandedProcedure === id ? null : id);
+    };
+
+    const deleteProcedure = (id) => {
+        if (window.confirm('Are you sure you want to delete this procedure?')) {
+            axios.delete(`http://localhost:8000/delete_procedure/${id}`)
+                .then(response => {
+                    console.log('Procedure deleted:', response.data);
+                    fetchData();  // Refresh the list of procedures
+                })
+                .catch(error => {
+                    console.error('Error deleting procedure:', error);
+                    setError('Error deleting procedure');
+                });
+        }
+    };
+
+    const editProcedure = (procedure) => {
+        setCurrentProcedureId(procedure.id);
+        setNewProcedure(procedure);
+        setShowModal(true);
+        setIsEditing(true);
     };
 
     if (error) return <div id="error">Error: {error}</div>;
 
     return (
         <div id="container">
-            <button onClick={() => setShowModal(true)}>Add New Procedure</button>
+            <button onClick={() => { setShowModal(true); setIsEditing(false); setNewProcedure({ id: '', title: '', steps: [] }); }}>Add New Procedure</button>
             {procedures.length > 0 ? (
                 procedures.map(procedure => (
-                    <div key={procedure.id} className="procedure-card">
-                        <div className="procedure-header">
+                    <div key={procedure.id} className="procedure-card" onClick={() => toggleExpand(procedure.id)}>
+                        <div className={`procedure-header ${expandedProcedure === procedure.id ? 'expanded' : ''}`}>
                             <h2>{procedure.title}</h2>
-                            <h4>#{procedure.id}</h4>
+                            <h4>ID: {procedure.id}</h4>
                         </div>
-                        <ul>
-                            {procedure.steps.map((step, index) => (
-                                <li key={index}>
-                                    <strong>{step.step} ({step.role})</strong>: {step.description}
-                                </li>
-                            ))}
-                        </ul>
+                        {expandedProcedure === procedure.id && (
+                            <>
+                                <ul>
+                                    {procedure.steps.map((step, index) => (
+                                        <li key={index}>
+                                            <strong>{step.step} ({step.role})</strong>: {step.description}
+                                        </li>
+                                    ))}
+                                </ul>
+                                <button className="edit-button" onClick={(e) => { e.stopPropagation(); editProcedure(procedure); }}>Edit</button>
+                                <button className="delete-button" onClick={(e) => { e.stopPropagation(); deleteProcedure(procedure.id); }}>Delete</button>
+                            </>
+                        )}
                     </div>
                 ))
             ) : (
@@ -98,13 +144,14 @@ const Equipment = () => {
                 <div id="modal">
                     <div id="modal-content">
                         <span id="close" onClick={() => setShowModal(false)}>&times;</span>
-                        <h2>Add New Procedure</h2>
+                        <h2>{isEditing ? 'Edit Procedure' : 'Add New Procedure'}</h2>
                         <div className="form-group">
                             <label>Procedure ID:</label>
                             <input
                                 type="number"
                                 value={newProcedure.id}
                                 onChange={(e) => setNewProcedure({ ...newProcedure, id: e.target.value })}
+                                disabled={isEditing}
                             />
                         </div>
                         <div className="form-group">
@@ -115,6 +162,29 @@ const Equipment = () => {
                                 onChange={(e) => setNewProcedure({ ...newProcedure, title: e.target.value })}
                             />
                         </div>
+                        <h3>Steps</h3>
+                        {newProcedure.steps.map((step, index) => (
+                            <div key={index} className="form-group">
+                                <label>Step:</label>
+                                <input
+                                    type="text"
+                                    value={step.step}
+                                    onChange={(e) => handleStepChange(index, 'step', e.target.value)}
+                                />
+                                <label>Role:</label>
+                                <input
+                                    type="text"
+                                    value={step.role}
+                                    onChange={(e) => handleStepChange(index, 'role', e.target.value)}
+                                />
+                                <label>Description:</label>
+                                <input
+                                    type="text"
+                                    value={step.description}
+                                    onChange={(e) => handleStepChange(index, 'description', e.target.value)}
+                                />
+                            </div>
+                        ))}
                         <h3>Add Step</h3>
                         <div className="form-group">
                             <label>Step:</label>
@@ -141,14 +211,7 @@ const Equipment = () => {
                             />
                         </div>
                         <button onClick={handleAddStep}>Add Step</button>
-                        <ul>
-                            {newProcedure.steps.map((step, index) => (
-                                <li key={index}>
-                                    <strong>{step.step} ({step.role})</strong>: {step.description}
-                                </li>
-                            ))}
-                        </ul>
-                        <button onClick={handleSubmit}>Submit Procedure</button>
+                        <button onClick={handleSubmit}>{isEditing ? 'Save Changes' : 'Submit Procedure'}</button>
                     </div>
                 </div>
             )}
