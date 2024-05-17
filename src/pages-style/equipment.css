@@ -1,12 +1,15 @@
-/* Equipment.css */
-.container {
+/* equipment.css */
+
+/* General Styles */
+#container {
   margin: 20px;
   display: flex;
   flex-direction: column;
   font-family: Arial, sans-serif;
+  color: #333;
 }
 
-h2 {
+h2, h3 {
   color: #333;
   border-bottom: 2px solid #ddd;
   padding-bottom: 5px;
@@ -19,7 +22,7 @@ ul {
 }
 
 li {
-  background: #f9f9f9;
+  background: #f1f1f1;
   margin-bottom: 10px;
   padding: 10px;
   border-radius: 5px;
@@ -33,4 +36,110 @@ li strong {
 .error {
   color: red;
   font-weight: bold;
+}
+
+/* Container for the page content */
+#container {
+  padding: 20px;
+}
+
+/* Button styles */
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Modal background */
+#modal {
+  display: block; /* Ensure modal is displayed */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal content */
+#modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 50%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Close button for the modal */
+#close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+#close:hover,
+#close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Form group styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #007BFF;
+}
+
+/* Additional styles for the procedure card */
+.procedure-card {
+  background: #e9ecef;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.procedure-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.procedure-header h4 {
+  margin: 0;
+  font-size: 1.2em;
+  color: #666;
 }
