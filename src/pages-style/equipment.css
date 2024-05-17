@@ -44,6 +44,11 @@ li strong {
   padding: 20px;
 }
 
+/* Highlighted procedure card */
+#highlight {
+  background-color: #50e0f99f; /* Soft yellow background for highlighting */
+}
+
 /* Button styles */
 button {
   margin: 10px;
@@ -188,4 +193,22 @@ button:hover {
 
 .edit-button:hover {
   background-color: #45a049;
+}
+
+/* Send button styles */
+.send-button {
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  bottom: 15px;
+  right: 165px;
+}
+
+.send-button:hover {
+  background-color: #e0a800;
 }

@@ -19,6 +19,7 @@ const Equipment = () => {
         description: ''
     });
     const [expandedProcedure, setExpandedProcedure] = useState(null);
+    const [sentProcedureId, setSentProcedureId] = useState(null);
 
     const fetchData = () => {
         axios.get('http://localhost:8000/get_equipment_procedures')
@@ -32,11 +33,25 @@ const Equipment = () => {
             });
     };
 
+    const fetchSentProcedureId = () => {
+        axios.get('http://localhost:8000/get_sent_procedure')
+            .then(response => {
+                console.log('Sent Procedure ID:', response.data.id); // Debugging: Log the sent procedure ID
+                setSentProcedureId(response.data.id);
+            })
+            .catch(error => {
+                console.error('Error fetching sent procedure ID:', error);
+                setError('Error fetching sent procedure ID');
+            });
+    };
+
     useEffect(() => {
         fetchData();  // Fetch initially
+        fetchSentProcedureId();  // Fetch the sent procedure ID initially
 
         const interval = setInterval(() => {
             fetchData();
+            fetchSentProcedureId();
         }, 3000);  // Fetch every 3 seconds
 
         return () => clearInterval(interval);  // Cleanup on unmount
@@ -109,33 +124,50 @@ const Equipment = () => {
         setIsEditing(true);
     };
 
+    const sendProcedure = (id) => {
+        axios.post(`http://localhost:8000/send_procedure?id=${id}`)
+            .then(response => {
+                console.log('Procedure sent:', response.data);
+                fetchSentProcedureId();  // Refresh the sent procedure ID
+            })
+            .catch(error => {
+                console.error('Error sending procedure:', error);
+                setError('Error sending procedure');
+            });
+    };
+
     if (error) return <div id="error">Error: {error}</div>;
 
     return (
         <div id="container">
             <button onClick={() => { setShowModal(true); setIsEditing(false); setNewProcedure({ id: '', title: '', steps: [] }); }}>Add New Procedure</button>
             {procedures.length > 0 ? (
-                procedures.map(procedure => (
-                    <div key={procedure.id} className="procedure-card" onClick={() => toggleExpand(procedure.id)}>
-                        <div className={`procedure-header ${expandedProcedure === procedure.id ? 'expanded' : ''}`}>
-                            <h2>{procedure.title}</h2>
-                            <h4>ID: {procedure.id}</h4>
+                procedures.map(procedure => {
+                    const isHighlighted = procedure.id === sentProcedureId;
+                    console.log(`Procedure ID: ${procedure.id}, Highlighted: ${isHighlighted}`); // Debugging
+                    return (
+                        <div key={procedure.id} id={isHighlighted ? 'highlight' : undefined} className="procedure-card" onClick={() => toggleExpand(procedure.id)}>
+                            <div className={`procedure-header ${expandedProcedure === procedure.id ? 'expanded' : ''}`}>
+                                <h2>{procedure.title}</h2>
+                                <h4>ID: {procedure.id}</h4>
+                            </div>
+                            {expandedProcedure === procedure.id && (
+                                <>
+                                    <ul>
+                                        {procedure.steps.map((step, index) => (
+                                            <li key={index}>
+                                                <strong>{step.step} ({step.role})</strong>: {step.description}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <button className="edit-button" onClick={(e) => { e.stopPropagation(); editProcedure(procedure); }}>Edit</button>
+                                    <button className="delete-button" onClick={(e) => { e.stopPropagation(); deleteProcedure(procedure.id); }}>Delete</button>
+                                    <button className="send-button" onClick={(e) => { e.stopPropagation(); sendProcedure(procedure.id); }}>Send</button>
+                                </>
+                            )}
                         </div>
-                        {expandedProcedure === procedure.id && (
-                            <>
-                                <ul>
-                                    {procedure.steps.map((step, index) => (
-                                        <li key={index}>
-                                            <strong>{step.step} ({step.role})</strong>: {step.description}
-                                        </li>
-                                    ))}
-                                </ul>
-                                <button className="edit-button" onClick={(e) => { e.stopPropagation(); editProcedure(procedure); }}>Edit</button>
-                                <button className="delete-button" onClick={(e) => { e.stopPropagation(); deleteProcedure(procedure.id); }}>Delete</button>
-                            </>
-                        )}
-                    </div>
-                ))
+                    );
+                })
             ) : (
                 <div>No procedures found.</div>
             )}

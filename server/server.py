@@ -41,7 +41,7 @@ async def fetch_json(url: str):
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
         if response.status_code != 200:
-            logger.error(f"Failed to fetch data from {url}, status code: {response.status_code}")
+            # logger.error(f"Failed to fetch data from {url}, status code: {response.status_code}")
             return None
         return response.json()
 
@@ -197,23 +197,41 @@ async def add_marker(marker: Marker):
 
 # Get sent ER Procedure (Used by HMD)
 @app.get("/get_sent_procedure")
-async def get_procedure(id: int):
+async def get_procedure():
     try:
-        if os.path.exists(EQUIPMENT_REPAIR_FILE):
-            with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+        if os.path.exists(GOLDEN_ER_FILE):
+            with open(GOLDEN_ER_FILE, 'r') as file:
                 data = json.load(file)
         else:
-            raise FileNotFoundError(f"{EQUIPMENT_REPAIR_FILE} not found")
-        procedures = data.get("procedures", [])
+            raise FileNotFoundError(f"{GOLDEN_ER_FILE} not found")
+        return data
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
-    procedure = next((proc for proc in procedures if proc["id"] == id), None)
-    if procedure:
-        return procedure
-    else:
-        raise HTTPException(status_code=404, detail="Procedure not found")
+@app.post("/send_procedure")
+async def get_procedure(id: int):
+    try:
+        with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Equipment repair file not found.")
+    
+    # Find the procedure by ID
+    procedure = next((proc for proc in data["procedures"] if proc["id"] == id), None)
+    
+    if not procedure:
+        raise HTTPException(status_code=404, detail="Procedure not found.")
+    
+    # Write the procedure to the new JSON file
+    try:
+        with open(GOLDEN_ER_FILE, 'w') as file:
+            json.dump(procedure, file, indent=4)
+    except IOError:
+        raise HTTPException(status_code=500, detail="Failed to write to Goldern ER file.")
+    
+    return {"message": "Procedure exported successfully.", "procedure": procedure}
 
+    
 with open(INGRESS_EGRESS_FILE, 'r') as f:
     procedures = json.load(f)
 
