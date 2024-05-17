@@ -10,7 +10,7 @@ INGRESS_EGRESS_FILE = './server/json_databases/ingress_egress_procedures.json'
 EQUIPMENT_REPAIR_FILE = './server/json_databases/equipment_repair.json'
 ALERTS_FILE = './server/json_databases/alerts.json'
 MESSAGES_FILE = './server/json_databases/messages.json'
-
+GOLDEN_ER_FILE = './server/json_databases/golden_er_procedure.json'
 # Default JSON data
 DEFAULT_CONFIG_DATA = {
     "TSS_IP": "localhost:14141",
@@ -2343,7 +2343,11 @@ DEFAULT_ALERTS_DATA = {
 }
 
 DEFAULT_MESSAGES_DATA = {
-    "messages": []
+    "message": []
+}
+
+DEFAULT_GOLDEN_ER = {
+    "message": "No Procedure has been sent"
 }
 
 def initialize_file(file_path, default_data, overwrite=True):
@@ -2362,6 +2366,7 @@ def initialize_database_files():
     initialize_file(EQUIPMENT_REPAIR_FILE, DEFAULT_EQUIPMENT_PROCEDURES_DATA)
     initialize_file(ALERTS_FILE, DEFAULT_ALERTS_DATA)
     initialize_file(MESSAGES_FILE, DEFAULT_MESSAGES_DATA)
+    initialize_file(GOLDEN_ER_FILE, DEFAULT_GOLDEN_ER)
 
 if __name__ == "__main__":
     initialize_database_files()
