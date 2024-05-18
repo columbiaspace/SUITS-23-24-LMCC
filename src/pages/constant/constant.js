@@ -18,6 +18,38 @@ function Constant() {
   const showMapModal = () => setMapModalVisible(true);
   const hideMapModal = () => setMapModalVisible(false);
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const start_id = event.target.start_id.value;
+    const end_id = event.target.end_id.value;
+
+    const data = {
+      start_id: parseInt(start_id, 10),
+      end_id: parseInt(end_id, 10)
+    };
+
+    fetch('http://localhost:8000/get_shortest_path', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      alert('Data submitted successfully!');
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('Failed to submit data.');
+    });
+
+    hideAlertModal();
+  };
+
   return (
     <GlobalProvider>
       <div className="pagecontainer" id="constantpage">
@@ -38,7 +70,15 @@ function Constant() {
         <Modal 
           isVisible={isAlertModalVisible} 
           hideModal={hideAlertModal} 
-          content={<div>Alert content goes here</div>} 
+          content={
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="start_id">Start ID:</label><br />
+              <input type="number" id="start_id" name="start_id" required /><br /><br />
+              <label htmlFor="end_id">End ID:</label><br />
+              <input type="number" id="end_id" name="end_id" required /><br /><br />
+              <button type="submit">Submit</button>
+            </form>
+          } 
         />
         <Modal 
           isVisible={isMapModalVisible} 
