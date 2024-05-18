@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
+    "crypto-browserify": "^3.12.0",
     "mapbox": "^1.0.0-beta10",
     "mapbox-gl": "^3.3.0",
     "react": "^18.2.0",
