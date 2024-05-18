@@ -1,5 +1,4 @@
 import React from 'react';
-import './procedureitem.css';
 
 function ProcedureItem({ name, description, className }) {
     const descriptionItems = description.split('\n').map((item, index) => (
@@ -8,7 +7,6 @@ function ProcedureItem({ name, description, className }) {
 
     return (
         <div className={`ProcedureItem ${className}`}>
-            <h1 className="procedureTitle">{name}</h1>
             <ul className='procedureDescription'>{descriptionItems}</ul>
         </div>
     );

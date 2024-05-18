@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import '../../pages-style/ingressegress 2.css';
+import '../../pages-style/ingressegress.css';
 import '../../pages-style/page.css'
 import { IngressProcedureList } from '../../assets/ProcedureLists/IngressProcedureList';
 import ProcedureItem from '../../components/ProcedureItem';
@@ -16,7 +16,6 @@ function Ingress() {
   return (
     <div className="ingressegress-container">
       <div className="left-column">
-        <h1>Ingress</h1>
         {IngressProcedureList[currentProcedure].image && (
           <img src={IngressProcedureList[currentProcedure].image} alt={IngressProcedureList[currentProcedure].name} />
         )}

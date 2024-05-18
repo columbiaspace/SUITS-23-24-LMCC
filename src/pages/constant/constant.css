@@ -25,11 +25,13 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  border-radius: 20px; /* Add curves to the center bar */
 }
 
+
 .centerButton {
-  width: 100px;
-  height: 50px;
+  width: 30%;
+  height: 60%;
   background-color: lightblue;
   color: white;
   display: flex;

@@ -1,56 +1,191 @@
+/* setup.css */
+
+:root {
+  --primary-color: #007bff;
+  --primary-hover-color: #0056b3;
+  --background-color: #f8f9fa;
+  --header-background-color: #80bdff;
+  --entry-background-color: #ffffff;
+  --button-color: #007bff;
+  --button-hover-color: #9dcdff;
+  --border-radius: 10px;
+  --input-border: #ced4da;
+  --input-focus-border: #80bdff;
+  --status-green: #28a745;
+  --status-yellow: #ffc107;
+  --status-red: #dc3545;
+}
+
+
 
 #setup {
-    display: block;
-}
-
-
-.entryBoxes {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-.dataEntry {
-    height: 100px;
-    width: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.dataEntry button{
-    margin: 0;
-}
-
-.dataDisplay {
-    background-color: green;
+  height: auto;
+  padding: 20px;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 20px auto;
 }
 
 .header {
-    height: 100px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background-color: var(--header-background-color);
+  color: white;
+  padding: 20px;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.entryBoxes {
+  background-color: var(--entry-background-color);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dataEntry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--entry-background-color);
+  padding: 10px 20px;
+  border: 1px solid var(--input-border);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dataEntry label {
+  flex: 1;
+  margin-right: 20px;
+  font-weight: bold;
+}
+
+.dataEntry input {
+  flex: 2;
+  padding: 8px;
+  border: 1px solid var(--input-border);
+  border-radius: var(--border-radius);
+  transition: border-color 0.3s ease;
+}
+
+.dataEntry input:focus {
+  border-color: var(--input-focus-border);
+  outline: none;
+}
+
+.dataEntry button {
+  background-color: var(--button-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.dataEntry button:hover {
+  background-color: var(--button-hover-color);
 }
 
 .status {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-left: 10px;
-  }
-  
-  .status.green {
-    background-color: green;
-  }
-  
-  .status.yellow {
-    background-color: yellow;
-  }
-  
-  .status.red {
-    background-color: red;
-  }
-  
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.status span {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.status.green span {
+  background-color: var(--status-green);
+}
+
+.status.yellow span {
+  background-color: var(--status-yellow);
+}
+
+.status.red span {
+  background-color: var(--status-red);
+}
+
+.status-text {
+  font-weight: bold;
+  color: #495057;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal.show {
+  display: block;
+}
+
+#info-modal-content {
+  background-color: #fefefe;
+  margin: 20% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 30%;
+  height: auto;
+  min-height: 10%;
+}
+
+#InfoText {
+  margin: 5%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#info-button {
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.8em;
+  color: grey;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+#info-button:hover {
+  background-color: lightgrey;
+}
+

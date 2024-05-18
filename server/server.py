@@ -2,28 +2,25 @@ from fastapi import FastAPI, HTTPException, Request
 import httpx
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import logging
 import asyncio
 import json
 import os
 from datetime import datetime
 from server.initdb import *
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 app = FastAPI()
 
 DATA_FILE = './server/json_databases/tss_data.json'
-PINS_FILE = './server/json_databases/created_pins.json'
+PINS_FILE = './server/json_databases/geojson/user_pins.json'
 BOUNDARY_LINES_FILE = './server/json_databases/boundary_lines.json'
 CONFIG_FILE = './server/json_databases/config_keys.json'
-INGRESS_FILE = './server/json_databases/ingress_procedures.json'
-EGRESS_FILE = './server/json_databases/egress_procedures.json'
+INGRESS_EGRESS_FILE = './server/json_databases/ingress_egress_procedures.json'
 EQUIPMENT_REPAIR_FILE = './server/json_databases/equipment_repair.json'
 ALERTS_FILE = './server/json_databases/alerts.json'
 MESSAGES_FILE = './server/json_databases/messages.json'
+GOLDEN_ER_FILE = './server/json_databases/golden_er_procedure.json'
 
-# Load config to get TSS_IP
+# TSS Connection
 if os.path.exists(CONFIG_FILE):
     with open(CONFIG_FILE, 'r') as f:
         config_data = json.load(f)
@@ -40,11 +37,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Get Json
 async def fetch_json(url: str):
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
         if response.status_code != 200:
-            logger.error(f"Failed to fetch data from {url}, status code: {response.status_code}")
+            # logger.error(f"Failed to fetch data from {url}, status code: {response.status_code}")
             return None
         return response.json()
 
@@ -54,25 +52,6 @@ async def startup_event():
 
     task = asyncio.create_task(periodic_fetch_and_store())
     await asyncio.sleep(1)
-
-@app.put("/update_config")
-async def update_config(request: Request):
-    new_config = await request.json()
-    with open(CONFIG_FILE, 'r') as f:
-        config_data = json.load(f)
-    
-    config_data.update(new_config)
-    
-    with open(CONFIG_FILE, 'w') as f:
-        json.dump(config_data, f)
-    
-    return {"message": "Config updated successfully"}
-
-@app.get("/config")
-async def get_config():
-    with open(CONFIG_FILE, 'r') as f:
-        config_data = json.load(f)
-    return config_data
 
 async def periodic_fetch_and_store():
     eva_url = f"http://{tss_ip}/json_data/teams/0/EVA.json"
@@ -89,14 +68,37 @@ async def periodic_fetch_and_store():
                 }
                 with open(DATA_FILE, 'w') as f:
                     json.dump(combined_data, f)
-                logger.info("Data fetched and stored successfully.")
             else:
-                logger.warning("One or both data sets were not fetched successfully.")
+                pass
+                # logger.warning("One or both data sets were not fetched successfully.")
         except Exception as e:
-            logger.error(f"An error occurred during periodic fetch: {e}")
+            pass
+            # logger.error(f"An error occurred during periodic fetch: {e}")
         await asyncio.sleep(1)
 
-@app.get("/data")
+# Save new IP or Key
+@app.put("/update_config")
+async def update_config(request: Request):
+    new_config = await request.json()
+    with open(CONFIG_FILE, 'r') as f:
+        config_data = json.load(f)
+    
+    config_data.update(new_config)
+    
+    with open(CONFIG_FILE, 'w') as f:
+        json.dump(config_data, f)
+    
+    return {"message": "Config updated successfully"}
+
+# Return keys and IPs
+@app.get("/get_config")
+async def get_config():
+    with open(CONFIG_FILE, 'r') as f:
+        config_data = json.load(f)
+    return config_data
+
+# Get Telemetry data
+@app.get("/get_telemetry_data")
 async def read_data():
     try:
         with open(DATA_FILE, 'r') as f:
@@ -105,12 +107,7 @@ async def read_data():
     except FileNotFoundError:
         return {"error": "Data file not found. Please check back later."}
 
-@app.get("/get_mapbox_key")
-async def get_mapbox_key():
-    with open(CONFIG_FILE, 'r') as f:
-        config = json.load(f)
-    return {"MAPBOX_KEY": config["MAPBOX_KEY"]}
-
+# Check Hololens, Server, and TSS Connection
 @app.get("/check_connection")
 async def check_connection(tss_ip: str = None, holo_ip: str = None, server_ip: str = None):
     async with httpx.AsyncClient() as client:
@@ -150,7 +147,7 @@ class Marker(BaseModel):
     lat: float
     lng: float
 
-@app.get("/geojson")
+@app.get("/get_geojson")
 async def get_geojson():
     geojson_data = {"type": "FeatureCollection", "features": []}
 
@@ -199,40 +196,140 @@ async def add_marker(marker: Marker):
     
     return {"message": "Marker added successfully"}
 
-@app.get("/json_data/{filename}")
-async def get_general_json(filename: str):
-    url = f"http://{tss_ip}/json_data/{filename}"
-    return await fetch_json(url)
-
-@app.get("/json_data/rocks/RockData.json")
-async def get_rock_data():
-    url = f"http://{tss_ip}/json_data/rocks/RockData.json"
-    return await fetch_json(url)
-
-@app.get("/json_data/teams/{team_number}/{filename}")
-async def get_team_data(team_number: int, filename: str):
-    if not (0 <= team_number <= 10):
-        raise HTTPException(status_code=400, detail="Team number must be between 0 and 10")
-    url = f"http://{tss_ip}/json_data/teams/{team_number}/{filename}"
-    return await fetch_json(url)
-
-def load_procedures():
-    if os.path.exists(EQUIPMENT_REPAIR_FILE):
-        with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
-            return json.load(file)
-    else:
-        raise FileNotFoundError(f"{EQUIPMENT_REPAIR_FILE} not found")
-
-@app.get("/procedure")
-async def get_procedure(id: int):
+# Get sent ER Procedure (Used by HMD)
+@app.get("/get_sent_procedure")
+async def get_procedure():
     try:
-        data = load_procedures()
-        procedures = data.get("procedures", [])
+        if os.path.exists(GOLDEN_ER_FILE):
+            with open(GOLDEN_ER_FILE, 'r') as file:
+                data = json.load(file)
+        else:
+            raise FileNotFoundError(f"{GOLDEN_ER_FILE} not found")
+        return data
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
-    procedure = next((proc for proc in procedures if proc["id"] == id), None)
-    if procedure:
-        return procedure
+@app.post("/send_procedure")
+async def get_procedure(id: int):
+    try:
+        with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Equipment repair file not found.")
+    
+    # Find the procedure by ID
+    procedure = next((proc for proc in data["procedures"] if proc["id"] == id), None)
+    
+    if not procedure:
+        raise HTTPException(status_code=404, detail="Procedure not found.")
+    
+    # Write the procedure to the new JSON file
+    try:
+        with open(GOLDEN_ER_FILE, 'w') as file:
+            json.dump(procedure, file, indent=4)
+    except IOError:
+        raise HTTPException(status_code=500, detail="Failed to write to Goldern ER file.")
+    
+    return {"message": "Procedure exported successfully.", "procedure": procedure}
+
+    
+with open(INGRESS_EGRESS_FILE, 'r') as f:
+    procedures = json.load(f)
+
+@app.get("/procedures")
+def get_procedures():
+    return procedures
+
+# Get Equipment Procedures
+@app.get("/get_equipment_procedures")
+async def get_equipment_procedures():
+    try:
+        if os.path.exists(EQUIPMENT_REPAIR_FILE):
+            with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+                data = json.load(file)
+        else:
+            raise FileNotFoundError(f"{EQUIPMENT_REPAIR_FILE} not found")
+        procedures = data.get("procedures", [])
+        return procedures
+    except FileNotFoundError as e:
+        
+        # logger.error(str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except json.JSONDecodeError as e:
+        # logger.error(f"JSON decode error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error decoding JSON data")
+    except Exception as e:
+        # logger.error(f"An unexpected error occurred: {str(e)}")
+        raise HTTPException(status_code=500, detail="An unexpected error occurred")
+
+class Step(BaseModel):
+    step: str
+    role: str
+    description: str
+
+class Procedure(BaseModel):
+    id: int
+    title: str
+    steps: list[Step]
+
+@app.post("/add_procedure", response_model=Procedure)
+async def add_procedure(procedure: Procedure):
+    if os.path.exists(EQUIPMENT_REPAIR_FILE):
+        with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+            data = json.load(file)
+    else:
+        data = {"procedures": []}
+
+    if any(existing_procedure["id"] == procedure.id for existing_procedure in data["procedures"]):
+        raise HTTPException(status_code=400, detail="Procedure with this ID already exists")
+
+    data["procedures"].append(procedure.dict())
+
+    with open(EQUIPMENT_REPAIR_FILE, 'w') as file:
+        json.dump(data, file, indent=4)
+
+    return procedure
+
+@app.delete("/delete_procedure/{id}", response_model=dict)
+async def delete_procedure(id: int):
+    if os.path.exists(EQUIPMENT_REPAIR_FILE):
+        with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+            data = json.load(file)
+    else:
+        raise HTTPException(status_code=404, detail=f"{EQUIPMENT_REPAIR_FILE} not found")
+
+    procedures = data.get("procedures", [])
+    updated_procedures = [procedure for procedure in procedures if procedure["id"] != id]
+
+    if len(procedures) == len(updated_procedures):
+        raise HTTPException(status_code=404, detail="Procedure not found")
+
+    data["procedures"] = updated_procedures
+
+    with open(EQUIPMENT_REPAIR_FILE, 'w') as file:
+        json.dump(data, file, indent=4)
+
+    return {"message": "Procedure deleted successfully"}
+
+@app.put("/update_procedure/{id}", response_model=Procedure)
+async def update_procedure(id: int, updated_procedure: Procedure):
+    if os.path.exists(EQUIPMENT_REPAIR_FILE):
+        with open(EQUIPMENT_REPAIR_FILE, 'r') as file:
+            data = json.load(file)
+    else:
+        raise HTTPException(status_code=404, detail=f"{EQUIPMENT_REPAIR_FILE} not found")
+
+    procedures = data.get("procedures", [])
+    for index, procedure in enumerate(procedures):
+        if procedure["id"] == id:
+            procedures[index] = updated_procedure.dict()
+            break
     else:
         raise HTTPException(status_code=404, detail="Procedure not found")
+
+    data["procedures"] = procedures
+
+    with open(EQUIPMENT_REPAIR_FILE, 'w') as file:
+        json.dump(data, file, indent=4)
+
+    return updated_procedure

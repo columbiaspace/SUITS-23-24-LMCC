@@ -15,10 +15,16 @@ function Setup() {
   const [serverIPStatus, setServerIPStatus] = useState('yellow');
   const [mapBoxAPIStatus, setMapBoxAPIStatus] = useState('yellow');
 
+  const [showTssIPModal, setShowTssIPModal] = useState(false);
+  const [showHoloIPModal, setShowHoloIPModal] = useState(false);
+  const [showServerIPModal, setShowServerIPModal] = useState(false);
+  const [showMapBoxAPIModal, setShowMapBoxAPIModal] = useState(false);
+
+
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const response = await fetch('http://localhost:8000/config');
+        const response = await fetch('http://localhost:8000/get_config');
         const config = await response.json();
         setTssIP(config.TSS_IP);
         setHoloIP(config.HOLO_IP);
@@ -145,6 +151,18 @@ function Setup() {
     });
   };
 
+  const InfoModal = ({ showModal, setShowModal, content }) => {
+    return (
+      <div className={`modal ${showModal ? 'show' : ''}`}>
+        <div className="modal-content" id="info-modal-content">
+          <span className="close" onClick={() => setShowModal(false)}>&times;</span>
+          <p id='InfoText'>{content}</p>
+        </div>
+      </div>
+    );
+  };
+  
+
   return (
     <div className='pagecontainer' id='setup'>
       <div className='header'>
@@ -154,31 +172,48 @@ function Setup() {
         <div className='dataEntry'>
           <label htmlFor='tss_ip'>TSS IP Address: </label>
           <input type='text' id='tss_ip' name='tss_ip' defaultValue={tssIP} />
+          <button id="info-button" onClick={() => setShowTssIPModal(true)}>?</button>
           <button onClick={handleSetTSS_IP}>Set TSS IP</button>
-          <span className={`status ${tssIPStatus}`}></span>
+          <div className={`status ${tssIPStatus}`}>
+            <span className="status-text"></span>
+          </div>
         </div>
         <div className='dataEntry'>
           <label htmlFor='server_ip'>Server IP Address:</label>
           <input type='text' id='server_ip' name='server_ip' defaultValue={serverIP} />
+          <button id="info-button" onClick={() => setShowServerIPModal(true)}>?</button>
           <button onClick={handleSetSERVER_IP}>Set Server IP</button>
-          <span className={`status ${serverIPStatus}`}></span>
+          <div className={`status ${serverIPStatus}`}>
+            <span className="status-text"></span>
+          </div>
         </div>
         <div className='dataEntry'>
           <label htmlFor='holo_ip'>HOLO Lens IP Address: </label>
           <input type='text' id='holo_ip' name='holo_ip' defaultValue={holoIP} />
+          <button id="info-button" onClick={() => setShowHoloIPModal(true)}>?</button>
           <button onClick={handleSetHOLO_IP}>Set HOLO IP</button>
-          <span className={`status ${holoIPStatus}`}></span>
+          <div className={`status ${holoIPStatus}`}>
+            <span className="status-text"></span>
+          </div>
         </div>
         <div className='dataEntry'>
           <label htmlFor='mapbox_api'>Map Box API Key: </label>
           <input type='text' id='mapbox_api' name='mapbox_api' defaultValue={mapBoxAPI} />
+          <button id="info-button" onClick={() => setShowMapBoxAPIModal(true)}>?</button>
           <button onClick={handleSetMapBoxAPI}>Set MapBox API Key</button>
-          <span className={`status ${mapBoxAPIStatus}`}></span>
+          <div className={`status ${mapBoxAPIStatus}`}>
+            <span className="status-text"></span>
+          </div>
         </div>
       </div>
       <div style={{ display: 'none' }}>
         <MapboxComponent handleMapBoxAPIStatus={setMapBoxAPIStatus} />
       </div>
+
+      <InfoModal showModal={showTssIPModal} setShowModal={setShowTssIPModal} content="The TSS IP Adress is needed so the server can receive information to update EVA data and positioning. If the TSS is running on the local machine, the IP is localhost:{port} (port is usually 14141). If the TSS is running on an external machine, find the exposed IP of that machine on the local network. Instructions for running the TSS can be found here: https://github.com/dignojrteogalbo/TSS_2024/tree/docker" />
+      <InfoModal showModal={showServerIPModal} setShowModal={setShowServerIPModal} content="The Server must be running via Uvicorn to receive data. If the Server is running on the local machine, the IP is localhost:{port} (port is usually 8000). If the Server is running on an external machine, find the exposed IP of that machine on the local network. Instructions to run the server can be found here: https://github.com/columbiaspace/SUITS-23-24-LMCC" />
+      <InfoModal showModal={showHoloIPModal} setShowModal={setShowHoloIPModal} content="The HOLO IP is found by asking the HoloLens 'What's my IP Adress?' or by going into network settings. The IP is necessary for video streaming" />
+      <InfoModal showModal={showMapBoxAPIModal} setShowModal={setShowMapBoxAPIModal} content="The Mapbox API key was sent in the Slack channel, dm Jonah if necessary. You can also get your own key here: https://docs.mapbox.com/help/glossary/access-token/" />
     </div>
   );
 }

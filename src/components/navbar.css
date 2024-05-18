@@ -1,11 +1,52 @@
-.img{
-    height: 3rem;
-    width: auto;
-    margin-right: 10px;
+/* navbar.css */
+
+.img {
+    height: 4rem;
+    width: 4rem;
+    margin: 10px;
+    border-radius: 50%; /* Circle border */
+    border: 2px solid #007bff; /* Border color and width */
+    object-fit: fill; /* Ensure the image fits within the circle */
 }
 
 #title {
     color: white;
     font-size: x-large;
-    margin-right: 50px;
+    margin: 30px;
+    font-family: 'Arial', sans-serif; /* Use a clean font */
+    letter-spacing: 1px; /* Slight spacing for better readability */
+}
+
+.Navbar {
+    background: darkblue;
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    border-radius: 0 0 10px 10px; /* Rounded bottom edges */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.NavLink {
+    color: #808080;
+    text-decoration: none;
+    padding: 1rem;
+    font-weight: bold;
+    transition: color 0.2s ease-in-out;
+    border-radius: 5px; /* Slightly rounded edges */
+    
+    &:hover {
+        color: white;
+        background-color: rgba(255, 255, 255, 0.1); /* Add slight background on hover */
+    }
+    
+    &.active {
+        color: #69b3e7;
+    }
+}
+
+.NavMenu {
+    display: flex;
+    align-items: center;
 }

@@ -1,41 +1,39 @@
 import React from "react";
-import { Nav, NavLink, NavMenu } from "./NavbarElements";
+import { NavLink as Link } from "react-router-dom";
 import './navbar.css';
 
 const Navbar = () => {
     return (
-        <>
-            <Nav style={{ height: '10vh' }}>
-                <NavMenu>
-                    <img className="img" src={require("./../assets/Images/logo.jpg")} alt="Logo"/>
-                    <h1 id="title">CUITS 2024 LMCC</h1>
-                    <NavLink to="/Constant" activeStyle>
-                        Constant
-                    </NavLink>
-                    <NavLink to="/Setup" activeStyle>
-                        Setup
-                    </NavLink>
-                    <NavLink to="/Egress" activeStyle>
-                        Egress
-                    </NavLink>
-                    <NavLink to="/Nav" activeStyle>
-                        Nav
-                    </NavLink>
-                    <NavLink to="/Equipment" activeStyle>
-                        Equipment
-                    </NavLink>
-                    <NavLink to="/Rocks" activeStyle>
-                        Rocks
-                    </NavLink>
-                    <NavLink to="/Rover" activeStyle>
-                        Rover
-                    </NavLink>
-                    <NavLink to="/Ingress" activeStyle>
-                        Ingress
-                    </NavLink>
-                </NavMenu>
-            </Nav>
-        </>
+        <nav className="Navbar">
+            <div className="NavMenu">
+                <img className="img" src={require("./../assets/Images/logo.jpg")} alt="Logo"/>
+                <h1 id="title">CUITS LMCC 2024</h1>
+                <Link className="NavLink" to="/Constant" activeStyle={{ color: '#69b3e7' }}>
+                    Constant
+                </Link>
+                <Link className="NavLink" to="/Setup" activeStyle={{ color: '#69b3e7' }}>
+                    Setup
+                </Link>
+                <Link className="NavLink" to="/Egress" activeStyle={{ color: '#69b3e7' }}>
+                    Egress
+                </Link>
+                <Link className="NavLink" to="/Nav" activeStyle={{ color: '#69b3e7' }}>
+                    Nav
+                </Link>
+                <Link className="NavLink" to="/Equipment" activeStyle={{ color: '#69b3e7' }}>
+                    Equipment
+                </Link>
+                <Link className="NavLink" to="/Rocks" activeStyle={{ color: '#69b3e7' }}>
+                    Rocks
+                </Link>
+                <Link className="NavLink" to="/Rover" activeStyle={{ color: '#69b3e7' }}>
+                    Rover
+                </Link>
+                <Link className="NavLink" to="/Ingress" activeStyle={{ color: '#69b3e7' }}>
+                    Ingress
+                </Link>
+            </div>
+        </nav>
     );
 };
 

@@ -13,7 +13,7 @@ export const GlobalProvider = ({ children }) => {
     const fetchData = async () => {
       setError(null);
       try {
-        const response = await axios.get('http://localhost:8000/data');
+        const response = await axios.get('http://localhost:8000/get_telemetry_data');
         if (response.status === 200) {
           setAllData(response.data);
         } else {

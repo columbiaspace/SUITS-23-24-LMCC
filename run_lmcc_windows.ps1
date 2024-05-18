@@ -49,4 +49,4 @@ Start-Process -NoNewWindow -FilePath "npm" -ArgumentList "start"
 
 # Start the FastAPI server
 Write-Output "Starting the FastAPI server with uvicorn..."
-Start-Process -NoNewWindow -FilePath "uvicorn" -ArgumentList "server.server:app --host 0.0.0.0 --port 8000 --reload"
+python -m uvicorn server.server:app --host 0.0.0.0 --port 8000 --reload

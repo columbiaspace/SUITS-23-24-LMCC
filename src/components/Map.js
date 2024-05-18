@@ -13,7 +13,7 @@ const MapboxComponent = () => {
   useEffect(() => {
     const fetchMapBoxAPIKey = async () => {
       try {
-        const response = await fetch("http://localhost:8000/get_mapbox_key");
+        const response = await fetch("http://localhost:8000/get_config");
         const data = await response.json();
         setMapBoxAPIKey(data.MAPBOX_KEY);
       } catch (error) {
@@ -30,9 +30,9 @@ const MapboxComponent = () => {
     mapboxgl.accessToken = mapBoxAPIKey;
     const newMap = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/mapbox/satellite-v9",
+      style: "mapbox://styles/mapbox/satellite-v8",
       center: [-95.08148549138448, 29.564911887991144],
-      zoom: 15,
+      zoom: 17,
     });
 
     newMap.on("load", () => {
@@ -55,7 +55,7 @@ const MapboxComponent = () => {
   useEffect(() => {
     const fetchGeoJson = async () => {
       try {
-        const response = await fetch("http://localhost:8000/geojson");
+        const response = await fetch("http://localhost:8000/get_geojson");
         const geoJson = await response.json();
 
         if (map) {
@@ -106,7 +106,7 @@ const MapboxComponent = () => {
 
   const addMarker = async (title, description, lat, lng) => {
     try {
-      await fetch("http://localhost:8000/add_marker", {
+      await fetch("mapbox://styles/mapbox/satellite-streets-v12", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

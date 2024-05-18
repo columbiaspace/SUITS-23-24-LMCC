@@ -9,12 +9,8 @@ import Map from '../../components/Map.js';
 import Modal from './Modal'; // Import the Modal component
 
 function Constant() {
-  const [isMessageModalVisible, setMessageModalVisible] = useState(false);
   const [isAlertModalVisible, setAlertModalVisible] = useState(false);
   const [isMapModalVisible, setMapModalVisible] = useState(false);
-
-  const showMessageModal = () => setMessageModalVisible(true);
-  const hideMessageModal = () => setMessageModalVisible(false);
 
   const showAlertModal = () => setAlertModalVisible(true);
   const hideAlertModal = () => setAlertModalVisible(false);
@@ -39,12 +35,6 @@ function Constant() {
           <div id="Map"><Map /></div>
           <div id="EV2"><EVData evNumber={2} /></div>
         </div>
-
-        <Modal 
-          isVisible={isMessageModalVisible} 
-          hideModal={hideMessageModal} 
-          content={<div>Message content goes here</div>} 
-        />
         <Modal 
           isVisible={isAlertModalVisible} 
           hideModal={hideAlertModal} 

@@ -9,7 +9,7 @@ const StreamComponent = () => {
 
   useEffect(() => {
     // Fetch configuration data from localhost:8000/config
-    fetch('http://localhost:8000/config')
+    fetch('http://localhost:8000/get_config')
       .then(response => response.json())
       .then(data => {
         setHOLO_IP(data.HOLO_IP); // Set HOLO_IP from fetched data
@@ -29,8 +29,6 @@ const StreamComponent = () => {
         console.error('Error playing the video:', error);
         setIsConnected(false); // Set isConnected to false on error
       });
-    } else {
-      setIsConnected(false); // Set isConnected to false if HOLO_IP is not set
     }
   }, [HOLO_IP]);
 

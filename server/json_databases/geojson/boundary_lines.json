@@ -1,0 +1,44 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "Name": "MapBounds",
+          "stroke": "#555555",
+          "stroke-width": 2,
+          "stroke-opacity": 1,
+          "fill": "#ffffff",
+          "fill-opacity": 0.1
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -95.0820575321341,
+                29.5643510431781
+              ],
+              [
+                -95.08087325776518,
+                29.5643510431781
+              ],
+              [
+                -95.08087325776518,
+                29.5654789690085
+              ],
+              [
+                -95.0820575321341,
+                29.5654789690085
+              ],
+              [
+                -95.0820575321341,
+                29.5643510431781
+              ]
+            ]
+          ]
+        },
+        "id": 0
+      }
+    ]
+  }
