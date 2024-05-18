@@ -5,17 +5,30 @@ from pydantic import BaseModel
 import asyncio
 import json
 import os
+from server.mapping import *
 from datetime import datetime
 from server.initdb import *
 
 app = FastAPI()
 
+#Data
 DATA_FILE = './server/json_databases/tss_data.json'
-PINS_FILE = './server/json_databases/geojson/user_pins.json'
-BOUNDARY_LINES_FILE = './server/json_databases/boundary_lines.json'
+
+# GEOJson Files for mapping
+BOUNDARY_LINES_FILE = './server/json_databases/geojson/boundary_lines.json'
+DEFAULT_PINS_FILE = './server/json_databases/geojson/default_pins.json'
+GEOLOGICAL_SITES_FILE = './server/json_databases/geojson/geological_sites.json'
+USER_PINS_FILE = './server/json_databases/geojson/user_pins.json'
+NAV_PATH = './server/json_databases/geojson/nav_path.json'
+
+#Keys and IP Addresses
 CONFIG_FILE = './server/json_databases/config_keys.json'
+
+#Procedures
 INGRESS_EGRESS_FILE = './server/json_databases/ingress_egress_procedures.json'
 EQUIPMENT_REPAIR_FILE = './server/json_databases/equipment_repair.json'
+
+#COMMS
 ALERTS_FILE = './server/json_databases/alerts.json'
 MESSAGES_FILE = './server/json_databases/messages.json'
 GOLDEN_ER_FILE = './server/json_databases/golden_er_procedure.json'
@@ -151,19 +164,14 @@ class Marker(BaseModel):
 async def get_geojson():
     geojson_data = {"type": "FeatureCollection", "features": []}
 
-    # Read boundary lines data
-    if os.path.exists(BOUNDARY_LINES_FILE):
-        with open(BOUNDARY_LINES_FILE, "r") as file:
-            boundary_lines_data = json.load(file)
-            if "features" in boundary_lines_data:
-                geojson_data["features"].extend(boundary_lines_data["features"])
+    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE, NAV_PATH_FILE]
 
-    # Read existing geojson data
-    if os.path.exists(BOUNDARY_LINES_FILE):
-        with open(BOUNDARY_LINES_FILE, "r") as file:
-            existing_geojson_data = json.load(file)
-            if "features" in existing_geojson_data:
-                geojson_data["features"].extend(existing_geojson_data["features"])
+    for file_path in geojson_files:
+        if os.path.exists(file_path):
+            with open(file_path, "r") as file:
+                file_data = json.load(file)
+                if "features" in file_data:
+                    geojson_data["features"].extend(file_data["features"])
 
     return geojson_data
 
@@ -333,3 +341,57 @@ async def update_procedure(id: int, updated_procedure: Procedure):
         json.dump(data, file, indent=4)
 
     return updated_procedure
+
+class PointIDRequest(BaseModel):
+    start_id: int
+    end_id: int
+
+def find_point_by_id(file_path, point_id):
+    print(f"Searching in file: {file_path} for point ID: {point_id}")
+    if os.path.exists(file_path):
+        with open(file_path, "r") as file:
+            file_data = json.load(file)
+            for feature in file_data.get("features", []):
+                print(f"Checking feature: {feature}")
+                if feature.get("id") == point_id:
+                    if feature["geometry"]["type"] == "Point":
+                        print(f"Found feature: {feature}")
+                        return feature
+                    else:
+                        print(f"Feature found, but geometry is not 'Point': {feature['geometry']['type']}")
+    return None
+
+@app.post("/get_shortest_path")
+async def get_shortest_path(point_request: PointIDRequest):
+    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE]
+    
+    start_feature = None
+    end_feature = None
+
+    for file_path in geojson_files:
+        if not start_feature:
+            start_feature = find_point_by_id(file_path, point_request.start_id)
+        if not end_feature:
+            end_feature = find_point_by_id(file_path, point_request.end_id)
+        if start_feature and end_feature:
+            break
+
+    if not start_feature or not end_feature:
+        raise HTTPException(status_code=404, detail="One or both points not found")
+
+    try:
+        start_coords = start_feature["geometry"]["coordinates"]
+        end_coords = end_feature["geometry"]["coordinates"]
+        
+        if len(start_coords) < 2 or len(end_coords) < 2:
+            raise HTTPException(status_code=400, detail="Invalid coordinates in features")
+
+        geojson_result = get_shortest_path_geojson(start_coords[1], start_coords[0], end_coords[1], end_coords[0])
+        
+        # Overwrite the contents of NAV_PATH with the geojson result
+        with open(NAV_PATH, 'w') as nav_file:
+            nav_file.write(geojson_result)
+        
+        return json.loads(geojson_result)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

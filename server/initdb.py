@@ -1,16 +1,28 @@
 import json
 import os
 
-# Paths to the JSON files
+#Data
 DATA_FILE = './server/json_databases/tss_data.json'
-PINS_FILE = './server/json_databases/geojson/user_pins.json'
-BOUNDARY_LINES_FILE = './server/json_databases/boundary_lines.json'
+
+# GEOJson Files for mapping
+BOUNDARY_LINES_FILE = './server/json_databases/geojson/boundary_lines.json'
+DEFAULT_PINS_FILE = './server/json_databases/geojson/default_pins.json'
+GEOLOGICAL_SITES_FILE = './server/json_databases/geojson/geological_sites.json'
+USER_PINS_FILE = './server/json_databases/geojson/user_pins.json'
+NAV_PATH_FILE = './server/json_databases/geojson/nav_path.json'
+
+#Keys and IP Addresses
 CONFIG_FILE = './server/json_databases/config_keys.json'
+
+#Procedures
 INGRESS_EGRESS_FILE = './server/json_databases/ingress_egress_procedures.json'
 EQUIPMENT_REPAIR_FILE = './server/json_databases/equipment_repair.json'
+
+#COMMS
 ALERTS_FILE = './server/json_databases/alerts.json'
 MESSAGES_FILE = './server/json_databases/messages.json'
 GOLDEN_ER_FILE = './server/json_databases/golden_er_procedure.json'
+
 # Default JSON data
 DEFAULT_CONFIG_DATA = {
     "TSS_IP": "localhost:14141",
@@ -18,102 +30,6 @@ DEFAULT_CONFIG_DATA = {
     "HOLO_IP": "your_holo_ip_here",
     "SERVER_IP": "localhost:8000"
 }
-
-DEFAULT_PINS_DATA = {
-    "type": "FeatureCollection",
-    "features": []
-}
-
-DEFAULT_BOUNDARY_LINES_DATA = {
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "properties": {
-          "Name": "E"
-        },
-        "geometry": {
-          "coordinates": [
-            -95.08135273293496,
-            29.564817014510794
-          ],
-          "type": "Point"
-        },
-        "id": 12
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "Name": "F"
-        },
-        "geometry": {
-          "coordinates": [
-            -95.08129157370881,
-            29.564986402558574
-          ],
-          "type": "Point"
-        },
-        "id": 11
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "Name": "C",
-          "stroke": "#000000"
-        },
-        "geometry": {
-          "coordinates": [
-            -95.08171325163919,
-            29.564815614505832
-          ],
-          "type": "Point"
-        },
-        "id": 2
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "Name": "A"
-        },
-        "geometry": {
-          "coordinates": [
-            -95.08180660061014,
-            29.564636426303025
-          ],
-          "type": "Point"
-        },
-        "id": 3
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "Name": "B"
-        },
-        "geometry": {
-          "coordinates": [
-            -95.08161829358309,
-            29.564710621587594
-          ],
-          "type": "Point"
-        },
-        "id": 4
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "Name": "D"
-        },
-        "geometry": {
-          "coordinates": [
-            -95.08152977324902,
-            29.564920607273663
-          ],
-          "type": "Point"
-        },
-        "id": 10
-      }
-    ]
-  }
 
 
 DEFAULT_DATA_FILE_CONTENT = {
@@ -346,6 +262,10 @@ DEFAULT_GOLDEN_ER = {
     "message": "No Procedure has been sent"
 }
 
+DEFAULT_NAV_PATH = {
+  
+}
+
 def initialize_file(file_path, default_data, overwrite=True):
     """Initialize a JSON file with default data, optionally overwriting it if it exists."""
     if overwrite or not os.path.exists(file_path):
@@ -355,14 +275,13 @@ def initialize_file(file_path, default_data, overwrite=True):
 def initialize_database_files():
     """Initialize all necessary database files with default data, conditionally overwriting existing files."""
     initialize_file(CONFIG_FILE, DEFAULT_CONFIG_DATA, overwrite=False)  # Do not overwrite config file
-    initialize_file(PINS_FILE, DEFAULT_PINS_DATA)
-    initialize_file(BOUNDARY_LINES_FILE, DEFAULT_BOUNDARY_LINES_DATA)
     initialize_file(DATA_FILE, DEFAULT_DATA_FILE_CONTENT)
     initialize_file(INGRESS_EGRESS_FILE, DEFAULT_INGRESS_EGRESS_PROCEDURES_DATA)
     initialize_file(EQUIPMENT_REPAIR_FILE, DEFAULT_EQUIPMENT_PROCEDURES_DATA)
     initialize_file(ALERTS_FILE, DEFAULT_ALERTS_DATA)
     initialize_file(MESSAGES_FILE, DEFAULT_MESSAGES_DATA)
     initialize_file(GOLDEN_ER_FILE, DEFAULT_GOLDEN_ER)
+    initialize_file(NAV_PATH_FILE, DEFAULT_NAV_PATH)
 
 if __name__ == "__main__":
     initialize_database_files()
