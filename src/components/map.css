@@ -1,0 +1,24 @@
+/* CSS for MapboxComponent */
+.map-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% - 40px); /* Adjust width to account for margin */
+    max-width: 100%; /* Ensure it doesn't exceed the parent's width */
+    height: 100%; /* Set a fixed height for the map container */
+    margin: 20px; /* Center the container and add top and bottom margins */
+    padding: 10px; /* Add padding inside the container */
+    border: 2px solid #ccc; /* Light gray border */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a modern look */
+    background-color: #f9f9f9; /* Light background color */
+    overflow: hidden; /* Ensure the map doesn't overflow the container */
+}
+
+.mapboxgl-map {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px; /* Slightly rounded corners for the map */
+    object-fit: contain; /* Ensure the map covers the entire container */
+    margin: 0; /* Remove margin to fit the container */
+}

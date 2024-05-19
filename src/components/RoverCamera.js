@@ -1,37 +1,53 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import NoVid from "./../assets/Images/NoVid.png";
+import './streamcomponent.css'; // Import the CSS file
 
 const RoverCamera = () => {
-  const [mediaType, setMediaType] = useState(null);
-  const [mediaSrc, setMediaSrc] = useState(null);
   const videoRef = useRef(null);
-  const streamUrl = "https://mars.nasa.gov/system/resources/detail_files/25904_1-PIA24546-1200.jpg";
+  const [isConnected, setIsConnected] = useState(true);
+  const [HOLO_IP, setHOLO_IP] = useState(null); // Initialize HOLO_IP as null
 
   useEffect(() => {
-    // Determine if the URL is an image or a video
-    if (/\.(jpg|jpeg|png|gif)$/i.test(streamUrl)) {
-      setMediaType('image');
-      setMediaSrc(streamUrl);
-    } else if (/\.(mp4|webm|ogg)$/i.test(streamUrl)) {
-      setMediaType('video');
-      if (videoRef.current) {
-        videoRef.current.src = streamUrl;
-        videoRef.current.load();
-        videoRef.current.play().catch(error => {
-          console.error('Error playing the video:', error);
-        });
-      }
+    // Fetch configuration data from localhost:8000/config
+    fetch('http://localhost:8000/get_config')
+      .then(response => response.json())
+      .then(data => {
+        setHOLO_IP(data.HOLO_IP); // Set HOLO_IP from fetched data
+      })
+      .catch(error => {
+        console.error('Error fetching configuration:', error);
+        setIsConnected(false); // Set isConnected to false on error
+      });
+  }, []);
+
+  useEffect(() => {
+    if (videoRef.current) { // && HOLO_IP
+      // const streamUrl = `http://${HOLO_IP}/api/holographic/stream/live_high.mp4`;
+      const streamUrl = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4';
+      videoRef.current.src = streamUrl;
+      videoRef.current.load();
+      videoRef.current.play().catch(error => {
+        console.error('Error playing the video:', error);
+        setIsConnected(false); // Set isConnected to false on error
+      });
     }
-  }, [streamUrl]);
+  }, [HOLO_IP]);
+
+  if (false) { //!isConnected
+    return (
+      <div>
+        <h1>HoloLens Not Connected</h1>
+        <p style={{ textAlign: 'center' }}>To see stream, input the HoloLens IP in the Setup page <Link to="/Setup">here</Link>.</p>
+        <img src={NoVid} alt="No Stream Icon" style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', marginTop: '10px', width: '200px', height: '200px' }}/>
+      </div>
+    );
+  }
 
   return (
-    <>
-      {mediaType === 'video' && (
-        <video ref={videoRef} controls autoPlay muted playsInline />
-      )}
-      {mediaType === 'image' && (
-        <img src={mediaSrc} alt="Mars Rover" />
-      )}
-    </>
+    <div className="stream-container">
+      <video ref={videoRef} className="stream-video" controls autoPlay muted playsInline />
+    </div>
   );
 };
 

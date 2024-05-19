@@ -7,6 +7,7 @@ import "../../pages-style/page.css";
 import EVData from './EVData.js';
 import Map from '../../components/Map.js';
 import Modal from './Modal'; // Import the Modal component
+import MapModal from './MapModal'; // Import the MapModal component
 
 function Constant() {
   const [isAlertModalVisible, setAlertModalVisible] = useState(false);
@@ -71,19 +72,13 @@ function Constant() {
           isVisible={isAlertModalVisible} 
           hideModal={hideAlertModal} 
           content={
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="start_id">Start ID:</label><br />
-              <input type="number" id="start_id" name="start_id" required /><br /><br />
-              <label htmlFor="end_id">End ID:</label><br />
-              <input type="number" id="end_id" name="end_id" required /><br /><br />
-              <button type="submit">Submit</button>
-            </form>
+            <p>None yet</p>
           } 
         />
-        <Modal 
+        <MapModal 
           isVisible={isMapModalVisible} 
           hideModal={hideMapModal} 
-          content={<div>Map content goes here</div>} 
+          handleSubmit={handleSubmit}
         />
       </div>
     </GlobalProvider>
