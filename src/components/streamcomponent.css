@@ -1,0 +1,25 @@
+/* CSS for StreamComponent */
+.stream-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    margin: 20px auto; /* Center the container and add top and bottom margins */
+    padding: 10px; /* Add padding inside the container */
+    border: 2px solid #ccc; /* Light gray border */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a modern look */
+    background-color: #f9f9f9; /* Light background color */
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .stream-video {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px; /* Slightly rounded corners for the video */
+  }
+  

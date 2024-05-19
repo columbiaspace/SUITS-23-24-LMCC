@@ -1,46 +1,41 @@
 {
-    "id": 1,
-    "title": "Structural Damage Repair",
+    "id": 2,
+    "title": "Power System Troubleshooting and Repair",
     "steps": [
         {
-            "step": "Comm Tower Base 1",
+            "step": "Tower Base PSU 1",
             "role": "EV1",
-            "description": "Collect structural repair materials including metal patches, welding tools, and adhesives."
+            "description": "Assemble diagnostic kit, spare batteries, solar cells, and electrical repair tools."
         },
         {
-            "step": "Comm Tower Base 2",
+            "step": "Tower Base PSU 2",
             "role": "EV2",
-            "description": "Assemble safety gear for climbing and securing both crew members."
+            "description": "Carry additional spare parts and protective equipment."
         },
         {
-            "step": "Comm Tower 3",
+            "step": "Tower Base PSU 3",
             "role": "EV1",
-            "description": "Assess tower for visible structural damage."
+            "description": "Perform diagnostics to identify power supply issues."
         },
         {
-            "step": "Comm Tower 4",
+            "step": "Tower Base PSU 4",
             "role": "EV2",
-            "description": "Assist in removing debris and damaged components."
+            "description": "Assist in identifying damaged components."
         },
         {
-            "step": "Comm Tower 5",
+            "step": "Tower Base PSU 5",
             "role": "EV1",
-            "description": "Apply metal patches over holes or tears using welding tools."
+            "description": "Replace faulty batteries or solar cells."
         },
         {
-            "step": "Comm Tower 6",
+            "step": "Tower Base PSU 6",
             "role": "EV2",
-            "description": "Provide support in applying patches or adhesives."
+            "description": "Help in repairing or replacing wiring, ensuring secure connections."
         },
         {
-            "step": "Comm Tower 7",
+            "step": "Tower Base PSU 7",
             "role": "EV1",
-            "description": "Secure larger structural issues with adhesives and temporary supports."
-        },
-        {
-            "step": "Comm Tower 8",
-            "role": "EV2",
-            "description": "Ensure safety protocols are followed during high or difficult access points."
+            "description": "Verify power system functionality post-repair."
         }
     ]
 }

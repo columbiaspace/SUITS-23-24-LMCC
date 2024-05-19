@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import NoVid from "./../assets/Images/NoVid.png";
+import './streamcomponent.css'; // Import the CSS file
 
 const StreamComponent = () => {
   const videoRef = useRef(null);
@@ -21,8 +22,9 @@ const StreamComponent = () => {
   }, []);
 
   useEffect(() => {
-    if (videoRef.current && HOLO_IP) {
-      const streamUrl = `http://${HOLO_IP}/api/holographic/stream/live_high.mp4`;
+    if (videoRef.current) { // && HOLO_IP
+      // const streamUrl = `http://${HOLO_IP}/api/holographic/stream/live_high.mp4`;
+      const streamUrl = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
       videoRef.current.src = streamUrl;
       videoRef.current.load();
       videoRef.current.play().catch(error => {
@@ -32,7 +34,7 @@ const StreamComponent = () => {
     }
   }, [HOLO_IP]);
 
-  if (!isConnected) {
+  if (false) { //!isConnected
     return (
       <div>
         <h1>HoloLens Not Connected</h1>
@@ -43,7 +45,9 @@ const StreamComponent = () => {
   }
 
   return (
-    <video ref={videoRef} controls autoPlay muted playsInline />
+    <div className="stream-container">
+      <video ref={videoRef} className="stream-video" controls autoPlay muted playsInline />
+    </div>
   );
 };
 
