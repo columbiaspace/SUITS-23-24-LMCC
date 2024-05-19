@@ -38,15 +38,15 @@ function Constant() {
       },
       body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Success:', data);
-      alert('Data submitted successfully!');
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      alert('Failed to submit data.');
-    });
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        alert('Data submitted successfully!');
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert('Failed to submit data.');
+      });
 
     hideAlertModal();
   };
@@ -54,30 +54,38 @@ function Constant() {
   return (
     <GlobalProvider>
       <div className="pagecontainer" id="constantpage">
-        <div id="topbar"></div>
-        <div id="centerbar">
-          <div className='centerButton' id='Alert' onClick={showAlertModal}>Alert</div>
-          <div className='centerButton' id='MapButton' onClick={showMapModal}>Map</div>
+        <div id="topbar">
+          <div className="status-indicator EVA">EVA</div>
+          <div className="status-indicator UIA">UIA</div>
+          <div className="status-indicator SPEC">SPEC</div>
+          <div className="status-indicator ROVER">ROVER</div>
+          <div className="status-indicator DCU">DCU</div>
+
         </div>
+
         <div className="top-half">
           <div id="HMDStream"><StreamComponent /></div>
+          <div id="centerbar">
+            <div className='centerButton' id='Alert' onClick={showAlertModal}>Alert</div>
+            <div className='centerButton' id='MapButton' onClick={showMapModal}>Map</div>
+          </div>
           <div id="RoverStream"><RoverCam /></div>
         </div>
         <div className="bottom-half">
           <div id="EV1"><EVData evNumber={1} /></div>
-          <div id="Map"><Map /></div>
+          <div id="ConstantMap"><Map /></div>
           <div id="EV2"><EVData evNumber={2} /></div>
         </div>
-        <Modal 
-          isVisible={isAlertModalVisible} 
-          hideModal={hideAlertModal} 
+        <Modal
+          isVisible={isAlertModalVisible}
+          hideModal={hideAlertModal}
           content={
             <p>None yet</p>
-          } 
+          }
         />
-        <MapModal 
-          isVisible={isMapModalVisible} 
-          hideModal={hideMapModal} 
+        <MapModal
+          isVisible={isMapModalVisible}
+          hideModal={hideMapModal}
           handleSubmit={handleSubmit}
         />
       </div>

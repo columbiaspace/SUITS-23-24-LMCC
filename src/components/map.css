@@ -5,7 +5,7 @@
     align-items: center;
     width: calc(100% - 40px); /* Adjust width to account for margin */
     max-width: 100%; /* Ensure it doesn't exceed the parent's width */
-    height: 100%; /* Set a fixed height for the map container */
+    height: calc(100% - 40px); /* Set a fixed height for the map container */
     margin: 20px; /* Center the container and add top and bottom margins */
     padding: 10px; /* Add padding inside the container */
     border: 2px solid #ccc; /* Light gray border */

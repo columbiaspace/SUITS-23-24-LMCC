@@ -6,23 +6,17 @@
   overflow: hidden;
 }
 
-#topbar {
-  height: 5%;
-  width: 100%;
-  background-color: lightblue;
-  position: absolute;
+#constantpage {
+  background-color: #cce6ff;
 }
 
 #centerbar {
-  width: 40vw;
-  height: 10vh;
+  width: 10%;
+  height: 80%;
+  margin: 20px;;
   background-color: rgb(72, 72, 244);
-  position: absolute;
-  top: calc(45.5vh);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
   border-radius: 20px; /* Add curves to the center bar */
@@ -30,8 +24,8 @@
 
 
 .centerButton {
-  width: 30%;
-  height: 60%;
+  width: 60%;
+  height: 20%;
   background-color: lightblue;
   color: white;
   display: flex;
@@ -50,33 +44,56 @@
 #HMDStream, #RoverStream {
   width: 50%;
   height: 100%;
-  background-color: lightblue;
 }
 
-#RoverStream {
-  background-color: darkblue;
-}
-
-#EV1, #Map, #EV2 {
+#EV1, #ConstantMap, #EV2 {
   width: 33.33%;
   height: 100%;
 }
 
-#EV1 {
-  background-color: lightblue;
+/* Add styles for the topbar and status indicators */
+#topbar {
+  height: 10%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  color: white;
+  padding: 10px;
 }
 
-#Map {
-  margin-top: 5vh;
-  background-color: darkblue;
+.status-indicator {
+  display: flex;
+  width: 10%;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #555;
 }
 
-#EV2 {
-  background-color: lightblue;
+.status-indicator.red {
+  background-color: red;
 }
+
+.status-indicator.yellow {
+  background-color: yellow;
+  color: black;
+}
+
+.status-indicator.green {
+  background-color: green;
+}
+
+.status-indicator span {
+  display: block;
+  font-size: 0.8em;
+}
+
 
 .top-half, .bottom-half {
   display: flex;
+  flex-direction: row;
   width: 100%;
 }
 
@@ -88,8 +105,10 @@
 
 .bottom-half {
   display: flex;
-  width: 100%;
-  height: 55%;
+  flex-direction: row;
+  width: calc(100% - 20px);
+  height: 45%;
+  margin: 10px;;
 }
 
 .ev-container {
