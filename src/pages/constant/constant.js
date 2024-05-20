@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GlobalProvider } from '../../components/GlobalContext'; 
 import "./constant.css";
 import StreamComponent from "../../components/StreamComponent.js";
@@ -15,7 +15,10 @@ function Constant() {
   const [hasError, setHasError] = useState(false);
   const [isAlertModalVisible, setAlertModalVisible] = useState(false);
   const [isMapModalVisible, setMapModalVisible] = useState(false);
-  const [selectedEV, setSelectedEV] = useState(parseInt(localStorage.getItem('selectedEV')) || 1); // State variable for selected EV
+  const [selectedEV, setSelectedEV] = useState(parseInt(localStorage.getItem('selectedEV')) || 1);
+  const [startId, setStartId] = useState(null);
+  const [endId, setEndId] = useState(null);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
     const fetchTelemetryData = () => {
@@ -36,6 +39,57 @@ function Constant() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (startId && endId) {
+      calculateShortestPath(startId, endId);
+      intervalRef.current = setInterval(() => {
+        calculateShortestPath(startId, endId);
+      }, 3000);
+
+      return () => clearInterval(intervalRef.current);
+    }
+  }, [startId, endId]);
+
+  const calculateShortestPath = (startId, endId) => {
+    const data = {
+      start_id: startId,
+      end_id: endId
+    };
+
+    fetch('http://localhost:8000/get_shortest_path', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(data => {
+        const distance = data.distance;
+        if (distance < 10) {
+          clearInterval(intervalRef.current);
+        }
+        console.log('Distance:', distance);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
+  const handleSubmit = (start, end) => {
+    clearInterval(intervalRef.current);
+    setStartId(start);
+    setEndId(end);
+  };
+
+  const handleToggleEV = () => {
+    const newEV = selectedEV === 1 ? 2 : 1;
+    localStorage.setItem('selectedEV', newEV);
+    setSelectedEV(newEV);
+    window.location.reload(); // Refresh the page on switch
+  };
+
   const getStatusClass = (started, completed) => {
     if (completed) return 'status-indicator green';
     if (started) return 'status-indicator yellow';
@@ -47,47 +101,6 @@ function Constant() {
     const minutes = Math.floor((timeInSeconds % 3600) / 60);
     const seconds = timeInSeconds % 60;
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
-
-  const showAlertModal = () => setAlertModalVisible(true);
-  const hideAlertModal = () => setAlertModalVisible(false);
-
-  const showMapModal = () => setMapModalVisible(true);
-  const hideMapModal = () => setMapModalVisible(false);
-
-  const handleSubmit = (start_id, end_id) => {
-    const data = {
-      start_id: parseInt(start_id, 10),
-      end_id: parseInt(end_id, 10)
-    };
-  
-    fetch('http://localhost:8000/get_shortest_path', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        alert('Data submitted successfully!');
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        alert('Failed to submit data.');
-      });
-  
-    hideMapModal();
-  };
-  
-
-  const handleToggleEV = () => {
-    const newEV = selectedEV === 1 ? 2 : 1;
-    localStorage.setItem('selectedEV', newEV);
-    setSelectedEV(newEV);
-    window.location.reload(); // Refresh the page on switch
   };
 
   return (
@@ -103,8 +116,8 @@ function Constant() {
         <div className="top-half">
           <div id="HMDStream"><StreamComponent evNumber={selectedEV} /></div>
           <div id="centerbar">
-            <div className='centerButton' id='Alert' onClick={showAlertModal}>Alert</div>
-            <div className='centerButton' id='MapButton' onClick={showMapModal}>Map</div>
+            <div className='centerButton' id='Alert' onClick={() => setAlertModalVisible(true)}>Alert</div>
+            <div className='centerButton' id='MapButton' onClick={() => setMapModalVisible(true)}>Map</div>
             <div className='centerButton' id='ToggleEV' onClick={handleToggleEV}>
               {selectedEV === 1 ? 'Switch to EV2' : 'Switch to EV1'}
             </div>
@@ -118,14 +131,14 @@ function Constant() {
         </div>
         <Modal
           isVisible={isAlertModalVisible}
-          hideModal={hideAlertModal}
+          hideModal={() => setAlertModalVisible(false)}
           content={
             <p>None yet</p>
           }
         />
         <MapModal
           isVisible={isMapModalVisible}
-          hideModal={hideMapModal}
+          hideModal={() => setMapModalVisible(false)}
           handleSubmit={handleSubmit}
         />
       </div>

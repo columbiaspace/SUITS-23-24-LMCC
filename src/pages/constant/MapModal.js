@@ -26,8 +26,6 @@ const MapModal = ({ isVisible, hideModal, handleSubmit }) => {
     if (startId && endId) {
       handleSubmit(startId, endId);
       hideModal();
-    } else {
-      alert('Please select both start and end points.');
     }
   };
 
