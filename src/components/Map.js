@@ -1,4 +1,3 @@
-// MapboxComponent.js
 import React, { useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -46,7 +45,15 @@ const MapboxComponent = () => {
           source: "geojson-source",
           filter: ["==", "$type", "Point"],
           paint: {
-            "circle-color": "#FF0000",
+            "circle-color": [
+              "case",
+              ["==", ["get", "Name"], "Rover"], "#00FF00", // Green for rover
+              ["==", ["get", "Name"], "Eva1"], "#0000FF",  // Blue for ev1
+              ["==", ["get", "Name"], "Eva2"], "#0000FF",  // Blue for ev2
+              ["==", ["get", "Name"], "UIA"], "#FFC0CB",  // Blue for ev2
+              ["==", ["get", "Name"], "Comm Tower"], "#FFC0CB",  // Blue for ev2
+              "#FF0000" // Red for all other points
+            ],
             "circle-radius": 5,
           },
         });
@@ -57,7 +64,7 @@ const MapboxComponent = () => {
           source: "geojson-source",
           filter: ["==", "$type", "LineString"],
           paint: {
-            "line-color": "#0000FF",
+            "line-color": "#FFFF00", // Yellow for lines
             "line-width": 2,
           },
         });

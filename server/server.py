@@ -428,7 +428,7 @@ def find_point_by_id(file_path, point_id):
 
 @app.post("/get_shortest_path")
 async def get_shortest_path(point_request: PointIDRequest):
-    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE, ROVER_LOCATION_FILE]
+    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE, CURRENT_LOCATIONS_FILE]
     
     start_feature = None
     end_feature = None
