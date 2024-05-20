@@ -15,6 +15,7 @@ function Constant() {
   const [hasError, setHasError] = useState(false);
   const [isAlertModalVisible, setAlertModalVisible] = useState(false);
   const [isMapModalVisible, setMapModalVisible] = useState(false);
+  const [selectedEV, setSelectedEV] = useState(parseInt(localStorage.getItem('selectedEV')) || 1); // State variable for selected EV
 
   useEffect(() => {
     const fetchTelemetryData = () => {
@@ -86,6 +87,13 @@ function Constant() {
     hideAlertModal();
   };
 
+  const handleToggleEV = () => {
+    const newEV = selectedEV === 1 ? 2 : 1;
+    localStorage.setItem('selectedEV', newEV);
+    setSelectedEV(newEV);
+    window.location.reload(); // Refresh the page on switch
+  };
+
   return (
     <GlobalProvider>
       <div className="pagecontainer" id="constantpage">
@@ -97,17 +105,20 @@ function Constant() {
           />
         )}
         <div className="top-half">
-          <div id="HMDStream"><StreamComponent /></div>
+          <div id="HMDStream"><StreamComponent evNumber={selectedEV} /></div>
           <div id="centerbar">
             <div className='centerButton' id='Alert' onClick={showAlertModal}>Alert</div>
             <div className='centerButton' id='MapButton' onClick={showMapModal}>Map</div>
+            <div className='centerButton' id='ToggleEV' onClick={handleToggleEV}>
+              {selectedEV === 1 ? 'Switch to EV2' : 'Switch to EV1'}
+            </div>
           </div>
           <div id="RoverStream"><RoverCam /></div>
         </div>
         <div className="bottom-half">
-          <div id="EV1"><EVData evNumber={1} /></div>
+          <div id="EV"><EVData evNumber={selectedEV} /></div>
           <div id="ConstantMap"><MapboxComponent /></div>
-          <div id="EV2"><EVData evNumber={2} /></div>
+          <div id="UIADCU">UIA DCU DATA</div>
         </div>
         <Modal
           isVisible={isAlertModalVisible}

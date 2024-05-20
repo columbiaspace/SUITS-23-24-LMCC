@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import NoVid from "./../assets/Images/NoVid.png";
 import './streamcomponent.css'; // Import the CSS file
 
-const StreamComponent = () => {
+const StreamComponent = ({ evNumber }) => {
   const videoRef = useRef(null);
   const [isConnected, setIsConnected] = useState(true);
   const [HOLO_IP, setHOLO_IP] = useState(null); // Initialize HOLO_IP as null
@@ -13,13 +13,17 @@ const StreamComponent = () => {
     fetch('http://localhost:8000/get_config')
       .then(response => response.json())
       .then(data => {
-        setHOLO_IP(data.HOLO_IP); // Set HOLO_IP from fetched data
+        if (evNumber === 1) {
+          setHOLO_IP(data.EV1_HOLO_IP); // Set EV1_HOLO_IP from fetched data
+        } else if (evNumber === 2) {
+          setHOLO_IP(data.EV2_HOLO_IP); // Set EV2_HOLO_IP from fetched data
+        }
       })
       .catch(error => {
         console.error('Error fetching configuration:', error);
         setIsConnected(false); // Set isConnected to false on error
       });
-  }, []);
+  }, [evNumber]);
 
   useEffect(() => {
     if (videoRef.current && HOLO_IP) { // Check if HOLO_IP is available

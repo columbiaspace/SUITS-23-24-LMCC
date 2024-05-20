@@ -6,7 +6,8 @@ import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";  // Import mapboxgl here
 
 function Setup() {
   const [tssIP, setTssIP] = useState('');
-  const [holoIP, setHoloIP] = useState('');
+  const [ev1HoloIP, setEv1HoloIP] = useState('');
+  const [ev2HoloIP, setEv2HoloIP] = useState('');
   const [mapBoxAPI, setMapBoxAPI] = useState('');
   const [serverIP, setServerIP] = useState('');
   const [ev1TeamID, setEv1TeamID] = useState('');
@@ -14,12 +15,14 @@ function Setup() {
   const [roverIP, setRoverIP] = useState('');
 
   const [tssIPStatus, setTssIPStatus] = useState('yellow');
-  const [holoIPStatus, setHoloIPStatus] = useState('yellow');
+  const [ev1HoloIPStatus, setEv1HoloIPStatus] = useState('yellow');
+  const [ev2HoloIPStatus, setEv2HoloIPStatus] = useState('yellow');
   const [serverIPStatus, setServerIPStatus] = useState('yellow');
   const [mapBoxAPIStatus, setMapBoxAPIStatus] = useState('yellow');
 
   const [showTssIPModal, setShowTssIPModal] = useState(false);
-  const [showHoloIPModal, setShowHoloIPModal] = useState(false);
+  const [showEv1HoloIPModal, setShowEv1HoloIPModal] = useState(false);
+  const [showEv2HoloIPModal, setShowEv2HoloIPModal] = useState(false);
   const [showServerIPModal, setShowServerIPModal] = useState(false);
   const [showMapBoxAPIModal, setShowMapBoxAPIModal] = useState(false);
 
@@ -29,7 +32,8 @@ function Setup() {
         const response = await fetch('http://localhost:8000/get_config');
         const config = await response.json();
         setTssIP(config.TSS_IP);
-        setHoloIP(config.HOLO_IP);
+        setEv1HoloIP(config.EV1_HOLO_IP);
+        setEv2HoloIP(config.EV2_HOLO_IP);
         setMapBoxAPI(config.MAPBOX_KEY);
         setServerIP(config.SERVER_IP);
         setEv1TeamID(config.EV1_TEAM_ID);
@@ -37,7 +41,8 @@ function Setup() {
         setRoverIP(config.ROVER_IP);
 
         checkConnection(config.TSS_IP, setTssIPStatus, 'tss_ip');
-        checkConnection(config.HOLO_IP, setHoloIPStatus, 'holo_ip');
+        checkConnection(config.EV1_HOLO_IP, setEv1HoloIPStatus, 'ev1_holo_ip');
+        checkConnection(config.EV2_HOLO_IP, setEv2HoloIPStatus, 'ev2_holo_ip');
         checkConnection(config.SERVER_IP, setServerIPStatus, 'server_ip');
         // Check Mapbox API Key
         checkMapboxAPIKey(config.MAPBOX_KEY);
@@ -75,7 +80,8 @@ function Setup() {
       console.log(result.message);
 
       if (newConfig.TSS_IP) checkConnection(newConfig.TSS_IP, setTssIPStatus, 'tss_ip');
-      if (newConfig.HOLO_IP) checkConnection(newConfig.HOLO_IP, setHoloIPStatus, 'holo_ip');
+      if (newConfig.EV1_HOLO_IP) checkConnection(newConfig.EV1_HOLO_IP, setEv1HoloIPStatus, 'ev1_holo_ip');
+      if (newConfig.EV2_HOLO_IP) checkConnection(newConfig.EV2_HOLO_IP, setEv2HoloIPStatus, 'ev2_holo_ip');
       if (newConfig.SERVER_IP) checkConnection(newConfig.SERVER_IP, setServerIPStatus, 'server_ip');
       if (newConfig.MAPBOX_KEY) {
         checkMapboxAPIKey(newConfig.MAPBOX_KEY);
@@ -118,7 +124,8 @@ function Setup() {
     updateConfigOnServer({
       TSS_IP: inputTSS_IP,
       MAPBOX_KEY: mapBoxAPI,
-      HOLO_IP: holoIP,
+      EV1_HOLO_IP: ev1HoloIP,
+      EV2_HOLO_IP: ev2HoloIP,
       SERVER_IP: serverIP,
       EV1_TEAM_ID: ev1TeamID,
       EV2_TEAM_ID: ev2TeamID,
@@ -132,7 +139,8 @@ function Setup() {
     updateConfigOnServer({
       TSS_IP: tssIP,
       MAPBOX_KEY: mapBoxAPI,
-      HOLO_IP: holoIP,
+      EV1_HOLO_IP: ev1HoloIP,
+      EV2_HOLO_IP: ev2HoloIP,
       SERVER_IP: inputSERVER_IP,
       EV1_TEAM_ID: ev1TeamID,
       EV2_TEAM_ID: ev2TeamID,
@@ -140,13 +148,29 @@ function Setup() {
     });
   };
 
-  const handleSetHOLO_IP = () => {
-    const inputHOLO_IP = document.getElementById('holo_ip').value;
-    setHoloIP(inputHOLO_IP);
+  const handleSetEV1_HOLO_IP = () => {
+    const inputEV1_HOLO_IP = document.getElementById('ev1_holo_ip').value;
+    setEv1HoloIP(inputEV1_HOLO_IP);
     updateConfigOnServer({
       TSS_IP: tssIP,
       MAPBOX_KEY: mapBoxAPI,
-      HOLO_IP: inputHOLO_IP,
+      EV1_HOLO_IP: inputEV1_HOLO_IP,
+      EV2_HOLO_IP: ev2HoloIP,
+      SERVER_IP: serverIP,
+      EV1_TEAM_ID: ev1TeamID,
+      EV2_TEAM_ID: ev2TeamID,
+      ROVER_IP: roverIP,
+    });
+  };
+
+  const handleSetEV2_HOLO_IP = () => {
+    const inputEV2_HOLO_IP = document.getElementById('ev2_holo_ip').value;
+    setEv2HoloIP(inputEV2_HOLO_IP);
+    updateConfigOnServer({
+      TSS_IP: tssIP,
+      MAPBOX_KEY: mapBoxAPI,
+      EV1_HOLO_IP: ev1HoloIP,
+      EV2_HOLO_IP: inputEV2_HOLO_IP,
       SERVER_IP: serverIP,
       EV1_TEAM_ID: ev1TeamID,
       EV2_TEAM_ID: ev2TeamID,
@@ -160,7 +184,8 @@ function Setup() {
     updateConfigOnServer({
       TSS_IP: tssIP,
       MAPBOX_KEY: inputMapBox_API,
-      HOLO_IP: holoIP,
+      EV1_HOLO_IP: ev1HoloIP,
+      EV2_HOLO_IP: ev2HoloIP,
       SERVER_IP: serverIP,
       EV1_TEAM_ID: ev1TeamID,
       EV2_TEAM_ID: ev2TeamID,
@@ -174,7 +199,8 @@ function Setup() {
     updateConfigOnServer({
       TSS_IP: tssIP,
       MAPBOX_KEY: mapBoxAPI,
-      HOLO_IP: holoIP,
+      EV1_HOLO_IP: ev1HoloIP,
+      EV2_HOLO_IP: ev2HoloIP,
       SERVER_IP: serverIP,
       EV1_TEAM_ID: inputEV1TeamID,
       EV2_TEAM_ID: ev2TeamID,
@@ -188,7 +214,8 @@ function Setup() {
     updateConfigOnServer({
       TSS_IP: tssIP,
       MAPBOX_KEY: mapBoxAPI,
-      HOLO_IP: holoIP,
+      EV1_HOLO_IP: ev1HoloIP,
+      EV2_HOLO_IP: ev2HoloIP,
       SERVER_IP: serverIP,
       EV1_TEAM_ID: ev1TeamID,
       EV2_TEAM_ID: inputEV2TeamID,
@@ -202,7 +229,8 @@ function Setup() {
     updateConfigOnServer({
       TSS_IP: tssIP,
       MAPBOX_KEY: mapBoxAPI,
-      HOLO_IP: holoIP,
+      EV1_HOLO_IP: ev1HoloIP,
+      EV2_HOLO_IP: ev2HoloIP,
       SERVER_IP: serverIP,
       EV1_TEAM_ID: ev1TeamID,
       EV2_TEAM_ID: ev2TeamID,
@@ -246,11 +274,20 @@ function Setup() {
           </div>
         </div>
         <div className='dataEntry'>
-          <label htmlFor='holo_ip'>HOLO Lens IP Address: </label>
-          <input type='text' id='holo_ip' name='holo_ip' defaultValue={holoIP} />
-          <button id="info-button" onClick={() => setShowHoloIPModal(true)}>?</button>
-          <button onClick={handleSetHOLO_IP}>Set HOLO IP</button>
-          <div className={`status ${holoIPStatus}`}>
+          <label htmlFor='ev1_holo_ip'>EV1 HoloLens IP Address: </label>
+          <input type='text' id='ev1_holo_ip' name='ev1_holo_ip' defaultValue={ev1HoloIP} />
+          <button id="info-button" onClick={() => setShowEv1HoloIPModal(true)}>?</button>
+          <button onClick={handleSetEV1_HOLO_IP}>Set EV1 HoloLens IP</button>
+          <div className={`status ${ev1HoloIPStatus}`}>
+            <span className="status-text"></span>
+          </div>
+        </div>
+        <div className='dataEntry'>
+          <label htmlFor='ev2_holo_ip'>EV2 HoloLens IP Address: </label>
+          <input type='text' id='ev2_holo_ip' name='ev2_holo_ip' defaultValue={ev2HoloIP} />
+          <button id="info-button" onClick={() => setShowEv2HoloIPModal(true)}>?</button>
+          <button onClick={handleSetEV2_HOLO_IP}>Set EV2 HoloLens IP</button>
+          <div className={`status ${ev2HoloIPStatus}`}>
             <span className="status-text"></span>
           </div>
         </div>
@@ -285,7 +322,8 @@ function Setup() {
 
       <InfoModal showModal={showTssIPModal} setShowModal={setShowTssIPModal} content="The TSS IP Address is needed so the server can receive information to update EVA data and positioning. If the TSS is running on the local machine, the IP is localhost:{port} (port is usually 14141). If the TSS is running on an external machine, find the exposed IP of that machine on the local network. Instructions for running the TSS can be found here: https://github.com/dignojrteogalbo/TSS_2024/tree/docker" />
       <InfoModal showModal={showServerIPModal} setShowModal={setShowServerIPModal} content="The Server must be running via Uvicorn to receive data. If the Server is running on the local machine, the IP is localhost:{port} (port is usually 8000). If the Server is running on an external machine, find the exposed IP of that machine on the local network. Instructions to run the server can be found here: https://github.com/columbiaspace/SUITS-23-24-LMCC" />
-      <InfoModal showModal={showHoloIPModal} setShowModal={setShowHoloIPModal} content="The HOLO IP is found by asking the HoloLens 'What's my IP Address?' or by going into network settings. The IP is necessary for video streaming" />
+      <InfoModal showModal={showEv1HoloIPModal} setShowModal={setShowEv1HoloIPModal} content="The EV1 HoloLens IP is found by asking the HoloLens 'What's my IP Address?' or by going into network settings. The IP is necessary for video streaming" />
+      <InfoModal showModal={showEv2HoloIPModal} setShowModal={setShowEv2HoloIPModal} content="The EV2 HoloLens IP is found by asking the HoloLens 'What's my IP Address?' or by going into network settings. The IP is necessary for video streaming" />
       <InfoModal showModal={showMapBoxAPIModal} setShowModal={setShowMapBoxAPIModal} content="The Mapbox API key was sent in the Slack channel, dm Jonah if necessary. You can also get your own key here: https://docs.mapbox.com/help/glossary/access-token/" />
     </div>
   );
