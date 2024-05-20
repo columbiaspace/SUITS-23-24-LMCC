@@ -12,29 +12,45 @@ const EVData = ({ evNumber }) => {
 
   // List of parameters and values in desired order
   const parameterList = [
-    { key: 'batt_time_left', label: 'Battery Time Left' },
-    { key: 'oxy_pri_storage', label: 'Oxygen Primary Storage' },
-    { key: 'oxy_sec_storage', label: 'Oxygen Secondary Storage' },
-    { key: 'oxy_pri_pressure', label: 'Oxygen Primary Pressure' },
-    { key: 'oxy_sec_pressure', label: 'Oxygen Secondary Pressure' },
-    { key: 'oxy_time_left', label: 'Oxygen Time Left' },
-    { key: 'heart_rate', label: 'Heart Rate' },
-    { key: 'oxy_consumption', label: 'Oxygen Consumption' },
-    { key: 'co2_production', label: 'CO2 Production' },
-    { key: 'suit_pressure_oxy', label: 'Suit Pressure O2' },
-    { key: 'suit_pressure_co2', label: 'Suit Pressure CO2' },
-    { key: 'suit_pressure_other', label: 'Suit Pressure Other' },
-    { key: 'suit_pressure_total', label: 'Suit Pressure Total' },
-    { key: 'fan_pri_rpm', label: 'Fan Primary RPM' },
-    { key: 'fan_sec_rpm', label: 'Fan Secondary RPM' },
-    { key: 'helmet_pressure_co2', label: 'Helmet Pressure CO2' },
-    { key: 'scrubber_a_co2_storage', label: 'Scrubber A CO2 Storage' },
-    { key: 'scrubber_b_co2_storage', label: 'Scrubber B CO2 Storage' },
-    { key: 'temperature', label: 'Temperature' },
-    { key: 'coolant_ml', label: 'Coolant ml' },
-    { key: 'coolant_gas_pressure', label: 'Coolant Gas Pressure' },
-    { key: 'coolant_liquid_pressure', label: 'Coolant Liquid Pressure' },
+    { key: 'batt_time_left', label: 'Battery Time Left', min: 3600, max: 10800 },
+    { key: 'oxy_pri_storage', label: 'Oxygen Primary Storage', min: 20, max: 100 },
+    { key: 'oxy_sec_storage', label: 'Oxygen Secondary Storage', min: 20, max: 100 },
+    { key: 'oxy_pri_pressure', label: 'Oxygen Primary Pressure', min: 600, max: 3000 },
+    { key: 'oxy_sec_pressure', label: 'Oxygen Secondary Pressure', min: 600, max: 3000 },
+    { key: 'oxy_time_left', label: 'Oxygen Time Left', min: 3600, max: 21600 },
+    { key: 'coolant_storage', label: 'Coolant Storage', min: 80, max: 100 },
+    { key: 'heart_rate', label: 'Heart Rate', min: 50, max: 160 },
+    { key: 'oxy_consumption', label: 'Oxygen Consumption', min: 0.05, max: 0.15 },
+    { key: 'co2_production', label: 'CO2 Production', min: 0.05, max: 0.15 },
+    { key: 'suit_pressure_oxy', label: 'Suit Pressure O2', min: 3.5, max: 4.1 },
+    { key: 'suit_pressure_co2', label: 'Suit Pressure CO2', min: 0.0, max: 0.1 },
+    { key: 'suit_pressure_other', label: 'Suit Pressure Other', min: 0.0, max: 0.5 },
+    { key: 'suit_pressure_total', label: 'Suit Pressure Total', min: 3.5, max: 4.5 },
+    { key: 'fan_pri_rpm', label: 'Fan Primary RPM', min: 20000, max: 30000 },
+    { key: 'fan_sec_rpm', label: 'Fan Secondary RPM', min: 20000, max: 30000 },
+    { key: 'helmet_pressure_co2', label: 'Helmet Pressure CO2', min: 0.0, max: 0.15 },
+    { key: 'scrubber_a_co2_storage', label: 'Scrubber A CO2 Storage', min: 0.0, max: 60 },
+    { key: 'scrubber_b_co2_storage', label: 'Scrubber B CO2 Storage', min: 0.0, max: 60 },
+    { key: 'temperature', label: 'Temperature', min: 50, max: 90 },
+    { key: 'coolant_liquid_pressure', label: 'Coolant Liquid Pressure', min: 100, max: 700 },
+    { key: 'coolant_gas_pressure', label: 'Coolant Gas Pressure', min: 0, max: 700 },
   ];
+
+  // Function to determine the background color based on the value range
+  const getBackgroundColor = (value, min, max) => {
+    if (value < min || value > max) {
+      return 'red';
+    }
+    return 'green';
+  };
+
+  // Function to format the value to a fixed number of decimal places
+  const formatValue = (value) => {
+    if (typeof value === 'number') {
+      return value.toFixed(4); // Change the number of decimal places if needed
+    }
+    return value;
+  };
 
   // Split the parameter list into two columns
   const midIndex = Math.ceil(parameterList.length / 2);
@@ -43,18 +59,32 @@ const EVData = ({ evNumber }) => {
 
   return (
     <div className="ev-container">
-      <h2>EV{evNumber} Data</h2>
+      <h4>EV{evNumber} Data</h4>
       <div className="ev-table-container">
         <table className="ev-table">
           <tbody>
             {firstColumn.map((param, index) => (
               <tr key={param.key}>
                 <td>{param.label}</td>
-                <td>{evaData[param.key]}</td>
+                <td
+                  style={{
+                    backgroundColor: getBackgroundColor(evaData[param.key] ?? evaData[`suit_pressure_cO2`], param.min, param.max),
+                    color: 'black',
+                  }}
+                >
+                  {formatValue(evaData[param.key] ?? evaData[`suit_pressure_cO2`])}
+                </td>
                 {secondColumn[index] ? (
                   <>
                     <td>{secondColumn[index].label}</td>
-                    <td>{evaData[secondColumn[index].key]}</td>
+                    <td
+                      style={{
+                        backgroundColor: getBackgroundColor(evaData[secondColumn[index].key] ?? evaData[`suit_pressure_cO2`], secondColumn[index].min, secondColumn[index].max),
+                        color: 'black',
+                      }}
+                    >
+                      {formatValue(evaData[secondColumn[index].key] ?? evaData[`suit_pressure_cO2`])}
+                    </td>
                   </>
                 ) : (
                   <>
