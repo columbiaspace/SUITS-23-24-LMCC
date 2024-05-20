@@ -50,8 +50,8 @@ const MapboxComponent = () => {
               ["==", ["get", "Name"], "Rover"], "#00FF00", // Green for rover
               ["==", ["get", "Name"], "Eva1"], "#0000FF",  // Blue for ev1
               ["==", ["get", "Name"], "Eva2"], "#0000FF",  // Blue for ev2
-              ["==", ["get", "Name"], "UIA"], "#FFC0CB",  // Blue for ev2
-              ["==", ["get", "Name"], "Comm Tower"], "#FFC0CB",  // Blue for ev2
+              ["==", ["get", "Name"], "UIA"], "#FFC0CB",  // Pink for UIA
+              ["==", ["get", "Name"], "Comm Tower"], "#FFC0CB",  // Pink for Comm Tower
               "#FF0000" // Red for all other points
             ],
             "circle-radius": 5,
@@ -70,40 +70,21 @@ const MapboxComponent = () => {
         });
 
         newMap.addLayer({
-          id: "polygons",
-          type: "fill",
-          source: "geojson-source",
-          filter: ["==", "$type", "Polygon"],
-          paint: {
-            "fill-opacity": 0,
-          },
-        });
-
-        newMap.addLayer({
-          id: "polygon-borders",
-          type: "line",
-          source: "geojson-source",
-          filter: ["==", "$type", "Polygon"],
-          paint: {
-            "line-color": "#000000",
-            "line-width": 1,
-          },
-        });
-
-        newMap.addLayer({
           id: "point-labels",
           type: "symbol",
           source: "geojson-source",
           filter: ["==", "$type", "Point"],
           layout: {
-            "text-field": ["to-string", ["get", "id"]],
+            "text-field": ["get", "Name"],
             "text-offset": [0, 1.5],
             "text-anchor": "top",
+            "text-size": 10
           },
           paint: {
-            "text-color": "#007bff",
+            "text-color": "#000000",
+            "text-width": 2,
             "text-halo-color": "#FFFFFF",
-            "text-halo-width": 1,
+            "text-halo-width": .2,
           },
         });
 
