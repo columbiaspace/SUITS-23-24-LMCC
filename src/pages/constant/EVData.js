@@ -47,7 +47,7 @@ const EVData = ({ evNumber }) => {
   // Function to format the value to a fixed number of decimal places
   const formatValue = (value) => {
     if (typeof value === 'number') {
-      return value.toFixed(4); // Change the number of decimal places if needed
+      return value.toFixed(2); // Change the number of decimal places if needed
     }
     return value;
   };

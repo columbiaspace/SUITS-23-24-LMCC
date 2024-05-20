@@ -1,3 +1,17 @@
 #navPage {
     flex-direction: column;
 }
+
+#conti {
+    display: flex;
+    flex-direction: row;
+    height: 90vh
+}
+
+#navMap {
+    width: 70%;
+}
+
+#navControls {
+    width: 30%;
+}

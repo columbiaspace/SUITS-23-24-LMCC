@@ -4,7 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import './map.css';
 import AddPointModal from '../pages/constant/AddPointModal'; // Ensure this path is correct
 
-const MapboxComponent = () => {
+const MapboxComponent = ({ zoom = 17 }) => {
   const [mapBoxAPIKey, setMapBoxAPIKey] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [clickCoordinates, setClickCoordinates] = useState(null);
@@ -30,7 +30,7 @@ const MapboxComponent = () => {
         container: "map",
         style: "mapbox://styles/mapbox/satellite-v8",
         center: [-95.08148549138448, 29.564911887991144],
-        zoom: 17,
+        zoom: zoom,
       });
 
       newMap.on("load", () => {
@@ -109,7 +109,7 @@ const MapboxComponent = () => {
         setModalVisible(true);
       });
     }
-  }, [mapBoxAPIKey]);
+  }, [mapBoxAPIKey, zoom]);
 
   const hideModal = () => setModalVisible(false);
 

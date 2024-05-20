@@ -1,76 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import Map from '../../components/Map.js';
 import RoverCam from "../../components/RoverCamera.js";
-
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-`;
-
-const ContentRover = styled.div`
-  display: flex;
-  flex: 1;
-`;
-
-const LeftColumnRover = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-`;
-
-const RoverCamContainer = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-`;
-
-const MapContainer = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-`;
-
-const RightColumnRover = styled.div`
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  background-color: #f0f0f0;
-  overflow: auto;
-`;
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-`;
-
-const TableHead = styled.thead`
-  background-color: #f2f2f2;
-`;
-
-const TableHeader = styled.th`
-  padding: 10px;
-  border: 1px solid #ddd;
-`;
-
-const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-`;
-
-const TableCell = styled.td`
-  padding: 10px;
-  border: 1px solid #ddd;
-`;
+import '../../pages-style/rover.css';
 
 function Rover() {
   const [roverData, setRoverData] = useState(null);
@@ -86,59 +17,49 @@ function Rover() {
       }
     };
 
-    // Fetch data initially
     fetchData();
 
-    // Set up interval to fetch data every second
     const intervalId = setInterval(fetchData, 1000);
 
-    // Clean up interval on component unmount
     return () => clearInterval(intervalId);
   }, []);
 
   return (
-    <PageContainer>
-      <ContentRover>
-        <LeftColumnRover>
-          <RoverCamContainer>
+    <div className="page-container">
+      <div className="header-rover">Rover Monitoring</div>
+      <div className="content-rover">
+        <div className="left-column-rover">
+            <Map id="rovMap" zoom={19}/>
+        </div>
+        <div className="right-column-rover">
             <RoverCam />
-          </RoverCamContainer>
-          <MapContainer>
-            <Map />
-          </MapContainer>
-        </LeftColumnRover>
-        <RightColumnRover>
           {roverData ? (
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableHeader>Property</TableHeader>
-                  <TableHeader>Value</TableHeader>
-                </TableRow>
-              </TableHead>
-              <tbody>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>{roverData.name}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>{roverData.id}</TableCell>
-                </TableRow>
-                {Object.entries(roverData.data).map(([key, value]) => (
-                  <TableRow key={key}>
-                    <TableCell>{key}</TableCell>
-                    <TableCell>{value}</TableCell>
-                  </TableRow>
-                ))}
-              </tbody>
-            </Table>
+            <div className="table">
+              <div className="table-row">
+                <div className="table-header">Property</div>
+                <div className="table-header">Value</div>
+              </div>
+              <div className="table-row">
+                <div className="table-cell">Name</div>
+                <div className="table-cell">{roverData.name}</div>
+              </div>
+              <div className="table-row">
+                <div className="table-cell">ID</div>
+                <div className="table-cell">{roverData.id}</div>
+              </div>
+              {Object.entries(roverData.data).map(([key, value]) => (
+                <div className="table-row" key={key}>
+                  <div className="table-cell">{key}</div>
+                  <div className="table-cell">{value}</div>
+                </div>
+              ))}
+            </div>
           ) : (
             'Loading...'
           )}
-        </RightColumnRover>
-      </ContentRover>
-    </PageContainer>
+        </div>
+      </div>
+    </div>
   );
 }
 

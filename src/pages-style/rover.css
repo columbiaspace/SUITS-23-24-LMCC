@@ -1,13 +1,17 @@
-.pagecontainer {
+.page-container {
   display: grid;
   grid-template-rows: auto 1fr;
+  height: 90vh;
   width: 100vw;
 }
 
 .header-rover {
   text-align: center;
   padding: 20px;
-  background-color: #f8f9fa; /* Light gray */
+  background-color: #f8f9fa;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
 }
 
 .content-rover {
@@ -17,49 +21,72 @@
 }
 
 .left-column-rover {
-  display: grid;
-  grid-template-rows: 50% 50%;
+  display: flex;
   border-right: 1px solid #ddd;
-  height: 100%;
 }
 
-.rover-cam {
+.rover-cam-container,
+.map-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  background-color: #eef; /* Light blue */
+  align-items: center;
+  background-color: #eef;
   overflow: hidden;
-  position: relative;
 }
 
-.rover-camera-container {
-  position: relative;
+.map-container {
+  flex: 1;
+}
+
+.rover-cam-container {
+  width: 100%;
+}
+
+#rovMap {
   width: 100%;
   height: 100%;
-}
-
-.video-container {
-  width: 100%;
-  height: calc(100% - 50px); /* Adjust height to leave space for the button */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.video-container video,
-.video-container img {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
 }
 
 .right-column-rover {
-  background-color: #f8f9fa; /* Light gray */
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f8f9fa;
+  overflow-y: auto;
+}
+
+.rover-video {
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.8rem; /* Decreased font size */
+}
+
+.table-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.table-cell,
+.table-header {
+  flex: 1;
+  padding: 5px; /* Decreased padding */
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.table-header {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.table-row:nth-child(even) .table-cell {
+  background-color: #f9f9f9;
 }

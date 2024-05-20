@@ -48,11 +48,11 @@
 }
 
 #EV {
-  width: 40%;
+  width: 33.333%;
 }
 
 #ConstantMap, #UIADCU {
-  width: 30%;
+  width: 33.333%;
 }
 
 #topbar {
@@ -125,9 +125,9 @@
 }
 
 .ev-container {
-  padding: 20px;
+  padding: 10px;
   background-color: #f0f8ff; /* Light blue-ish background */
-  border-radius: 8px;
+  border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
   height: 100%;
@@ -151,11 +151,11 @@
 
 .ev-table th,
 .ev-table td {
-  font-size: medium;
+  font-size: small;
   border: 1px solid #ddd;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  text-align: left;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-align: center;
   box-sizing: border-box;
 }
 
