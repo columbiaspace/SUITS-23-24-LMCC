@@ -490,6 +490,59 @@ async def get_rover_spec_scan():
     except json.JSONDecodeError:
         raise HTTPException(status_code=500, detail="Error decoding Rock LUT file")
 
+@app.post("/drop_pin_here/{eva_num}")
+async def drop_pin_here(eva_num: int):
+    if eva_num not in [1, 2]:
+        raise HTTPException(status_code=400, detail="Invalid EVA number. Must be 1 or 2.")
+
+    try:
+        # Read current locations
+        with open(CURRENT_LOCATIONS_FILE, 'r') as f:
+            current_locations = json.load(f)
+        
+        # Find the corresponding EVA feature
+        eva_name = f"Eva{eva_num}"
+        eva_feature = next((feature for feature in current_locations["features"] if feature["properties"]["Name"] == eva_name), None)
+        
+        if not eva_feature:
+            raise HTTPException(status_code=404, detail=f"{eva_name} not found in current locations.")
+
+        # Generate EVA Time as minutes and seconds concatenated as an integer
+        now = datetime.now()
+        eva_time = int(now.strftime("%M%S"))
+
+        # Create a new feature
+        new_feature = {
+            "type": "Feature",
+            "properties": {
+                "Name": f"{eva_name} @ {eva_time}"
+            },
+            "geometry": eva_feature["geometry"],
+            "id": eva_time
+        }
+
+        # Read or initialize USER_PINS_FILE
+        if os.path.exists(USER_PINS_FILE):
+            with open(USER_PINS_FILE, 'r') as f:
+                user_pins = json.load(f)
+        else:
+            user_pins = {"type": "FeatureCollection", "features": []}
+
+        # Append the new feature
+        user_pins["features"].append(new_feature)
+
+        # Write back to USER_PINS_FILE
+        with open(USER_PINS_FILE, 'w') as f:
+            json.dump(user_pins, f, indent=4)
+
+        return {"message": "Pin added successfully", "feature": new_feature}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
 if __name__ == '__main__':
     import uvicorn
     uvicorn.run(app, host='0.0.0.0', port=8000)
+

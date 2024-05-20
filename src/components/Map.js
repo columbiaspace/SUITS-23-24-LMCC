@@ -83,7 +83,7 @@ const MapboxComponent = () => {
           paint: {
             "text-color": "#000000",
             "text-width": 2,
-            "text-halo-color": "#FFFFFF",
+            "text-halo-color": "#FF0000",
             "text-halo-width": .2,
           },
         });
