@@ -25,7 +25,7 @@ function App() {
           <Route path="/egress" element={<Egress />} />
           <Route path="/nav" element={<Nav />} />
           <Route path="/equipment" element={<Equipment />} />
-          <Route path="/rocks" element={<Rocks />} />
+          {/* <Route path="/rocks" element={<Rocks />} /> */}
           <Route path="/rover" element={<Rover />} />
           <Route path="/ingress" element={<Ingress />} />
         </Routes>

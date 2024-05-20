@@ -20,6 +20,7 @@ app = FastAPI()
 # Data
 DATA_FILE = './server/json_databases/tss_data.json'
 ROCK_LUT = './server/json_databases/ROCK_DATA_FINAL.json'
+DCU_UIA_FILE = './server/json_databases/DCUUIA.json'
 # GEOJson Files for mapping
 BOUNDARY_LINES_FILE = './server/json_databases/geojson/boundary_lines.json'
 DEFAULT_PINS_FILE = './server/json_databases/geojson/default_pins.json'
@@ -66,13 +67,22 @@ async def fetch_json(url: str):
             return None
         return response.json()
 
+def initialize_files():
+    # Create DATA_FILE if it does not exist
+    if not os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'w') as f:
+            json.dump({}, f)
+    # Create DCU_UIA_FILE if it does not exist
+    if not os.path.exists(DCU_UIA_FILE):
+        with open(DCU_UIA_FILE, 'w') as f:
+            json.dump({}, f)
+
+
 @app.on_event("startup")
 async def startup_event():
-    initialize_database_files()
-    task = asyncio.create_task(periodic_fetch_and_store())
-    await asyncio.sleep(1)
+    initialize_files()  # Ensure files are created if they do not exist
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(fetch_and_update_positions, 'interval', seconds=3)
+    scheduler.add_job(periodic_fetch_and_store, 'interval', seconds=10)  # Adjust the interval as needed
     scheduler.start()
 
 async def periodic_fetch_and_store():
@@ -80,10 +90,15 @@ async def periodic_fetch_and_store():
     team_number = config_data.get("EV1_TEAM_ID")
     while team_number is None:
         await asyncio.sleep(1)
+
     eva_url = f"http://{tss_ip}/json_data/teams/{team_number}/EVA.json"
     telemetry_url = f"http://{tss_ip}/json_data/teams/{team_number}/TELEMETRY.json"
+    dcu_url = f"http://{tss_ip}/json_data/DCU.json"
+    uia_url = f"http://{tss_ip}/json_data/UIA.json"
+
     while True:
         try:
+            # Fetch EVA and telemetry data
             eva_data = await fetch_json(eva_url)
             telemetry_data = await fetch_json(telemetry_url)
             if eva_data and telemetry_data:
@@ -94,10 +109,33 @@ async def periodic_fetch_and_store():
                 }
                 with open(DATA_FILE, 'w') as f:
                     json.dump(combined_data, f)
-        except Exception as e:
-            pass
-        await asyncio.sleep(1)
 
+            # Fetch DCU and UIA data
+            dcu_data = await fetch_json(dcu_url)
+            uia_data = await fetch_json(uia_url)
+            if dcu_data and uia_data:
+                combined_dcu_uia_data = {
+                    "timestamp": datetime.now().isoformat(),
+                    "dcu": dcu_data["dcu"],
+                    "uia": uia_data["uia"]
+                }
+                with open(DCU_UIA_FILE, 'w') as f:
+                    json.dump(combined_dcu_uia_data, f)
+
+        except Exception as e:
+            print(f"Error fetching or saving data: {e}")
+
+        await asyncio.sleep(1)  # Adjust the sleep interval as needed
+
+@app.get("/dcu_uia")
+async def get_dcu_uia():
+    if os.path.exists(DCU_UIA_FILE):
+        with open(DCU_UIA_FILE, 'r') as f:
+            data = json.load(f)
+        return data
+    else:
+        raise HTTPException(status_code=404, detail="DCUUIA.json not found")
+    
 def utm_to_latlon(easting, northing, zone_number=15, zone_letter='R'):
     return utm.to_latlon(easting, northing, zone_number, zone_letter)
 

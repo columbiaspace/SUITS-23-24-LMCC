@@ -188,6 +188,8 @@
 }
 
 .modal-content {
+  align-items: center;
+  justify-content: center;
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;

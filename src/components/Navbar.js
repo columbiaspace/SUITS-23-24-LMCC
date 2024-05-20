@@ -23,9 +23,9 @@ const Navbar = () => {
                 <Link className="NavLink" to="/Equipment" activeStyle={{ color: '#69b3e7' }}>
                     Equipment
                 </Link>
-                <Link className="NavLink" to="/Rocks" activeStyle={{ color: '#69b3e7' }}>
+                {/* <Link className="NavLink" to="/Rocks" activeStyle={{ color: '#69b3e7' }}>
                     Rocks
-                </Link>
+                </Link> */}
                 <Link className="NavLink" to="/Rover" activeStyle={{ color: '#69b3e7' }}>
                     Rover
                 </Link>

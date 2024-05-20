@@ -9,6 +9,7 @@ import MapboxComponent from '../../components/Map.js'; // Ensure this path is co
 import Modal from './Modal'; 
 import MapModal from './MapModal';
 import TopBar from './Topbar';
+import DCUUIA from './DCUUIA'; // Import the new component
 
 function Constant() {
   const [telemetryData, setTelemetryData] = useState(null);
@@ -127,7 +128,7 @@ function Constant() {
         <div className="bottom-half">
           <div id="EV"><EVData evNumber={selectedEV} /></div>
           <div id="ConstantMap"><MapboxComponent zoom={18} /></div>
-          <div id="UIADCU">UIA DCU DATA</div>
+          <div id="UIADCU"><DCUUIA /></div> {/* Include the new component */}
         </div>
         <Modal
           isVisible={isAlertModalVisible}
