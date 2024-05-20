@@ -55,17 +55,12 @@ function Constant() {
   const showMapModal = () => setMapModalVisible(true);
   const hideMapModal = () => setMapModalVisible(false);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const start_id = event.target.start_id.value;
-    const end_id = event.target.end_id.value;
-
+  const handleSubmit = (start_id, end_id) => {
     const data = {
       start_id: parseInt(start_id, 10),
       end_id: parseInt(end_id, 10)
     };
-
+  
     fetch('http://localhost:8000/get_shortest_path', {
       method: 'POST',
       headers: {
@@ -83,9 +78,10 @@ function Constant() {
         console.error('Error:', error);
         alert('Failed to submit data.');
       });
-
-    hideAlertModal();
+  
+    hideMapModal();
   };
+  
 
   const handleToggleEV = () => {
     const newEV = selectedEV === 1 ? 2 : 1;

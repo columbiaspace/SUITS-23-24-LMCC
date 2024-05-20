@@ -1,4 +1,3 @@
-from types import NoneType
 import heapq
 import utm
 import json
@@ -38,19 +37,19 @@ def define_areas(grid, areas, weight):
             for j in range(start_y, end_y + 1):
                 grid[i][j] = weight
 
-grass_areas = [
+# Increase grass weight more
+define_areas(grid, [
     ('AA0', 'U16'), ('U0', 'T16'), ('T0', 'S13'), ('S0', 'R11'), ('R0', 'Q9'), ('Q0', 'P8'),
     ('O0', 'O7'), ('N0', 'M7'), ('M0', 'I3'), ('I0', 'G2'), ('G0', 'F2'), ('F0', 'A1'),
     ('C1', 'A5'), ('A5', 'A14'), ('AA16', 'AA28'), ('Z23', 'X28'), ('H15', 'D22'),
     ('D18', 'A22'), ('J19', 'H28'), ('L20', 'K24'), ('H25', 'A28'), ('I18', 'H18')
-]
-define_areas(grid, grass_areas, 3)
+], 5)
 
-mound_areas = [
+# Avoid mounds
+define_areas(grid, [
     ('M9', 'L17'), ('Q9', 'M18'), ('P8', 'M9'), ('R10', 'Q19'),
     ('S12', 'R19'), ('T13', 'S19')
-]
-define_areas(grid, mound_areas, 0)
+], 0)
 
 # Graph setup
 graph = {}
@@ -68,7 +67,7 @@ def initialize_graph():
         for col in range(grid_width):
             coord = index_to_letter(row) + str(col)
             distances[coord] = float('inf')
-            predecessors[coord] = None  # Initialize predecessor to None
+            predecessors[coord] = None
 
             neighbors = {}
             if row > 0:
@@ -80,15 +79,20 @@ def initialize_graph():
             if col < grid_width - 1:
                 neighbors[index_to_letter(row) + str(col + 1)] = grid[row][col]
 
-            # Add diagonal neighbors with a length of sqrt(2)
-            if row > 0 and col > 0:
-                neighbors[index_to_letter(row - 1) + str(col - 1)] = grid[row][col] * math.sqrt(2)
-            if row > 0 and col < grid_width - 1:
-                neighbors[index_to_letter(row - 1) + str(col + 1)] = grid[row][col] * math.sqrt(2)
-            if row < grid_height - 1 and col > 0:
-                neighbors[index_to_letter(row + 1) + str(col - 1)] = grid[row][col] * math.sqrt(2)
-            if row < grid_height - 1 and col < grid_width - 1:
-                neighbors[index_to_letter(row + 1) + str(col + 1)] = grid[row][col] * math.sqrt(2)
+            # Add more direct diagonals in the east/west direction
+            diagonals = [
+                (row - 1, col - 1), (row - 1, col + 1),
+                (row + 1, col - 1), (row + 1, col + 1),
+                (row - 1, col - 2), (row - 1, col + 2),
+                (row + 1, col - 2), (row + 1, col + 2),
+                (row - 2, col - 1), (row - 2, col + 1),
+                (row + 2, col - 1), (row + 2, col + 1),
+                (row - 2, col), (row + 2, col)
+            ]
+            for r, c in diagonals:
+                if 0 <= r < grid_height and 0 <= c < grid_width and grid[row][col] > 0 and grid[r][c] > 0:
+                    distance = math.sqrt((r - row) ** 2 + (c - col) ** 2)
+                    neighbors[index_to_letter(r) + str(c)] = grid[row][col] * distance
 
             graph[coord] = neighbors
 
@@ -96,6 +100,11 @@ initialize_graph()
 
 # Dijkstra's algorithm
 def dijkstra(graph, startLat, startLong, endLat, endLong):
+    # Reset distances and predecessors
+    for key in distances.keys():
+        distances[key] = float('inf')
+        predecessors[key] = None
+
     Start_east, Start_north, _, _ = latlon_to_utm(startLat, startLong)
     start = indices_to_grid_coord(Start_east, Start_north)
 
@@ -105,18 +114,18 @@ def dijkstra(graph, startLat, startLong, endLat, endLong):
     pq = [(0, start)]
     visited = set()
     distances[start] = 0
-
+    
     while pq:
         dist, node = heapq.heappop(pq)
-
+        
         if node == end:
             break 
-
+        
         if node in visited:
             continue
-
+        
         visited.add(node)
-
+        
         for neighbor, weight in graph[node].items():
             if distances[node] + weight < distances[neighbor]:
                 distances[neighbor] = distances[node] + weight
@@ -133,11 +142,11 @@ def reconstruct_path(startLat, startLong, endLat, endLong):
     path = []
     node = end
 
-    coord_path = []
     while node is not None:
         path.append(node)
         node = predecessors[node]
 
+    coord_path = []
     for item in path[::-1]:
         east, north = grid_coord_to_indices(item)
         coord_path.append(utm_to_latlon(east, north))
@@ -177,7 +186,7 @@ def indices_to_grid_coord(easting, northing):
             return "AA"
         else:
             return chr(ord('A') + 26 - index - 1)
-
+    
     width_per_box = 100 / 28
     height_per_box = 108 / 26
 
@@ -199,6 +208,7 @@ def get_shortest_path_geojson(start_lat, start_long, end_lat, end_long):
 
 def convert_to_geojson_feature_collection(coordinates):
     smooth_path = smooth_coordinates(coordinates)
+    reduced_path = reduce_coordinates(smooth_path)
     geojson_feature_collection = {
         "type": "FeatureCollection",
         "features": [
@@ -207,7 +217,7 @@ def convert_to_geojson_feature_collection(coordinates):
                 "geometry": {
                     "type": "LineString",
                     "coordinates": [
-                        [longitude, latitude] for latitude, longitude in smooth_path
+                        [longitude, latitude] for latitude, longitude in reduced_path
                     ]
                 },
                 "properties": {
@@ -225,11 +235,28 @@ def smooth_coordinates(coordinates):
     latitudes = [coord[0] for coord in coordinates]
     longitudes = [coord[1] for coord in coordinates]
 
+    # Create cubic splines for latitude and longitude
     cs_lat = CubicSpline(range(len(latitudes)), latitudes)
     cs_lon = CubicSpline(range(len(longitudes)), longitudes)
 
-    xs = np.linspace(0, len(latitudes) - 1, len(latitudes) * 10)
+    # Generate a denser set of points for smoothing
+    xs = np.linspace(0, len(latitudes) - 1, len(latitudes) * 10)  # Adjust factor as needed for smoothing
     smoothed_lats = cs_lat(xs)
     smoothed_lons = cs_lon(xs)
 
-    return list(zip(smoothed_lats, smoothed_lons))
+    # Downsample the smoothed points to the original number of points
+    step = len(xs) // len(latitudes)
+    smoothed_coordinates = [(smoothed_lats[i], smoothed_lons[i]) for i in range(0, len(xs), step)]
+
+    return smoothed_coordinates
+
+def reduce_coordinates(coordinates):
+    if len(coordinates) < 3:
+        return coordinates  # Not enough points to reduce
+
+    # Select every third coordinate, but make sure to include the first and last
+    reduced_path = coordinates[::3]
+    if reduced_path[-1] != coordinates[-1]:
+        reduced_path.append(coordinates[-1])
+    return reduced_path
+

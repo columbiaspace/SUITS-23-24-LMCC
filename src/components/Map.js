@@ -112,7 +112,7 @@ const MapboxComponent = () => {
         };
 
         fetchGeoJSON();
-        const intervalId = setInterval(fetchGeoJSON, 3000);
+        const intervalId = setInterval(fetchGeoJSON, 1000);
         return () => clearInterval(intervalId);
       });
 

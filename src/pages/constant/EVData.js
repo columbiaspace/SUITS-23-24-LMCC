@@ -18,12 +18,12 @@ const EVData = ({ evNumber }) => {
     { key: 'oxy_pri_pressure', label: 'Oxygen Primary Pressure', min: 600, max: 3000 },
     { key: 'oxy_sec_pressure', label: 'Oxygen Secondary Pressure', min: 600, max: 3000 },
     { key: 'oxy_time_left', label: 'Oxygen Time Left', min: 3600, max: 21600 },
-    { key: 'coolant_storage', label: 'Coolant Storage', min: 80, max: 100 },
+    { key: 'coolant_ml', label: 'Coolant Storage', min: 80, max: 100 }, // Updated
     { key: 'heart_rate', label: 'Heart Rate', min: 50, max: 160 },
     { key: 'oxy_consumption', label: 'Oxygen Consumption', min: 0.05, max: 0.15 },
     { key: 'co2_production', label: 'CO2 Production', min: 0.05, max: 0.15 },
     { key: 'suit_pressure_oxy', label: 'Suit Pressure O2', min: 3.5, max: 4.1 },
-    { key: 'suit_pressure_co2', label: 'Suit Pressure CO2', min: 0.0, max: 0.1 },
+    { key: 'suit_pressure_co2', label: 'Suit Pressure CO2', min: 0.0, max: 0.1 }, // Key to check for alternate naming
     { key: 'suit_pressure_other', label: 'Suit Pressure Other', min: 0.0, max: 0.5 },
     { key: 'suit_pressure_total', label: 'Suit Pressure Total', min: 3.5, max: 4.5 },
     { key: 'fan_pri_rpm', label: 'Fan Primary RPM', min: 20000, max: 30000 },

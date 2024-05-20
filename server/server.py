@@ -1,12 +1,13 @@
-from fastapi import FastAPI, HTTPException, Request
-import httpx
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-import asyncio
 import json
 import os
-from server.mapping import *
 from datetime import datetime
+import asyncio
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+import httpx
+from pydantic import BaseModel
+
+from server.mapping import *
 from server.initdb import *
 
 app = FastAPI()
@@ -33,13 +34,16 @@ ALERTS_FILE = './server/json_databases/alerts.json'
 MESSAGES_FILE = './server/json_databases/messages.json'
 GOLDEN_ER_FILE = './server/json_databases/golden_er_procedure.json'
 
-# TSS Connection
+# Initialize variables for configuration data
+tss_ip = 'localhost:14141'
+team_number = None
+
+# Load configuration from file
 if os.path.exists(CONFIG_FILE):
     with open(CONFIG_FILE, 'r') as f:
         config_data = json.load(f)
-        tss_ip = config_data.get("TSS_IP", 'localhost:14141')
-else:
-    tss_ip = 'localhost:14141'
+        tss_ip = config_data.get("TSS_IP", tss_ip)
+        team_number = config_data.get("EV1_TEAM_ID")
 
 # Configure CORS
 app.add_middleware(
@@ -50,25 +54,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Get Json
+# Get JSON
 async def fetch_json(url: str):
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
         if response.status_code != 200:
-            # logger.error(f"Failed to fetch data from {url}, status code: {response.status_code}")
             return None
         return response.json()
 
 @app.on_event("startup")
 async def startup_event():
     initialize_database_files()
-
     task = asyncio.create_task(periodic_fetch_and_store())
     await asyncio.sleep(1)
 
 async def periodic_fetch_and_store():
-    eva_url = f"http://{tss_ip}/json_data/teams/0/EVA.json"
-    telemetry_url = f"http://{tss_ip}/json_data/teams/0/TELEMETRY.json"
+    global team_number
+    team_number = config_data.get("EV1_TEAM_ID")
+    while team_number is None:
+        await asyncio.sleep(1)
+    eva_url = f"http://{tss_ip}/json_data/teams/{team_number}/EVA.json"
+    telemetry_url = f"http://{tss_ip}/json_data/teams/{team_number}/TELEMETRY.json"
     while True:
         try:
             eva_data = await fetch_json(eva_url)
@@ -81,18 +87,15 @@ async def periodic_fetch_and_store():
                 }
                 with open(DATA_FILE, 'w') as f:
                     json.dump(combined_data, f)
-            else:
-                pass
-                # logger.warning("One or both data sets were not fetched successfully.")
         except Exception as e:
             pass
-            # logger.error(f"An error occurred during periodic fetch: {e}")
         await asyncio.sleep(1)
 
 # Save new IP or Key
 @app.put("/update_config")
 async def update_config(request: Request):
     new_config = await request.json()
+    global tss_ip, team_number
     with open(CONFIG_FILE, 'r') as f:
         config_data = json.load(f)
     
@@ -101,6 +104,9 @@ async def update_config(request: Request):
     with open(CONFIG_FILE, 'w') as f:
         json.dump(config_data, f)
     
+    tss_ip = config_data.get("TSS_IP", tss_ip)
+    team_number = config_data.get("TEAM_NUMBER", team_number)
+
     return {"message": "Config updated successfully"}
 
 # Return keys and IPs
@@ -175,7 +181,6 @@ async def get_geojson():
 
     return geojson_data
 
-
 class GeoJSONFeature(BaseModel):
     type: str
     properties: dict
@@ -237,11 +242,10 @@ async def get_procedure(id: int):
         with open(GOLDEN_ER_FILE, 'w') as file:
             json.dump(procedure, file, indent=4)
     except IOError:
-        raise HTTPException(status_code=500, detail="Failed to write to Goldern ER file.")
+        raise HTTPException(status_code=500, detail="Failed to write to Golden ER file.")
     
     return {"message": "Procedure exported successfully.", "procedure": procedure}
 
-    
 with open(INGRESS_EGRESS_FILE, 'r') as f:
     procedures = json.load(f)
 
@@ -261,14 +265,10 @@ async def get_equipment_procedures():
         procedures = data.get("procedures", [])
         return procedures
     except FileNotFoundError as e:
-        
-        # logger.error(str(e))
         raise HTTPException(status_code=404, detail=str(e))
     except json.JSONDecodeError as e:
-        # logger.error(f"JSON decode error: {str(e)}")
         raise HTTPException(status_code=500, detail="Error decoding JSON data")
     except Exception as e:
-        # logger.error(f"An unexpected error occurred: {str(e)}")
         raise HTTPException(status_code=500, detail="An unexpected error occurred")
 
 class Step(BaseModel):
@@ -348,18 +348,13 @@ class PointIDRequest(BaseModel):
     end_id: int
 
 def find_point_by_id(file_path, point_id):
-    print(f"Searching in file: {file_path} for point ID: {point_id}")
     if os.path.exists(file_path):
         with open(file_path, "r") as file:
             file_data = json.load(file)
             for feature in file_data.get("features", []):
-                print(f"Checking feature: {feature}")
                 if feature.get("id") == point_id:
                     if feature["geometry"]["type"] == "Point":
-                        print(f"Found feature: {feature}")
                         return feature
-                    else:
-                        print(f"Feature found, but geometry is not 'Point': {feature['geometry']['type']}")
     return None
 
 @app.post("/get_shortest_path")
@@ -405,7 +400,6 @@ class RockData(BaseModel):
 
 @app.get("/get_rover_spec_scan", response_model=RockData)
 async def get_rover_spec_scan():
-    # Fetch the QR ID from the rover data
     print(tss_ip)
     rover_url = f"http://{tss_ip}/json_data/ROVER.json"
     rover_data = await fetch_json(rover_url)

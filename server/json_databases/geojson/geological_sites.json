@@ -4,7 +4,7 @@
       {
         "type": "Feature",
         "properties": {
-          "Name": "C",
+          "Name": "Geolocigal Site C",
           "stroke": "#000000"
         },
         "geometry": {
@@ -19,7 +19,7 @@
       {
         "type": "Feature",
         "properties": {
-          "Name": "A"
+          "Name": "Geolocigal Site A"
         },
         "geometry": {
           "coordinates": [
@@ -33,7 +33,7 @@
       {
         "type": "Feature",
         "properties": {
-          "Name": "B"
+          "Name": "Geolocigal Site B"
         },
         "geometry": {
           "coordinates": [
@@ -47,7 +47,7 @@
       {
         "type": "Feature",
         "properties": {
-          "Name": "D"
+          "Name": "Geolocigal Site D"
         },
         "geometry": {
           "coordinates": [
@@ -61,7 +61,7 @@
       {
         "type": "Feature",
         "properties": {
-          "Name": "E"
+          "Name": "Geolocigal Site E"
         },
         "geometry": {
           "coordinates": [
@@ -75,7 +75,7 @@
       {
         "type": "Feature",
         "properties": {
-          "Name": "F"
+          "Name": "Geolocigal Site F"
         },
         "geometry": {
           "coordinates": [
