@@ -1,4 +1,5 @@
 import json
+import random
 import os
 from datetime import datetime
 import asyncio
@@ -6,6 +7,10 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 import httpx
 from pydantic import BaseModel
+import requests
+import utm
+from geojson import Feature, FeatureCollection, dump
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from server.mapping import *
 from server.initdb import *
@@ -21,6 +26,7 @@ DEFAULT_PINS_FILE = './server/json_databases/geojson/default_pins.json'
 GEOLOGICAL_SITES_FILE = './server/json_databases/geojson/geological_sites.json'
 USER_PINS_FILE = './server/json_databases/geojson/user_pins.json'
 NAV_PATH = './server/json_databases/geojson/nav_path.json'
+ROVER_LOCATION_FILE = './server/json_databases/geojson/ROVER_LOCATION.geojson'
 
 # Keys and IP Addresses
 CONFIG_FILE = './server/json_databases/config_keys.json'
@@ -67,6 +73,9 @@ async def startup_event():
     initialize_database_files()
     task = asyncio.create_task(periodic_fetch_and_store())
     await asyncio.sleep(1)
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(fetch_and_update_rover_position, 'interval', seconds=3)
+    scheduler.start()
 
 async def periodic_fetch_and_store():
     global team_number
@@ -91,6 +100,56 @@ async def periodic_fetch_and_store():
             pass
         await asyncio.sleep(1)
 
+# Function to convert UTM to latitude and longitude
+def utm_to_latlon(easting, northing, zone_number=15, zone_letter='R'):
+    lat, lon = utm.to_latlon(easting, northing, zone_number, zone_letter)
+    return lat, lon
+
+# Function to fetch the rover's position and update the GeoJSON file
+def fetch_and_update_rover_position():
+    try:
+        rover_url = f"http://{tss_ip}/json_data/ROVER.json"
+        response = requests.get(rover_url)
+        data = response.json()
+        
+        posx = data["rover"]["posx"]
+        posy = data["rover"]["posy"]
+
+        # Spoof data if both posx and posy are 0
+        if posx == 0 and posy == 0:
+            latitude = 29.564802807347508
+            longitude = -95.08160677610833
+
+            utm_coords = utm.from_latlon(latitude, longitude)
+            posx = utm_coords[0] + random.uniform(-30, 30)
+            posy = utm_coords[1] + random.uniform(-30, 30)
+            print("Spoofed position data for rover")
+
+        lat, lon = utm_to_latlon(posx, posy, utm_coords[2], utm_coords[3])
+
+        feature = {
+            "type": "Feature",
+            "properties": {
+                "Name": "Rover"
+            },
+            "geometry": {
+                "coordinates": [lon, lat],
+                "type": "Point"
+            },
+            "id": 100
+        }
+
+        feature_collection = FeatureCollection([feature])
+
+        with open(ROVER_LOCATION_FILE, "w") as f:
+            dump(feature_collection, f)
+
+        print(f"Updated ROVER_LOCATION.geojson with new position: ({lon}, {lat})")
+
+    except Exception as e:
+        print(f"Error fetching or updating rover position: {e}")
+        
+        
 # Save new IP or Key
 @app.put("/update_config")
 async def update_config(request: Request):
@@ -170,7 +229,7 @@ class Marker(BaseModel):
 async def get_geojson():
     geojson_data = {"type": "FeatureCollection", "features": []}
 
-    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE, NAV_PATH]
+    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE, NAV_PATH, ROVER_LOCATION_FILE]
 
     for file_path in geojson_files:
         if os.path.exists(file_path):
@@ -359,7 +418,7 @@ def find_point_by_id(file_path, point_id):
 
 @app.post("/get_shortest_path")
 async def get_shortest_path(point_request: PointIDRequest):
-    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE]
+    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE, ROVER_LOCATION_FILE]
     
     start_feature = None
     end_feature = None
