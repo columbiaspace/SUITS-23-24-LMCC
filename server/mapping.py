@@ -105,18 +105,18 @@ def dijkstra(graph, startLat, startLong, endLat, endLong):
     pq = [(0, start)]
     visited = set()
     distances[start] = 0
-    
+
     while pq:
         dist, node = heapq.heappop(pq)
-        
+
         if node == end:
             break 
-        
+
         if node in visited:
             continue
-        
+
         visited.add(node)
-        
+
         for neighbor, weight in graph[node].items():
             if distances[node] + weight < distances[neighbor]:
                 distances[neighbor] = distances[node] + weight
@@ -177,7 +177,7 @@ def indices_to_grid_coord(easting, northing):
             return "AA"
         else:
             return chr(ord('A') + 26 - index - 1)
-    
+
     width_per_box = 100 / 28
     height_per_box = 108 / 26
 
@@ -221,15 +221,15 @@ def convert_to_geojson_feature_collection(coordinates):
 def smooth_coordinates(coordinates):
     if len(coordinates) < 3:
         return coordinates  # Not enough points to smooth
-    
+
     latitudes = [coord[0] for coord in coordinates]
     longitudes = [coord[1] for coord in coordinates]
-    
+
     cs_lat = CubicSpline(range(len(latitudes)), latitudes)
     cs_lon = CubicSpline(range(len(longitudes)), longitudes)
-    
+
     xs = np.linspace(0, len(latitudes) - 1, len(latitudes) * 10)
     smoothed_lats = cs_lat(xs)
     smoothed_lons = cs_lon(xs)
-    
+
     return list(zip(smoothed_lats, smoothed_lons))

@@ -130,13 +130,10 @@ const MapboxComponent = () => {
       type: "Feature",
       properties: {
         Name: name,
-        "marker-color": "#f4aeae",
-        "marker-size": "medium",
-        "marker-symbol": "circle"
       },
       geometry: {
-        type: "Point",
-        coordinates
+        coordinates,
+        type: "Point"
       },
       id: parseInt(id, 10)
     };
