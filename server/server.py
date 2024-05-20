@@ -26,7 +26,7 @@ DEFAULT_PINS_FILE = './server/json_databases/geojson/default_pins.json'
 GEOLOGICAL_SITES_FILE = './server/json_databases/geojson/geological_sites.json'
 USER_PINS_FILE = './server/json_databases/geojson/user_pins.json'
 NAV_PATH = './server/json_databases/geojson/nav_path.json'
-ROVER_LOCATION_FILE = './server/json_databases/geojson/ROVER_LOCATION.geojson'
+CURRENT_LOCATIONS_FILE = './server/json_databases/geojson/CURRENT_LOCATION.json'
 
 # Keys and IP Addresses
 CONFIG_FILE = './server/json_databases/config_keys.json'
@@ -59,8 +59,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Get JSON
 async def fetch_json(url: str):
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
@@ -70,11 +68,10 @@ async def fetch_json(url: str):
 
 @app.on_event("startup")
 async def startup_event():
-    initialize_database_files()
     task = asyncio.create_task(periodic_fetch_and_store())
     await asyncio.sleep(1)
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(fetch_and_update_rover_position, 'interval', seconds=3)
+    scheduler.add_job(fetch_and_update_positions, 'interval', seconds=3)
     scheduler.start()
 
 async def periodic_fetch_and_store():
@@ -100,54 +97,67 @@ async def periodic_fetch_and_store():
             pass
         await asyncio.sleep(1)
 
-# Function to convert UTM to latitude and longitude
 def utm_to_latlon(easting, northing, zone_number=15, zone_letter='R'):
-    lat, lon = utm.to_latlon(easting, northing, zone_number, zone_letter)
-    return lat, lon
+    return utm.to_latlon(easting, northing, zone_number, zone_letter)
 
-# Function to fetch the rover's position and update the GeoJSON file
-def fetch_and_update_rover_position():
+def fetch_and_update_positions():
     try:
+        # URLs for the rover and IMU data
         rover_url = f"http://{tss_ip}/json_data/ROVER.json"
-        response = requests.get(rover_url)
-        data = response.json()
+        imu_url = f"http://{tss_ip}/json_data/IMU.json"
+
+        # Fetching data
+        rover_response = requests.get(rover_url)
+        rover_data = rover_response.json()
         
-        posx = data["rover"]["posx"]
-        posy = data["rover"]["posy"]
+        imu_response = requests.get(imu_url)
+        imu_data = imu_response.json()
 
-        # Spoof data if both posx and posy are 0
-        if posx == 0 and posy == 0:
-            latitude = 29.564802807347508
-            longitude = -95.08160677610833
-
-            utm_coords = utm.from_latlon(latitude, longitude)
-            posx = utm_coords[0] + random.uniform(-30, 30)
-            posy = utm_coords[1] + random.uniform(-30, 30)
-            print("Spoofed position data for rover")
-
-        lat, lon = utm_to_latlon(posx, posy, utm_coords[2], utm_coords[3])
-
-        feature = {
-            "type": "Feature",
-            "properties": {
-                "Name": "Rover"
-            },
-            "geometry": {
-                "coordinates": [lon, lat],
-                "type": "Point"
-            },
-            "id": 100
+        # Getting positions for rover, eva1, and eva2
+        positions = {
+            "rover": rover_data["rover"],
+            "eva1": imu_data["imu"]["eva1"],
+            "eva2": imu_data["imu"]["eva2"]
         }
 
-        feature_collection = FeatureCollection([feature])
+        features = []
 
-        with open(ROVER_LOCATION_FILE, "w") as f:
+        # Spoof and convert positions if they are zero
+        for idx, (name, pos) in enumerate(positions.items()):
+            posx, posy = pos["posx"], pos["posy"]
+
+            if posx == 0 and posy == 0:
+                latitude = 29.564802807347508
+                longitude = -95.08160677610833
+                utm_coords = utm.from_latlon(latitude, longitude)
+                # posx = utm_coords[0] + random.uniform(-30, 30)
+                # posy = utm_coords[1] + random.uniform(-30, 30)
+                # print(f"Spoofed position data for {name}")
+
+            lat, lon = utm_to_latlon(posx, posy, utm_coords[2], utm_coords[3])
+
+            feature = {
+                "type": "Feature",
+                "properties": {
+                    "Name": name.capitalize()
+                },
+                "geometry": {
+                    "coordinates": [lon, lat],
+                    "type": "Point"
+                },
+                "id": 100 + idx
+            }
+            features.append(feature)
+
+        feature_collection = FeatureCollection(features)
+
+        with open(CURRENT_LOCATIONS_FILE, "w") as f:
             dump(feature_collection, f)
 
-        print(f"Updated ROVER_LOCATION.geojson with new position: ({lon}, {lat})")
+        print(f"Updated CURRENT_LOCATIONS.geojson with new positions for rover, eva1, and eva2")
 
     except Exception as e:
-        print(f"Error fetching or updating rover position: {e}")
+        print(f"Error fetching or updating positions: {e}")
         
         
 # Save new IP or Key
@@ -229,7 +239,7 @@ class Marker(BaseModel):
 async def get_geojson():
     geojson_data = {"type": "FeatureCollection", "features": []}
 
-    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE, NAV_PATH, ROVER_LOCATION_FILE]
+    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE, NAV_PATH, CURRENT_LOCATIONS_FILE]
 
     for file_path in geojson_files:
         if os.path.exists(file_path):

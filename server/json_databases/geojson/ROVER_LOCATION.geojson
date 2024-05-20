@@ -1,1 +1,1 @@
-{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"Name": "Rover"}, "geometry": {"coordinates": [-95.08188632485191, 29.56471360941181], "type": "Point"}, "id": 100}]}
+{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"Name": "Rover"}, "geometry": {"coordinates": [-95.08184061347882, 29.564838153239624], "type": "Point"}, "id": 100}]}
