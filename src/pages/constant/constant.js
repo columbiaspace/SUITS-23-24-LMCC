@@ -126,7 +126,7 @@ function Constant() {
         </div>
         <div className="bottom-half">
           <div id="EV"><EVData evNumber={selectedEV} /></div>
-          <div id="ConstantMap"><MapboxComponent /></div>
+          <div id="ConstantMap"><MapboxComponent zoom={18} /></div>
           <div id="UIADCU">UIA DCU DATA</div>
         </div>
         <Modal

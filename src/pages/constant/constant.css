@@ -21,6 +21,7 @@
 }
 
 .centerButton {
+  text-align: center;
   width: 60%;
   height: 20%;
   background-color: lightblue;
