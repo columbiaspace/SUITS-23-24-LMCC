@@ -68,6 +68,7 @@ async def fetch_json(url: str):
 
 @app.on_event("startup")
 async def startup_event():
+    initialize_database_files()
     task = asyncio.create_task(periodic_fetch_and_store())
     await asyncio.sleep(1)
     scheduler = AsyncIOScheduler()
