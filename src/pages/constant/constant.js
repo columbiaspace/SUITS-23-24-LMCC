@@ -1,17 +1,52 @@
-import React, { useState } from 'react';
-import { GlobalProvider } from '../../components/GlobalContext'; // Ensure this path is correct
+import React, { useState, useEffect } from 'react';
+import { GlobalProvider } from '../../components/GlobalContext'; 
 import "./constant.css";
 import StreamComponent from "../../components/StreamComponent.js";
 import RoverCam from "../../components/RoverCamera.js";
 import "../../pages-style/page.css";
 import EVData from './EVData.js';
-import Map from '../../components/Map.js';
-import Modal from './Modal'; // Import the Modal component
-import MapModal from './MapModal'; // Import the MapModal component
+import MapboxComponent from '../../components/Map.js'; // Ensure this path is correct
+import Modal from './Modal'; 
+import MapModal from './MapModal';
+import TopBar from './Topbar';
 
 function Constant() {
+  const [telemetryData, setTelemetryData] = useState(null);
+  const [hasError, setHasError] = useState(false);
   const [isAlertModalVisible, setAlertModalVisible] = useState(false);
   const [isMapModalVisible, setMapModalVisible] = useState(false);
+
+  useEffect(() => {
+    const fetchTelemetryData = () => {
+      fetch('http://localhost:8000/get_telemetry_data')
+        .then(response => response.json())
+        .then(data => {
+          setTelemetryData(data);
+          setHasError(false); // Reset error state if data fetch is successful
+        })
+        .catch(error => {
+          console.error('Error fetching telemetry data:', error);
+          setHasError(true); // Set error state if data fetch fails
+        });
+    };
+
+    fetchTelemetryData();
+    const interval = setInterval(fetchTelemetryData, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getStatusClass = (started, completed) => {
+    if (completed) return 'status-indicator green';
+    if (started) return 'status-indicator yellow';
+    return 'status-indicator red';
+  };
+
+  const formatTime = (timeInSeconds) => {
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = timeInSeconds % 60;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
 
   const showAlertModal = () => setAlertModalVisible(true);
   const hideAlertModal = () => setAlertModalVisible(false);
@@ -54,15 +89,13 @@ function Constant() {
   return (
     <GlobalProvider>
       <div className="pagecontainer" id="constantpage">
-        <div id="topbar">
-          <div className="status-indicator EVA">EVA</div>
-          <div className="status-indicator UIA">UIA</div>
-          <div className="status-indicator SPEC">SPEC</div>
-          <div className="status-indicator ROVER">ROVER</div>
-          <div className="status-indicator DCU">DCU</div>
-
-        </div>
-
+        {telemetryData && !hasError && (
+          <TopBar 
+            telemetryData={telemetryData}
+            getStatusClass={getStatusClass}
+            formatTime={formatTime}
+          />
+        )}
         <div className="top-half">
           <div id="HMDStream"><StreamComponent /></div>
           <div id="centerbar">
@@ -73,7 +106,7 @@ function Constant() {
         </div>
         <div className="bottom-half">
           <div id="EV1"><EVData evNumber={1} /></div>
-          <div id="ConstantMap"><Map /></div>
+          <div id="ConstantMap"><MapboxComponent /></div>
           <div id="EV2"><EVData evNumber={2} /></div>
         </div>
         <Modal

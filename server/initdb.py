@@ -254,6 +254,12 @@ DEFAULT_ALERTS_DATA = {
     "alerts": []
 }
 
+DEFAULT_USER_PINS = {
+  "type": "FeatureCollection",
+  "features": [
+  ]
+}
+
 DEFAULT_MESSAGES_DATA = {
     "message": []
 }
@@ -281,6 +287,7 @@ def initialize_database_files():
     initialize_file(ALERTS_FILE, DEFAULT_ALERTS_DATA)
     initialize_file(MESSAGES_FILE, DEFAULT_MESSAGES_DATA)
     initialize_file(GOLDEN_ER_FILE, DEFAULT_GOLDEN_ER)
+    initialize_file(USER_PINS_FILE, DEFAULT_USER_PINS)
     initialize_file(NAV_PATH_FILE, DEFAULT_NAV_PATH)
 
 if __name__ == "__main__":

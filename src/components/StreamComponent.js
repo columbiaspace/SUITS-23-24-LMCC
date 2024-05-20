@@ -9,7 +9,7 @@ const StreamComponent = () => {
   const [HOLO_IP, setHOLO_IP] = useState(null); // Initialize HOLO_IP as null
 
   useEffect(() => {
-    // Fetch configuration data from localhost:8000/config
+    // Fetch configuration data from localhost:8000/get_config
     fetch('http://localhost:8000/get_config')
       .then(response => response.json())
       .then(data => {
@@ -22,9 +22,8 @@ const StreamComponent = () => {
   }, []);
 
   useEffect(() => {
-    if (videoRef.current) { // && HOLO_IP
-      // const streamUrl = `http://${HOLO_IP}/api/holographic/stream/live_high.mp4`;
-      const streamUrl = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+    if (videoRef.current && HOLO_IP) { // Check if HOLO_IP is available
+      const streamUrl = `http://${HOLO_IP}/api/holographic/stream/live_high.mp4`;
       videoRef.current.src = streamUrl;
       videoRef.current.load();
       videoRef.current.play().catch(error => {
@@ -34,7 +33,7 @@ const StreamComponent = () => {
     }
   }, [HOLO_IP]);
 
-  if (false) { //!isConnected
+  if (!isConnected) {
     return (
       <div>
         <h1>HoloLens Not Connected</h1>

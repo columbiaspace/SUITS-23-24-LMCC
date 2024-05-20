@@ -175,34 +175,35 @@ async def get_geojson():
 
     return geojson_data
 
-@app.post("/add_marker")
-async def add_marker(marker: Marker):
-    if not os.path.exists(BOUNDARY_LINES_FILE):
+
+class GeoJSONFeature(BaseModel):
+    type: str
+    properties: dict
+    geometry: dict
+    id: int
+
+@app.post("/add_feature")
+async def add_feature(feature: GeoJSONFeature):
+    if not os.path.exists(USER_PINS_FILE):
         data = {"type": "FeatureCollection", "features": []}
     else:
-        with open(BOUNDARY_LINES_FILE, "r") as file:
+        with open(USER_PINS_FILE, "r") as file:
             data = json.load(file)
     
-    new_feature = {
-        "type": "Feature",
-        "properties": {
-            "title": marker.title,
-            "description": marker.description,
-            "marker-color": "#FF0000",
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [marker.lng, marker.lat]
-        },
-        "id": len(data["features"])
-    }
+    # Check if an object with the same ID already exists
+    existing_feature_index = next((index for (index, d) in enumerate(data["features"]) if d["id"] == feature.id), None)
     
-    data["features"].append(new_feature)
+    if existing_feature_index is not None:
+        # Update the existing feature
+        data["features"][existing_feature_index] = feature.dict()
+    else:
+        # Append the new feature
+        data["features"].append(feature.dict())
     
-    with open(BOUNDARY_LINES_FILE, "w") as file:
+    with open(USER_PINS_FILE, "w") as file:
         json.dump(data, file)
     
-    return {"message": "Marker added successfully"}
+    return {"message": "Feature added/updated successfully"}
 
 # Get sent ER Procedure (Used by HMD)
 @app.get("/get_sent_procedure")

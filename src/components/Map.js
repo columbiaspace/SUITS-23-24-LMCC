@@ -1,10 +1,14 @@
+// MapboxComponent.js
 import React, { useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
 import "mapbox-gl/dist/mapbox-gl.css";
-import './map.css'; // Import the CSS file
+import './map.css';
+import AddPointModal from '../pages/constant/AddPointModal'; // Ensure this path is correct
 
 const MapboxComponent = () => {
   const [mapBoxAPIKey, setMapBoxAPIKey] = useState(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [clickCoordinates, setClickCoordinates] = useState(null);
 
   const fetchMapBoxAPIKey = async () => {
     try {
@@ -111,12 +115,61 @@ const MapboxComponent = () => {
         const intervalId = setInterval(fetchGeoJSON, 3000);
         return () => clearInterval(intervalId);
       });
+
+      newMap.on('click', (e) => {
+        setClickCoordinates([e.lngLat.lng, e.lngLat.lat]);
+        setModalVisible(true);
+      });
     }
   }, [mapBoxAPIKey]);
+
+  const hideModal = () => setModalVisible(false);
+
+  const handleAddPoint = async ({ name, id, coordinates }) => {
+    const newFeature = {
+      type: "Feature",
+      properties: {
+        Name: name,
+        "marker-color": "#f4aeae",
+        "marker-size": "medium",
+        "marker-symbol": "circle"
+      },
+      geometry: {
+        type: "Point",
+        coordinates
+      },
+      id: parseInt(id, 10)
+    };
+
+    try {
+      const response = await fetch('http://localhost:8000/add_feature', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newFeature)
+      });
+
+      if (response.ok) {
+        console.log('Point added successfully');
+      } else {
+        console.error('Failed to add point');
+      }
+    } catch (error) {
+      console.error('Error adding point:', error);
+    }
+  };
 
   return (
     <div className="map-container">
       <div id="map" className="map"></div>
+      <AddPointModal
+        isVisible={isModalVisible}
+        hideModal={hideModal}
+        coordinates={clickCoordinates}
+        onSubmit={handleAddPoint}
+      />
     </div>
   );
 };
