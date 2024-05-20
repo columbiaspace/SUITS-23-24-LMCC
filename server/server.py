@@ -11,9 +11,9 @@ from server.initdb import *
 
 app = FastAPI()
 
-#Data
+# Data
 DATA_FILE = './server/json_databases/tss_data.json'
-
+ROCK_LUT = './server/json_databases/ROCK_DATA_FINAL.json'
 # GEOJson Files for mapping
 BOUNDARY_LINES_FILE = './server/json_databases/geojson/boundary_lines.json'
 DEFAULT_PINS_FILE = './server/json_databases/geojson/default_pins.json'
@@ -21,14 +21,14 @@ GEOLOGICAL_SITES_FILE = './server/json_databases/geojson/geological_sites.json'
 USER_PINS_FILE = './server/json_databases/geojson/user_pins.json'
 NAV_PATH = './server/json_databases/geojson/nav_path.json'
 
-#Keys and IP Addresses
+# Keys and IP Addresses
 CONFIG_FILE = './server/json_databases/config_keys.json'
 
-#Procedures
+# Procedures
 INGRESS_EGRESS_FILE = './server/json_databases/ingress_egress_procedures.json'
 EQUIPMENT_REPAIR_FILE = './server/json_databases/equipment_repair.json'
 
-#COMMS
+# COMMS
 ALERTS_FILE = './server/json_databases/alerts.json'
 MESSAGES_FILE = './server/json_databases/messages.json'
 GOLDEN_ER_FILE = './server/json_databases/golden_er_procedure.json'
@@ -164,7 +164,7 @@ class Marker(BaseModel):
 async def get_geojson():
     geojson_data = {"type": "FeatureCollection", "features": []}
 
-    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE, NAV_PATH_FILE]
+    geojson_files = [BOUNDARY_LINES_FILE, DEFAULT_PINS_FILE, GEOLOGICAL_SITES_FILE, USER_PINS_FILE, NAV_PATH]
 
     for file_path in geojson_files:
         if os.path.exists(file_path):
@@ -396,3 +396,37 @@ async def get_shortest_path(point_request: PointIDRequest):
         return json.loads(geojson_result)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Define RockData model for response
+class RockData(BaseModel):
+    name: str
+    id: int
+    data: dict
+
+@app.get("/get_rover_spec_scan", response_model=RockData)
+async def get_rover_spec_scan():
+    # Fetch the QR ID from the rover data
+    print(tss_ip)
+    rover_url = f"http://{tss_ip}/json_data/ROVER.json"
+    rover_data = await fetch_json(rover_url)
+    if rover_data is None:
+        raise HTTPException(status_code=500, detail="Error fetching rover data")
+
+    qr_id = rover_data['rover']['qr_id']
+
+    # Fetch rock data from the ROCK_LUT
+    try:
+        with open(ROCK_LUT, 'r') as file:
+            rock_data = json.load(file)
+        rock = next((rock for rock in rock_data['ROCKS'] if rock['id'] == qr_id), None)
+        if rock is None:
+            raise HTTPException(status_code=404, detail="Rock not found")
+        return rock
+    except FileNotFoundError:
+        raise HTTPException(status_code=500, detail="Rock LUT file not found")
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Error decoding Rock LUT file")
+
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run(app, host='0.0.0.0', port=8000)

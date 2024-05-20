@@ -39,10 +39,11 @@ const StreamComponent = ({ evNumber }) => {
 
   if (!isConnected) {
     return (
-      <div>
+      <div className="stream-container">
         <h1>HoloLens Not Connected</h1>
         <p style={{ textAlign: 'center' }}>To see stream, input the HoloLens IP in the Setup page <Link to="/Setup">here</Link>.</p>
-        <img src={NoVid} alt="No Stream Icon" style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', marginTop: '10px', width: '200px', height: '200px' }}/>
+        <img src={NoVid} alt="No Stream Icon" style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', marginTop: '10px', width: '200px', height: '200px' }} />
+
       </div>
     );
   }
