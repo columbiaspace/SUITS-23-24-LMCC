@@ -6,6 +6,7 @@ import './rovercamera.css'; // Import the CSS file
 const RoverCamera = () => {
   const [isConnected, setIsConnected] = useState(true);
   const [streamUrl, setStreamUrl] = useState('');
+  const [isNativeFeed, setIsNativeFeed] = useState(true); // Track the current feed type
 
   useEffect(() => {
     // Fetch configuration data from localhost:8000/config
@@ -21,6 +22,16 @@ const RoverCamera = () => {
       });
   }, []);
 
+  const toggleFeed = () => {
+    // Toggle the stream URL between native_feed and thermal_feed
+    setStreamUrl((prevUrl) => 
+      prevUrl.includes('native_feed') 
+        ? prevUrl.replace('native_feed', 'thermal_feed') 
+        : prevUrl.replace('thermal_feed', 'native_feed')
+    );
+    setIsNativeFeed(!isNativeFeed); // Toggle the feed type state
+  };
+
   if (!isConnected) {
     return (
       <div>
@@ -32,8 +43,10 @@ const RoverCamera = () => {
   }
 
   return (
-    <div className="stream-container">
+    <div className="stream-container" onClick={toggleFeed}>
       <img src={streamUrl} alt="Rover Stream" className="stream-image" />
+      <p style={{ textAlign: 'center', marginTop: '10px' }}>
+      </p>
     </div>
   );
 };
