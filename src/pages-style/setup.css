@@ -20,6 +20,7 @@
 
 #setup {
   height: auto;
+  flex-direction: column;
   padding: 20px;
   background-color: var(--background-color);
   border-radius: var(--border-radius);
