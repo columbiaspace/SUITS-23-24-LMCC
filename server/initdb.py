@@ -245,9 +245,106 @@ DEFAULT_EQUIPMENT_PROCEDURES_DATA = {
           "description": "Ensure module installation is correctly performed; conduct systems check to verify functionality."
         }
       ]
+    },
+    {
+      "id": 5,
+      "title": "Cable Repair",
+      "steps": [
+        {
+          "step": "COMM Tower Screen 1",
+          "role": "EV1",
+          "description": "Select Gear icon"
+        },
+        {
+          "step": "COMM Tower Screen 2",
+          "role": "EV1",
+          "description": "Select Shutdown"
+        },
+        {
+          "step": "COMM Tower Screen 3",
+          "role": "EV1",
+          "description": "Verify shutdown complete and notify EV2 and LMCC1"
+        },
+        {
+          "step": "MMRTG 4",
+          "role": "EV2",
+          "description": "Move POWER – OFF, notify EV1 and LMCC1"
+        },
+        {
+          "step": "MMRTG 5",
+          "role": "EV2",
+          "description": "Navigate to Comm Tower to retrieve one end of power cable"
+        },
+        {
+          "step": "Tool box 6",
+          "role": "EV1",
+          "description": "Retrieve spare cable"
+        },
+        {
+          "step": "MMRTG 7",
+          "role": "EV2",
+          "description": "Take appropriate end of cable to MMRTG, notify EV1 and LMCC1 when at MMRTG"
+        },
+        {
+          "step": "Comm Tower 8",
+          "role": "EV1",
+          "description": "Disconnect damaged cable from Comm Tower, notify EV2 and LMCC1"
+        },
+        {
+          "step": "MMRTG 9",
+          "role": "EV2",
+          "description": "Disconnect damaged cable from MMRTG, notify EV1 and LMCC1"
+        },
+        {
+          "step": "Comm Tower 10",
+          "role": "EV1",
+          "description": "Connect new cable from Comm Tower, notify EV2 and LMCC1"
+        },
+        {
+          "step": "MMRTG 11",
+          "role": "EV2",
+          "description": "Connect new cable from MMRTG, notify EV1 and LMCC1"
+        },
+        {
+          "step": "MMRTG 12",
+          "role": "EV2",
+          "description": "Move POWER – ON, notify EV1 and LMCC1"
+        },
+        {
+          "step": "Comm Tower 13",
+          "role": "EV1",
+          "description": "POWER – ON, notify EV2 and LMCC1"
+        },
+        {
+          "step": "Comm Tower 14",
+          "role": "EV1",
+          "description": "When start up complete, notify EV2 and LMCC1"
+        },
+        {
+          "step": "Comm Tower Screen 15",
+          "role": "EV1",
+          "description": "Verify channel “B” is operational, notify EV2 and LMCC1"
+        },
+        {
+          "step": "ALL DCU+LMCC 16",
+          "role": "LMCC1",
+          "description": "On LMCC1 Go, switch to COM – B"
+        },
+        {
+          "step": "ALL DCU+LMCC 17",
+          "role": "All",
+          "description": "Perform comm check"
+        },
+        {
+          "step": "ALL DCU+LMCC 18",
+          "role": "All",
+          "description": "If Comm good, EV1/LMCC1 switch back to COM-A, EV2/LMCC2 continue COM-B, else all to COM – A"
+        }
+      ]
     }
   ]
 }
+
 
 
 DEFAULT_ALERTS_DATA = {

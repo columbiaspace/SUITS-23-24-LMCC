@@ -81,6 +81,7 @@ def initialize_files():
 @app.on_event("startup")
 async def startup_event():
     initialize_files()  # Ensure files are created if they do not exist
+    initialize_database_files()
     scheduler = AsyncIOScheduler()
     scheduler.add_job(periodic_fetch_and_store, 'interval', seconds=10)  # Adjust the interval as needed
     scheduler.start()
