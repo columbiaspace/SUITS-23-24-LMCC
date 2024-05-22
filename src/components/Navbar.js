@@ -6,6 +6,7 @@ const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [warnings, setWarnings] = useState([]);
+  const [acknowledgedWarnings, setAcknowledgedWarnings] = useState({});
 
   useEffect(() => {
     const fetchWarnings = async () => {
@@ -16,10 +17,25 @@ const Navbar = () => {
           .filter(([key, value]) => value)
           .map(([key]) => key);
 
-        if (activeWarnings.length > 0) {
-          setWarnings(activeWarnings);
+        // Reset acknowledgment if a warning changes from false to true
+        const newAcknowledgedWarnings = { ...acknowledgedWarnings };
+        Object.entries(data.error).forEach(([key, value]) => {
+          if (!value) {
+            newAcknowledgedWarnings[key] = false;
+          }
+        });
+
+        setAcknowledgedWarnings(newAcknowledgedWarnings);
+
+        // Set warnings to be displayed
+        const warningsToDisplay = activeWarnings.filter(warning => !newAcknowledgedWarnings[warning]);
+        setWarnings(warningsToDisplay);
+
+        if (warningsToDisplay.length > 0) {
           setShowModal(true);
           setIsVisible(true);
+        } else {
+          setShowModal(false);
         }
       } catch (error) {
         console.error('Error fetching warnings:', error);
@@ -28,9 +44,15 @@ const Navbar = () => {
 
     const interval = setInterval(fetchWarnings, 3000); // Fetch warnings every 3 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [acknowledgedWarnings]);
 
   const closeModal = () => {
+    const newAcknowledgedWarnings = { ...acknowledgedWarnings };
+    warnings.forEach(warning => {
+      newAcknowledgedWarnings[warning] = true;
+    });
+
+    setAcknowledgedWarnings(newAcknowledgedWarnings);
     setIsVisible(false);
     setTimeout(() => setShowModal(false), 500); // Wait for the fade-out transition to complete
   };

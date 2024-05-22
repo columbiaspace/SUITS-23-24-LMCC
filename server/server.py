@@ -96,6 +96,7 @@ async def periodic_fetch_and_store():
     dcu_url = f"http://{tss_ip}/json_data/DCU.json"
     uia_url = f"http://{tss_ip}/json_data/UIA.json"
     warnings_url = f'http://{tss_ip}/json_data/ERROR.json'
+    spec_url = f'http://{tss_ip}/json_data/SPEC.json'
 
     while True:
         print('running')
@@ -104,13 +105,15 @@ async def periodic_fetch_and_store():
             eva_data = await fetch_json(eva_url)
             telemetry_data = await fetch_json(telemetry_url)
             warnings_data = await fetch_json(warnings_url)
+            spec_data = await fetch_json(spec_url)
             
             if eva_data and telemetry_data and warnings_data:
                 combined_data = {
                     "timestamp": datetime.now().isoformat(),
                     "eva": eva_data,
                     "telemetry": telemetry_data,
-                    "warnings": warnings_data
+                    "warnings": warnings_data,
+                    "spec": spec_data
                 }
                 with open(DATA_FILE, 'w') as f:
                     json.dump(combined_data, f)
@@ -148,7 +151,16 @@ async def get_warnings():
             data = json.load(f)
         return data['warnings']
     else:
-        raise HTTPException(status_code=404, detail="DCUUIA.json not found")
+        raise HTTPException(status_code=404, detail="DATA.json not found")
+    
+@app.get("/spec_scans")
+async def get_warnings():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r') as f:
+            data = json.load(f)
+        return data['spec']
+    else:
+        raise HTTPException(status_code=404, detail="DATA.json not found")
     
 def utm_to_latlon(easting, northing, zone_number=15, zone_letter='R'):
     return utm.to_latlon(easting, northing, zone_number, zone_letter)

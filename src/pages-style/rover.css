@@ -1,9 +1,9 @@
 .page-container {
   display: grid;
-  grid-template-rows: auto 1fr;
   height: 90vh;
   width: 100vw;
 }
+
 
 .header-rover {
   text-align: center;
