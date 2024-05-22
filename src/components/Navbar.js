@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink as Link } from "react-router-dom";
 import './navbar.css';
 
+// WarningModal Component
+const WarningModal = ({ closeModal, isVisible }) => {
+    return (
+        <div className={`warning ${isVisible ? '' : 'hidden'}`}>
+            <div className="warning-modal-content">
+                <p>This is a warning message!</p>
+                <button className="warning-acknowledge" onClick={closeModal}>
+                    I Acknowledge
+                </button>
+            </div>
+        </div>
+    );
+};
+
+// Navbar Component
 const Navbar = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
+
+    const openModal = () => {
+        setShowModal(true);
+        setIsVisible(true);
+    };
+
+    const closeModal = () => {
+        setIsVisible(false);
+        setTimeout(() => setShowModal(false), 500); // Wait for the fade-out transition to complete
+    };
+
     return (
         <nav className="Navbar">
             <div className="NavMenu">
@@ -32,6 +60,8 @@ const Navbar = () => {
                 <Link className="NavLink" to="/Ingress" activeStyle={{ color: '#69b3e7' }}>
                     Ingress
                 </Link>
+                <button className="warning-btn" onClick={openModal}>Show Warning</button>
+                {showModal && <WarningModal closeModal={closeModal} isVisible={isVisible} />}
             </div>
         </nav>
     );

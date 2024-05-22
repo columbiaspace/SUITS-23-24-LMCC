@@ -50,3 +50,49 @@
     display: flex;
     align-items: center;
 }
+
+
+.warning {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 9999; /* Higher z-index to appear in front of other elements */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease; /* Transition for fade-out effect */
+}
+
+.warning.hidden {
+    opacity: 0; /* Hidden state for fade-out */
+    pointer-events: none; /* Disable pointer events when hidden */
+}
+
+.warning-modal-content {
+    background-color: #ffcccc; /* Light red inside */
+    padding: 40px; /* Increased padding for bigger modal */
+    border-radius: 15px; /* Rounded corners */
+    border: 5px solid #cc0000; /* Dark red border */
+    width: 400px; /* Increased width */
+    text-align: center;
+    position: relative;
+    transition: transform 0.5s ease; /* Transition for fade-out effect */
+}
+
+.warning.hidden .warning-modal-content {
+    transform: scale(0.9); /* Slightly shrink the modal when hidden */
+}
+
+.warning-acknowledge {
+    margin-top: 20px; /* Margin for spacing */
+    padding: 10px 20px;
+    background-color: #cc0000; /* Dark red button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
