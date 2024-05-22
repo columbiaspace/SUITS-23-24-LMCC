@@ -165,6 +165,7 @@ async def get_warnings():
 def utm_to_latlon(easting, northing, zone_number=15, zone_letter='R'):
     return utm.to_latlon(easting, northing, zone_number, zone_letter)
 
+@app.get('/update_positions')
 def fetch_and_update_positions():
     try:
         # URLs for the rover and IMU data
@@ -173,9 +174,11 @@ def fetch_and_update_positions():
 
         # Fetching data
         rover_response = requests.get(rover_url)
+        rover_response.raise_for_status()  # Ensure we raise an error for bad status codes
         rover_data = rover_response.json()
         
         imu_response = requests.get(imu_url)
+        imu_response.raise_for_status()  # Ensure we raise an error for bad status codes
         imu_data = imu_response.json()
 
         # Getting positions for rover, eva1, and eva2
@@ -187,19 +190,13 @@ def fetch_and_update_positions():
 
         features = []
 
-        # Spoof and convert positions if they are zero
         for idx, (name, pos) in enumerate(positions.items()):
             posx, posy = pos["posx"], pos["posy"]
 
-            if posx == 0 and posy == 0:
-                latitude = 29.564802807347508
-                longitude = -95.08160677610833
-                utm_coords = utm.from_latlon(latitude, longitude)
-                # posx = utm_coords[0] + random.uniform(-30, 30)
-                # posy = utm_coords[1] + random.uniform(-30, 30)
-                # print(f"Spoofed position data for {name}")
-
-            lat, lon = utm_to_latlon(posx, posy, utm_coords[2], utm_coords[3])
+            # Assuming a default UTM zone for this example
+            zone_number = 15
+            zone_letter = 'R'
+            lat, lon = utm_to_latlon(posx, posy, zone_number, zone_letter)
 
             feature = {
                 "type": "Feature",
@@ -219,11 +216,10 @@ def fetch_and_update_positions():
         with open(CURRENT_LOCATIONS_FILE, "w") as f:
             dump(feature_collection, f)
 
-        print(f"Updated CURRENT_LOCATIONS.geojson with new positions for rover, eva1, and eva2")
+        return (f"Updated CURRENT_LOCATIONS.geojson with new positions for rover, eva1, and eva2")
 
     except Exception as e:
-        print(f"Error fetching or updating positions: {e}")
-        
+        return (f"Error fetching or updating positions: {e}")
         
 # Save new IP or Key
 @app.put("/update_config")

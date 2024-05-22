@@ -100,8 +100,8 @@ const MapboxComponent = ({ zoom = 17 }) => {
         };
 
         fetchGeoJSON();
-        const intervalId = setInterval(fetchGeoJSON, 1000);
-        return () => clearInterval(intervalId);
+        const intervalIdGeoJSON = setInterval(fetchGeoJSON, 1000);
+        return () => clearInterval(intervalIdGeoJSON);
       });
 
       newMap.on('click', (e) => {
@@ -110,6 +110,22 @@ const MapboxComponent = ({ zoom = 17 }) => {
       });
     }
   }, [mapBoxAPIKey, zoom]);
+
+  useEffect(() => {
+    const fetchUpdatePositions = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/update_positions");
+        const data = await response.json();
+        console.log("Updated Positions:", data);
+      } catch (error) {
+        console.error("Error updating positions:", error);
+      }
+    };
+
+    fetchUpdatePositions();
+    const intervalIdUpdatePositions = setInterval(fetchUpdatePositions, 3000);
+    return () => clearInterval(intervalIdUpdatePositions);
+  }, []);
 
   const hideModal = () => setModalVisible(false);
 
