@@ -616,6 +616,29 @@ async def save_spec():
             return {"message": "Data saved successfully"}
         else:
             raise HTTPException(status_code=response.status_code, detail="Failed to retrieve data")
+        
+@app.post("/save_rover_spec")
+async def save_spec():
+    async with httpx.AsyncClient() as client:
+        response = await client.get('http://localhost:8000/get_rover_spec_scan')
+        
+        if response.status_code == 200:
+            data = response.json()
+
+            # Load existing data
+            with open(SAVED_ROCKS_FILE, 'r') as file:
+                saved_data = json.load(file)
+
+            # Append new data to the "saved rocks" array
+            saved_data["saved rocks"].append(data)
+
+            # Save updated data
+            with open(SAVED_ROCKS_FILE, 'w') as file:
+                json.dump(saved_data, file, indent=4)
+
+            return {"message": "Data saved successfully"}
+        else:
+            raise HTTPException(status_code=response.status_code, detail="Failed to retrieve data")
 
 
 @app.get("/get_spec")
