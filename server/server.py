@@ -40,6 +40,7 @@ EQUIPMENT_REPAIR_FILE = './server/json_databases/equipment_repair.json'
 ALERTS_FILE = './server/json_databases/alerts.json'
 MESSAGES_FILE = './server/json_databases/messages.json'
 GOLDEN_ER_FILE = './server/json_databases/golden_er_procedure.json'
+SAVED_ROCKS_FILE = './server/json_databases/saved_rocks.json'
 
 # Initialize variables for configuration data
 tss_ip = 'localhost:14141'
@@ -592,8 +593,43 @@ async def drop_pin_here(eva_num: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/save_spec")
+async def save_spec():
+    async with httpx.AsyncClient() as client:
+        response = await client.get('http://localhost:8000/spec_scans')
+        
+        if response.status_code == 200:
+            data = response.json()
+            eva1_data = data['spec']['eva1']
+
+            # Load existing data
+            with open(SAVED_ROCKS_FILE, 'r') as file:
+                saved_rocks_data = json.load(file)
+
+            # Append new data to the "saved rocks" array
+            saved_rocks_data["saved rocks"].append(eva1_data)
+
+            # Save updated data
+            with open(SAVED_ROCKS_FILE, 'w') as file:
+                json.dump(saved_rocks_data, file, indent=4)
+
+            return {"message": "Data saved successfully"}
+        else:
+            raise HTTPException(status_code=response.status_code, detail="Failed to retrieve data")
 
 
+@app.get("/get_spec")
+async def get_spec():
+    try:
+        if os.path.exists(SAVED_ROCKS_FILE):
+            with open(SAVED_ROCKS_FILE, 'r') as file:
+                data = json.load(file)
+        else:
+            raise FileNotFoundError(f"{SAVED_ROCKS_FILE} not found")
+        return data
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    
 if __name__ == '__main__':
     import uvicorn
     uvicorn.run(app, host='0.0.0.0', port=8000)

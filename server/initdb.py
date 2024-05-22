@@ -23,6 +23,8 @@ ALERTS_FILE = './server/json_databases/alerts.json'
 MESSAGES_FILE = './server/json_databases/messages.json'
 GOLDEN_ER_FILE = './server/json_databases/golden_er_procedure.json'
 
+SAVED_ROCKS_FILE = './server/json_databases/saved_rocks.json'
+
 # Default JSON data
 DEFAULT_CONFIG_DATA = {
     "TSS_IP": "localhost:14141",
@@ -369,6 +371,10 @@ DEFAULT_NAV_PATH = {
   
 }
 
+DEFAULT_SAVED_ROCKS = {
+  "saved rocks":[]
+}
+
 def initialize_file(file_path, default_data, overwrite=True):
     """Initialize a JSON file with default data, optionally overwriting it if it exists."""
     if overwrite or not os.path.exists(file_path):
@@ -386,6 +392,7 @@ def initialize_database_files():
     initialize_file(GOLDEN_ER_FILE, DEFAULT_GOLDEN_ER)
     initialize_file(USER_PINS_FILE, DEFAULT_USER_PINS)
     initialize_file(NAV_PATH_FILE, DEFAULT_NAV_PATH)
+    initialize_file(SAVED_ROCKS_FILE, DEFAULT_SAVED_ROCKS)
 
 if __name__ == "__main__":
     initialize_database_files()
