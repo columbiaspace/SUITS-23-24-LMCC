@@ -15,8 +15,6 @@ function Setup() {
   const [roverIP, setRoverIP] = useState('');
 
   const [tssIPStatus, setTssIPStatus] = useState('yellow');
-  const [ev1HoloIPStatus, setEv1HoloIPStatus] = useState('yellow');
-  const [ev2HoloIPStatus, setEv2HoloIPStatus] = useState('yellow');
   const [serverIPStatus, setServerIPStatus] = useState('yellow');
   const [mapBoxAPIStatus, setMapBoxAPIStatus] = useState('yellow');
 
@@ -41,8 +39,6 @@ function Setup() {
         setRoverIP(config.ROVER_IP);
 
         checkConnection(config.TSS_IP, setTssIPStatus, 'tss_ip');
-        checkConnection(config.EV1_HOLO_IP, setEv1HoloIPStatus, 'ev1_holo_ip');
-        checkConnection(config.EV2_HOLO_IP, setEv2HoloIPStatus, 'ev2_holo_ip');
         checkConnection(config.SERVER_IP, setServerIPStatus, 'server_ip');
         // Check Mapbox API Key
         checkMapboxAPIKey(config.MAPBOX_KEY);
@@ -80,8 +76,6 @@ function Setup() {
       console.log(result.message);
 
       if (newConfig.TSS_IP) checkConnection(newConfig.TSS_IP, setTssIPStatus, 'tss_ip');
-      if (newConfig.EV1_HOLO_IP) checkConnection(newConfig.EV1_HOLO_IP, setEv1HoloIPStatus, 'ev1_holo_ip');
-      if (newConfig.EV2_HOLO_IP) checkConnection(newConfig.EV2_HOLO_IP, setEv2HoloIPStatus, 'ev2_holo_ip');
       if (newConfig.SERVER_IP) checkConnection(newConfig.SERVER_IP, setServerIPStatus, 'server_ip');
       if (newConfig.MAPBOX_KEY) {
         checkMapboxAPIKey(newConfig.MAPBOX_KEY);
@@ -273,24 +267,7 @@ function Setup() {
             <span className="status-text"></span>
           </div>
         </div>
-        <div className='dataEntry'>
-          <label htmlFor='ev1_holo_ip'>EV1 HoloLens IP Address: </label>
-          <input type='text' id='ev1_holo_ip' name='ev1_holo_ip' defaultValue={ev1HoloIP} />
-          <button id="info-button" onClick={() => setShowEv1HoloIPModal(true)}>?</button>
-          <button onClick={handleSetEV1_HOLO_IP}>Set EV1 HoloLens IP</button>
-          <div className={`status ${ev1HoloIPStatus}`}>
-            <span className="status-text"></span>
-          </div>
-        </div>
-        <div className='dataEntry'>
-          <label htmlFor='ev2_holo_ip'>EV2 HoloLens IP Address: </label>
-          <input type='text' id='ev2_holo_ip' name='ev2_holo_ip' defaultValue={ev2HoloIP} />
-          <button id="info-button" onClick={() => setShowEv2HoloIPModal(true)}>?</button>
-          <button onClick={handleSetEV2_HOLO_IP}>Set EV2 HoloLens IP</button>
-          <div className={`status ${ev2HoloIPStatus}`}>
-            <span className="status-text"></span>
-          </div>
-        </div>
+
         <div className='dataEntry'>
           <label htmlFor='mapbox_api'>Map Box API Key: </label>
           <input type='text' id='mapbox_api' name='mapbox_api' defaultValue={mapBoxAPI} />
@@ -300,6 +277,26 @@ function Setup() {
             <span className="status-text"></span>
           </div>
         </div>
+
+        <div className='dataEntry'>
+          <label htmlFor='rover_ip'>Rover IP Address: </label>
+          <input type='text' id='rover_ip' name='rover_ip' defaultValue={roverIP} />
+          <button onClick={handleSetRoverIP}>Set Rover IP</button>
+        </div>
+
+        <div className='dataEntry'>
+          <label htmlFor='ev1_holo_ip'>EV1 HoloLens IP Address: </label>
+          <input type='text' id='ev1_holo_ip' name='ev1_holo_ip' defaultValue={ev1HoloIP} />
+          <button id="info-button" onClick={() => setShowEv1HoloIPModal(true)}>?</button>
+          <button onClick={handleSetEV1_HOLO_IP}>Set EV1 HoloLens IP</button>
+        </div>
+        <div className='dataEntry'>
+          <label htmlFor='ev2_holo_ip'>EV2 HoloLens IP Address: </label>
+          <input type='text' id='ev2_holo_ip' name='ev2_holo_ip' defaultValue={ev2HoloIP} />
+          <button id="info-button" onClick={() => setShowEv2HoloIPModal(true)}>?</button>
+          <button onClick={handleSetEV2_HOLO_IP}>Set EV2 HoloLens IP</button>
+        </div>
+        
         <div className='dataEntry'>
           <label htmlFor='ev1_team_id'>EV1 Team ID: </label>
           <input type='text' id='ev1_team_id' name='ev1_team_id' defaultValue={ev1TeamID} />
@@ -310,11 +307,7 @@ function Setup() {
           <input type='text' id='ev2_team_id' name='ev2_team_id' defaultValue={ev2TeamID} />
           <button onClick={handleSetEV2TeamID}>Set EV2 Team ID</button>
         </div>
-        <div className='dataEntry'>
-          <label htmlFor='rover_ip'>Rover IP Address: </label>
-          <input type='text' id='rover_ip' name='rover_ip' defaultValue={roverIP} />
-          <button onClick={handleSetRoverIP}>Set Rover IP</button>
-        </div>
+        
       </div>
       <div style={{ display: 'none' }}>
         <MapboxComponent handleMapBoxAPIStatus={setMapBoxAPIStatus} />

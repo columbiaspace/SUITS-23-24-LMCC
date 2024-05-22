@@ -29,9 +29,7 @@ const RoverCamContainer = styled.div`
   padding-bottom: 30px;
   padding-top: 30px;
 `;
-const StreamContainer = styled.div`
-  padding-bottom: 30px;
-`;
+
 const MapContainer = styled.div`
   flex: 1;
   display: flex;

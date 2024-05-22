@@ -105,7 +105,7 @@ function Constant() {
   };
 
   return (
-    <GlobalProvider>
+    <GlobalProvider value={{ telemetryData, hasError }}>
       <div className="pagecontainer" id="constantpage">
         {telemetryData && !hasError && (
           <TopBar 

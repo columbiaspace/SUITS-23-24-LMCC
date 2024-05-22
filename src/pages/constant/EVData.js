@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGlobal } from '../../components/GlobalContext';
 import './constant.css'; // Import CSS file for styling
 
 const EVData = ({ evNumber }) => {
-  const { allData, error } = useGlobal();
+  const { error } = useGlobal();
+  const [allData, setAllData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/get_telemetry_data');
+        const data = await response.json();
+        setAllData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+    const interval = setInterval(fetchData, 1000); // Fetch data every second
+    return () => clearInterval(interval); // Clear interval on component unmount
+  }, []);
 
   if (error) return <div>Error: {error}</div>;
-  if (!allData.telemetry || !allData.telemetry.telemetry) return <div>Loading...</div>;
+  if (!allData || !allData.telemetry || !allData.telemetry.telemetry) return <div>Loading...</div>;
 
   const evaData = allData.telemetry.telemetry[`eva${evNumber}`];
 

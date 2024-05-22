@@ -82,9 +82,8 @@ def initialize_files():
 async def startup_event():
     initialize_files()  # Ensure files are created if they do not exist
     initialize_database_files()
-    scheduler = AsyncIOScheduler()
-    scheduler.add_job(periodic_fetch_and_store, 'interval', seconds=10)  # Adjust the interval as needed
-    scheduler.start()
+    task = asyncio.create_task(periodic_fetch_and_store())
+    await asyncio.sleep(1)
 
 async def periodic_fetch_and_store():
     global team_number
@@ -96,17 +95,22 @@ async def periodic_fetch_and_store():
     telemetry_url = f"http://{tss_ip}/json_data/teams/{team_number}/TELEMETRY.json"
     dcu_url = f"http://{tss_ip}/json_data/DCU.json"
     uia_url = f"http://{tss_ip}/json_data/UIA.json"
+    warnings_url = f'http://{tss_ip}/json_data/ERROR.json'
 
     while True:
+        print('running')
         try:
             # Fetch EVA and telemetry data
             eva_data = await fetch_json(eva_url)
             telemetry_data = await fetch_json(telemetry_url)
-            if eva_data and telemetry_data:
+            warnings_data = await fetch_json(warnings_url)
+            
+            if eva_data and telemetry_data and warnings_data:
                 combined_data = {
                     "timestamp": datetime.now().isoformat(),
                     "eva": eva_data,
-                    "telemetry": telemetry_data
+                    "telemetry": telemetry_data,
+                    "warnings": warnings_data
                 }
                 with open(DATA_FILE, 'w') as f:
                     json.dump(combined_data, f)
@@ -134,6 +138,15 @@ async def get_dcu_uia():
         with open(DCU_UIA_FILE, 'r') as f:
             data = json.load(f)
         return data
+    else:
+        raise HTTPException(status_code=404, detail="DCUUIA.json not found")
+    
+@app.get("/warnings")
+async def get_warnings():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r') as f:
+            data = json.load(f)
+        return data['warnings']
     else:
         raise HTTPException(status_code=404, detail="DCUUIA.json not found")
     
@@ -237,7 +250,7 @@ async def read_data():
 
 # Check Hololens, Server, and TSS Connection
 @app.get("/check_connection")
-async def check_connection(tss_ip: str = None, holo_ip: str = None, server_ip: str = None):
+async def check_connection(tss_ip: str = None, server_ip: str = None):
     async with httpx.AsyncClient() as client:
         if tss_ip:
             try:
@@ -248,15 +261,6 @@ async def check_connection(tss_ip: str = None, holo_ip: str = None, server_ip: s
                     return {"status": "no connection", "type": "TSS_IP"}
             except Exception:
                 return {"status": "no connection", "type": "TSS_IP"}
-        elif holo_ip:
-            try:
-                response = await client.get(f"https://{holo_ip}/")
-                if response.status_code == 200:
-                    return {"status": "connected", "type": "HOLO_IP"}
-                else:
-                    return {"status": "no connection", "type": "HOLO_IP"}
-            except Exception:
-                return {"status": "no connection", "type": "HOLO_IP"}
         elif server_ip:
             try:
                 response = await client.get(f"http://{server_ip}/docs")
@@ -267,7 +271,7 @@ async def check_connection(tss_ip: str = None, holo_ip: str = None, server_ip: s
             except Exception:
                 return {"status": "no connection", "type": "SERVER_IP"}
         else:
-            raise HTTPException(status_code=400, detail="Invalid request, provide either tss_ip, holo_ip, or server_ip")
+            raise HTTPException(status_code=400, detail="Invalid request, provide either tss_ip or server_ip")
 
 class Marker(BaseModel):
     title: str
