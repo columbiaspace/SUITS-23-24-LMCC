@@ -155,7 +155,7 @@ async def get_warnings():
         raise HTTPException(status_code=404, detail="DATA.json not found")
     
 @app.get("/spec_scans")
-async def get_warnings():
+async def get_spec_scans():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r') as f:
             data = json.load(f)
