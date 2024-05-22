@@ -37,7 +37,9 @@ DEFAULT_CONFIG_DATA = {
 DEFAULT_DATA_FILE_CONTENT = {
     "timestamp": "",
     "eva": {},
-    "telemetry": {}
+    "telemetry": {},
+    "warnings": {},
+    "spec": {}
 }
 
 DEFAULT_INGRESS_EGRESS_PROCEDURES_DATA = {

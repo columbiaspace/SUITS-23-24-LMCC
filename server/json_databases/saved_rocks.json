@@ -1,35 +1,19 @@
 {
     "saved rocks": [
         {
-            "name": "default_rock",
-            "id": 0,
+            "name": "ilmenite_basalt",
+            "id": 7,
             "data": {
-                "SiO2": 1,
-                "TiO2": 1,
-                "Al2O3": 1,
-                "FeO": 1,
-                "MnO": 1,
-                "MgO": 1,
-                "CaO": 1,
-                "K2O": 1,
-                "P2O3": 1,
-                "other": 91
-            }
-        },
-        {
-            "name": "olivine_basalt_2",
-            "id": 6,
-            "data": {
-                "SiO2": 40.36,
-                "TiO2": 0.99,
-                "Al2O3": 2.32,
-                "FeO": 25.71,
-                "MnO": 0.58,
-                "MgO": 12.81,
-                "CaO": 5.95,
-                "K2O": 0.2,
-                "P2O3": 0.28,
-                "other": 10.8
+                "SiO2": 43.98,
+                "TiO2": 1.04,
+                "Al2O3": 5.75,
+                "FeO": 20.4,
+                "MnO": 0.51,
+                "MgO": 6.02,
+                "CaO": 8.89,
+                "K2O": 0.71,
+                "P2O3": 1.09,
+                "other": 11.61
             }
         }
     ]
