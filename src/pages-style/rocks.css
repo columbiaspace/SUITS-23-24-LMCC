@@ -1,7 +1,7 @@
 .rocks-container {
     display: flex;
     height: 90vh;
-    width: 100vw;
+    /*width: 100vw;*/
     background-color: #cce6ff;
   }
   
@@ -29,7 +29,36 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: black;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
-  
+  /* rocks.css */
+.rocks-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  padding: 20px;
+}
+
+.left-section, .right-section {
+  flex: 1;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  border-radius: 8px;
+}
+
+.left-section {
+  background-color: #f9f9f9;
+}
+
+.right-section {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.top-div, .bottom-div {
+  margin-bottom: 20px;
+}
