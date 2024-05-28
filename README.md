@@ -1,4 +1,4 @@
-# CUITS 2024 LMCC
+# CUITS 2024 LMCC and API
 
 CUITS 2024 LMCC is a React application designed to simulate a Mars mission control center, providing real-time data and control over various mission aspects.  
 
