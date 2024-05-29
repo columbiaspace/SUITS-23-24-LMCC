@@ -114,7 +114,7 @@ const MapboxComponent = ({ zoom = 17 }) => {
   useEffect(() => {
     const fetchUpdatePositions = async () => {
       try {
-        const response = await fetch("http://localhost:8000/update_positions");
+        const response = await fetch("http://localhost:8000/update_positions?spoof=true");
         const data = await response.json();
         console.log("Updated Positions:", data);
       } catch (error) {

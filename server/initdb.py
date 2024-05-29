@@ -35,11 +35,22 @@ DEFAULT_CONFIG_DATA = {
 
 
 DEFAULT_DATA_FILE_CONTENT = {
-    "timestamp": "",
-    "eva": {},
-    "telemetry": {},
-    "warnings": {},
-    "spec": {}
+    "timestamp": "2024-05-22T08:32:58.505248",
+    "eva": {
+        
+    },
+    "telemetry": {
+        
+    },
+    "warnings": {
+        "error": {
+            "fan_error": False,
+            "oxy_error": False,
+            "pump_error": False
+        }
+    },
+    "spec": {
+    }
 }
 
 DEFAULT_INGRESS_EGRESS_PROCEDURES_DATA = {

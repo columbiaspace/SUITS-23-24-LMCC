@@ -3,7 +3,7 @@ import random
 import os
 from datetime import datetime
 import asyncio
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.middleware.cors import CORSMiddleware
 import httpx
 from pydantic import BaseModel
@@ -163,64 +163,118 @@ async def get_spec_scans():
     else:
         raise HTTPException(status_code=404, detail="DATA.json not found")
     
-def utm_to_latlon(easting, northing, zone_number=15, zone_letter='R'):
-    return utm.to_latlon(easting, northing, zone_number, zone_letter)
+initial_positions = {
+    "rover": [-95.08102106128668, 29.565337181128633],
+    "eva1": [-95.08142850229642, 29.564493991846092],
+    "eva2": [-95.0814765394288, 29.564493238761674]
+}
+
+def latlon_to_utm(lat, lon):
+    easting, northing, zone_number, zone_letter = utm.from_latlon(lat, lon)
+    return easting, northing, zone_number, zone_letter
+
+def utm_to_latlon(easting, northing, zone_number, zone_letter):
+    lat, lon = utm.to_latlon(easting, northing, zone_number, zone_letter)
+    return lat, lon
+
+def random_walk(easting, northing, max_step=2.0):
+    angle = random.uniform(0, 2 * 3.14159)  # Random direction in radians
+    easting += max_step * random.uniform(-1, 1)
+    northing += max_step * random.uniform(-1, 1)
+    return easting, northing
 
 @app.get('/update_positions')
-def fetch_and_update_positions():
+def fetch_and_update_positions(spoof: bool = Query(False)):
     try:
-        # URLs for the rover and IMU data
-        rover_url = f"http://{tss_ip}/json_data/ROVER.json"
-        imu_url = f"http://{tss_ip}/json_data/IMU.json"
+        if spoof:
+            features = []
 
-        # Fetching data
-        rover_response = requests.get(rover_url)
-        rover_response.raise_for_status()  # Ensure we raise an error for bad status codes
-        rover_data = rover_response.json()
+            for idx, (name, coords) in enumerate(initial_positions.items()):
+                lon, lat = coords
+                easting, northing, zone_number, zone_letter = latlon_to_utm(lat, lon)
+                
+                # Apply random walk of 1 meter
+                easting, northing = random_walk(easting, northing)
+                
+                # Convert back to lat/lon
+                lat, lon = utm_to_latlon(easting, northing, zone_number, zone_letter)
+                
+                initial_positions[name] = [lon, lat]  # Update the initial positions with the new coordinates
+
+                feature = {
+                    "type": "Feature",
+                    "properties": {
+                        "Name": name.capitalize()
+                    },
+                    "geometry": {
+                        "coordinates": [lon, lat],
+                        "type": "Point"
+                    },
+                    "id": 100 + idx
+                }
+                features.append(feature)
+
+            feature_collection = FeatureCollection(features)
+
+            with open(CURRENT_LOCATIONS_FILE, "w") as f:
+                dump(feature_collection, f)
+
+            return "Updated CURRENT_LOCATIONS.geojson with new positions for rover, eva1, and eva2 (spoofed)"
         
-        imu_response = requests.get(imu_url)
-        imu_response.raise_for_status()  # Ensure we raise an error for bad status codes
-        imu_data = imu_response.json()
+        else:
+            # URLs for the rover and IMU data
+            rover_url = f"http://{tss_ip}/json_data/ROVER.json"
+            imu_url = f"http://{tss_ip}/json_data/IMU.json"
 
-        # Getting positions for rover, eva1, and eva2
-        positions = {
-            "rover": rover_data["rover"],
-            "eva1": imu_data["imu"]["eva1"],
-            "eva2": imu_data["imu"]["eva2"]
-        }
+            # Fetching data
+            rover_response = requests.get(rover_url)
+            rover_response.raise_for_status()  # Ensure we raise an error for bad status codes
+            rover_data = rover_response.json()
+            
+            imu_response = requests.get(imu_url)
+            imu_response.raise_for_status()  # Ensure we raise an error for bad status codes
+            imu_data = imu_response.json()
 
-        features = []
-
-        for idx, (name, pos) in enumerate(positions.items()):
-            posx, posy = pos["posx"], pos["posy"]
-
-            # Assuming a default UTM zone for this example
-            zone_number = 15
-            zone_letter = 'R'
-            lat, lon = utm_to_latlon(posx, posy, zone_number, zone_letter)
-
-            feature = {
-                "type": "Feature",
-                "properties": {
-                    "Name": name.capitalize()
-                },
-                "geometry": {
-                    "coordinates": [lon, lat],
-                    "type": "Point"
-                },
-                "id": 100 + idx
+            # Getting positions for rover, eva1, and eva2
+            positions = {
+                "rover": rover_data["rover"],
+                "eva1": imu_data["imu"]["eva1"],
+                "eva2": imu_data["imu"]["eva2"]
             }
-            features.append(feature)
 
-        feature_collection = FeatureCollection(features)
+            features = []
 
-        with open(CURRENT_LOCATIONS_FILE, "w") as f:
-            dump(feature_collection, f)
+            for idx, (name, pos) in enumerate(positions.items()):
+                posx, posy = pos["posx"], pos["posy"]
+                posz = pos.get("posz", 0)  # Assuming a default posz if not present
 
-        return (f"Updated CURRENT_LOCATIONS.geojson with new positions for rover, eva1, and eva2")
+                # Assuming a default UTM zone for this example
+                zone_number = 15
+                zone_letter = 'R'
+                lat, lon = utm_to_latlon(posx, posy, zone_number, zone_letter)
+
+                feature = {
+                    "type": "Feature",
+                    "properties": {
+                        "Name": name.capitalize()
+                    },
+                    "geometry": {
+                        "coordinates": [lon, lat],
+                        "type": "Point"
+                    },
+                    "id": 100 + idx
+                }
+                features.append(feature)
+
+            feature_collection = FeatureCollection(features)
+
+            with open(CURRENT_LOCATIONS_FILE, "w") as f:
+                dump(feature_collection, f)
+
+            return "Updated CURRENT_LOCATIONS.geojson with new positions for rover, eva1, and eva2"
 
     except Exception as e:
-        return (f"Error fetching or updating positions: {e}")
+        return f"Error fetching or updating positions: {e}"
         
 # Save new IP or Key
 @app.put("/update_config")
